@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="צ׳קליסט טיסה">
+<meta name="theme-color" content="#0a0e1a">
+<title>LSA Checklist</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e1a;--bg2:#111827;--bg3:#1a2236;--bg4:#0c1220;
+  --border:#1e2d47;--border2:#263654;
+  --blue:#3b82f6;--blue-dim:#1d3a6b;--blue-bg:#0d1f3c;
+  --green:#22c55e;--green-dim:#14532d;--green-bg:#0a1f0f;
+  --amber:#f59e0b;--red:#ef4444;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#475569;--text4:#2a3a52;
+  --r:14px;
+}
+.light{
+  --bg:#f0f2f5;--bg2:#ffffff;--bg3:#e4e7ed;--bg4:#e8eaef;
+  --border:#d1d5db;--border2:#b0b7c3;
+  --blue:#1d6feb;--blue-dim:#dbeafe;--blue-bg:#eff6ff;
+  --green:#16a34a;--green-dim:#dcfce7;--green-bg:#f0fdf4;
+  --amber:#d97706;--red:#dc2626;
+  --text:#111827;--text2:#4b5563;--text3:#9ca3af;--text4:#cbd5e1;
+}
+.light html,.light body{background:var(--bg);}
+/* ── THEME TOGGLE ── */
+.theme-toggle{display:flex;align-items:center;gap:5px;flex-shrink:0;cursor:pointer;}
+.theme-icon{font-size:14px;line-height:1;}
+.toggle-track{width:36px;height:20px;border-radius:10px;background:var(--bg3);border:1px solid var(--border);position:relative;transition:background .2s;}
+.toggle-track.on{background:var(--blue);}
+.toggle-thumb{position:absolute;top:2px;right:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:right .2s;}
+.toggle-track.on .toggle-thumb{right:calc(100% - 16px);}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none;}
+html,body{height:100%;background:var(--bg);font-family:'Heebo',sans-serif;color:var(--text);overflow:hidden;transition:background .2s,color .2s;}
+#app{height:100%;display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:relative;}
+
+.screen{display:none;flex-direction:column;flex:1;overflow:hidden;}
+.screen.active{display:flex;}
+
+/* ── RESUME ── */
+#screenResume{justify-content:center;align-items:stretch;padding:32px 22px;gap:18px;}
+.logo-wrap{text-align:center;}
+.logo-icon{font-size:44px;margin-bottom:10px;}
+.logo-title{font-size:28px;font-weight:700;letter-spacing:-.5px;}
+.logo-sub{font-size:13px;color:var(--text2);margin-top:5px;}
+.resume-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;}
+.rc-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;}
+.rc-val{font-size:15px;color:var(--text);font-weight:500;}
+.prog-row{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:6px;}
+.prog-track{background:var(--bg3);border-radius:4px;height:5px;}
+.prog-fill{height:5px;border-radius:4px;background:var(--blue);transition:width .4s;}
+.btn{width:100%;padding:16px;border-radius:var(--r);border:none;font-family:'Heebo',sans-serif;font-size:17px;font-weight:700;cursor:pointer;transition:opacity .15s;}
+.btn:active{opacity:.8;}
+.btn-blue{background:var(--blue);color:#fff;}
+.btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border);}
+
+/* ── CHECKLIST ── */
+#screenChecklist{background:var(--bg);}
+
+/* Top card — unified rounded surface */
+.top-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;margin:10px 12px 8px;overflow:hidden;flex-shrink:0;}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;gap:10px;}
+.phase-info{flex:1;min-width:0;text-align:right;}
+.phase-name{font-size:13px;font-weight:700;color:var(--blue);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topbar-left{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.step-badge{font-size:11px;color:var(--text2);background:var(--bg3);padding:4px 9px;border-radius:20px;border:1px solid var(--border);white-space:nowrap;}
+.topbar-btn{font-size:12px;padding:5px 10px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Heebo',sans-serif;cursor:pointer;}
+
+/* phase bar */
+.segs-bar{display:flex;align-items:flex-start;gap:5px;padding:12px 14px 8px;flex-shrink:0;}
+.seg{flex:1;display:flex;flex-direction:column;gap:4px;}
+.seg-track{height:6px;border-radius:3px;background:var(--bg3);overflow:hidden;position:relative;}
+.seg-fill-el{position:absolute;top:0;right:0;bottom:0;border-radius:3px;width:0%;}
+.seg-lbl{font-size:9px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text2);line-height:1.2;}
+.seg-lbl.done{color:#4ade80;}
+.seg-lbl.cur{color:var(--blue);font-weight:600;}
+.seg-dot{width:3px;height:3px;border-radius:50%;background:var(--border);flex-shrink:0;margin-top:2px;}
+
+/* groups sub-bar — clear visual separator from phase bar */
+.groups-bar{display:flex;align-items:flex-start;gap:4px;padding:8px 14px 10px;border-top:2px solid var(--border2);margin-top:0;}
+.grp-seg{flex:1;display:flex;flex-direction:column;gap:4px;}
+.grp-track{height:4px;border-radius:2px;background:var(--border);overflow:hidden;position:relative;}
+.grp-fill{position:absolute;top:0;right:0;bottom:0;border-radius:2px;}
+.grp-name{font-size:9px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text2);line-height:1.2;}
+.grp-name.done{color:#4ade80;}
+.grp-name.cur{color:var(--blue);font-weight:600;}
+.grp-seg-dot{width:2px;height:2px;border-radius:50%;background:var(--border2);flex-shrink:0;margin-top:4px;}
+
+/* card */
+.card-area{padding:0 14px 0;flex-shrink:0;border-top:1px solid var(--border);}
+.item-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r) var(--r) 0 0;border-bottom:none;padding:20px 18px 16px;width:100%;text-align:center;transition:border-color .2s,background .2s;}
+.item-card.confirming{border-color:var(--blue);background:var(--blue-bg);}
+.item-card.confirmed{border-color:#4ade80;background:var(--green-bg);}
+.item-main{font-size:22px;font-weight:700;line-height:1.3;color:var(--text);margin-bottom:5px;text-align:center;direction:rtl;}
+.item-sub{font-size:13px;color:var(--text2);min-height:16px;line-height:1.4;text-align:center;direction:rtl;}
+.item-bullets{margin-top:10px;text-align:right;}
+.item-bullet{display:flex;flex-direction:row-reverse;align-items:flex-start;gap:8px;padding:4px 0;border-top:1px solid var(--border);font-size:13px;color:var(--text2);line-height:1.4;}
+.item-bullet:first-child{border-top:none;}
+.bullet-dot{width:5px;height:5px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:6px;}
+
+.hold-btn{width:100%;height:56px;border:1px solid var(--border);border-top:1px solid var(--border);border-radius:0 0 var(--r) var(--r);background:var(--bg3);cursor:pointer;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;}
+.hold-fill{position:absolute;right:0;top:0;bottom:0;width:0%;background:var(--blue);}
+.hold-label{font-size:17px;font-weight:700;color:var(--blue);position:relative;z-index:1;font-family:'Heebo',sans-serif;pointer-events:none;}
+.hold-btn.confirmed{background:var(--green-bg);border-color:#4ade80;}
+.hold-btn.confirmed .hold-label{color:#4ade80;}
+.hold-btn.confirming .hold-fill{transition:width .4s linear;}
+.hold-btn.confirming .hold-label{color:#fff;}
+
+.nav-row{display:flex;gap:8px;padding:10px 14px 12px;margin-top:10px;border-top:1px solid var(--border);flex-shrink:0;}
+.nav-btn{flex:1;padding:12px 6px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:14px;font-family:'Heebo',sans-serif;font-weight:500;cursor:pointer;}
+.nav-btn:active{background:var(--bg3);}
+.nav-btn.primary{color:var(--blue);border-color:var(--blue-dim);}
+
+/* ── TREE ── */
+.tree-panel{flex:1;overflow-y:auto;background:var(--bg);padding:10px 12px 16px;margin-top:0;padding-top:8px;}
+
+/* Phase block — card with rounded corners */
+.tree-phase{background:var(--bg2);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;overflow:hidden;}
+.tree-phase-hdr{display:flex;align-items:center;padding:10px 14px;cursor:pointer;gap:8px;}
+.tree-phase-hdr:active{background:var(--bg3);}
+.ph-arrow{font-size:11px;color:var(--text3);width:14px;text-align:center;flex-shrink:0;}
+.ph-name{font-size:13px;font-weight:700;flex:1;}
+.ph-name.done{color:#4ade80;}
+.ph-name.current{color:var(--blue);}
+.ph-name.upcoming{color:var(--text2);}
+.ph-stat{font-size:11px;flex-shrink:0;}
+.ph-stat.done{color:#4ade80;}
+.ph-stat.current{color:var(--text2);}
+.ph-stat.upcoming{color:var(--text3);}
+
+.ph-groups{display:none;border-top:1px solid var(--border);padding:6px 10px 10px 10px;}
+.ph-groups.open{display:block;}
+
+/* Group block — indented from phase */
+.tree-group{background:var(--bg3);border-radius:8px;margin-bottom:4px;overflow:hidden;margin-right:28px;}
+.tree-group-hdr{display:flex;align-items:center;padding:7px 12px;cursor:pointer;gap:8px;}
+.tree-group-hdr:active{opacity:.8;}
+.gr-arrow{font-size:10px;color:var(--text3);width:12px;text-align:center;flex-shrink:0;}
+.gr-name{font-size:12px;flex:1;}
+.gr-name.done{color:#4ade80;}
+.gr-name.current{color:var(--blue);font-weight:700;}
+.gr-name.upcoming{color:var(--text2);}
+.gr-stat{font-size:10px;flex-shrink:0;}
+.gr-stat.done{color:#4ade80;}
+.gr-stat.current{color:var(--text2);}
+.gr-stat.upcoming{color:var(--text3);}
+
+.gr-items{display:none;padding:2px 8px 6px 8px;}
+.gr-items.open{display:block;}
+
+/* Item row — indented from group */
+.tree-item{display:flex;align-items:center;gap:8px;padding:6px 10px;margin-right:28px;border-radius:6px;cursor:pointer;margin-bottom:2px;}
+.tree-item:active{opacity:.7;}
+.tree-item.current{background:var(--blue-dim);}
+.ti-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;border:1.5px solid transparent;}
+.tree-item.done .ti-dot{background:#4ade80;border-color:#4ade80;}
+.tree-item.current .ti-dot{background:var(--blue);border-color:var(--blue);}
+.tree-item.upcoming .ti-dot{background:transparent;border-color:var(--text4);}
+.tree-item.skipped .ti-dot{background:var(--amber);border-color:var(--amber);}
+.ti-text{flex:1;font-size:12px;}
+.tree-item.done .ti-text{color:#4ade80;}
+.tree-item.current .ti-text{color:var(--blue);font-weight:700;}
+.tree-item.upcoming .ti-text{color:var(--text2);}
+.tree-item.skipped .ti-text{color:var(--amber);opacity:.7;}
+.ti-check{font-size:11px;color:#4ade80;flex-shrink:0;}
+
+/* ── DONE ── */
+#screenDone{justify-content:center;align-items:center;padding:32px 24px;text-align:center;gap:16px;}
+.done-mark{width:72px;height:72px;border-radius:50%;background:var(--green-dim);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--green);}
+.done-title{font-size:26px;font-weight:700;color:var(--green);}
+.done-sub{font-size:15px;color:var(--text2);line-height:1.6;}
+
+/* ── UNCHECK MINI-MODAL ── */
+#uncheckModal{display:none;position:absolute;inset:0;background:rgba(0,0,0,.75);z-index:110;align-items:center;justify-content:center;padding:24px;}
+#uncheckModal.open{display:flex;}
+.uncheck-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);padding:22px 20px;width:100%;text-align:center;}
+.uncheck-item-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.uncheck-sub{font-size:13px;color:var(--text2);margin-bottom:18px;}
+.uncheck-btns{display:flex;gap:10px;}
+.uncheck-btns .btn{font-size:15px;padding:13px;}
+
+/* ── IMPORT SCREEN ── */
+#screenImport{background:var(--bg);padding:0;}
+.import-topbar{display:flex;align-items:center;padding:10px 14px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0;gap:10px;}
+.import-title{font-size:14px;font-weight:700;flex:1;text-align:right;}
+.import-body{flex:1;overflow-y:auto;padding:16px 14px;display:flex;flex-direction:column;gap:14px;}
+.import-instructions{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;font-size:13px;color:var(--text2);line-height:1.7;text-align:right;}
+.import-instructions b{color:var(--text);font-weight:700;}
+.import-example{font-family:monospace;font-size:11px;background:var(--bg3);border-radius:8px;padding:10px 12px;color:var(--text2);direction:ltr;text-align:left;white-space:pre;}
+.import-textarea{width:100%;min-height:180px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px;font-size:13px;color:var(--text);font-family:'Heebo',sans-serif;resize:vertical;direction:rtl;text-align:right;outline:none;}
+.import-textarea:focus{border-color:var(--blue);}
+.import-error{font-size:13px;color:var(--red);text-align:right;padding:4px 0;display:none;}
+
+.upload-label{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:var(--bg2);border:2px dashed var(--border2);border-radius:var(--r);padding:36px 20px;cursor:pointer;transition:border-color .2s;}
+.upload-label:active{border-color:var(--blue);}
+.upload-icon{font-size:36px;}
+.upload-text{font-size:16px;font-weight:700;color:var(--text);}
+.upload-hint{font-size:12px;color:var(--text3);}
+.upload-label.success{border-color:var(--green);background:var(--green-bg);}
+.upload-label.success .upload-text{color:var(--green);}
+
+/* ── FOOTER ── */
+.footer{text-align:center;padding:1.75rem 0 0.5rem;font-size:11px;color:#bbb;letter-spacing:.03em;flex-shrink:0;}
+
+/* ── MODAL ── */
+#modal{display:none;position:absolute;inset:0;background:rgba(0,0,0,.75);z-index:100;align-items:center;justify-content:center;padding:24px;}
+#modal.open{display:flex;}
+.modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);padding:24px 20px;width:100%;text-align:center;}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:8px;}
+.modal-sub{font-size:14px;color:var(--text2);margin-bottom:20px;line-height:1.5;}
+.modal-btns{display:flex;gap:10px;flex-direction:column;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- RESUME -->
+  <div class="screen" id="screenResume">
+    <div style="display:flex;justify-content:flex-start;padding:8px 4px 0;">
+      <div class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-icon">🌙</span>
+        <div class="toggle-track" id="toggleTrackResume"><div class="toggle-thumb"></div></div>
+        <span class="theme-icon">☀️</span>
+      </div>
+    </div>
+    <div class="logo-wrap">
+      <div class="logo-icon">✈</div>
+      <div class="logo-title">צ׳קליסט טיסה</div>
+      <div class="logo-sub">טיסה בטוחה מתחילה בהכנה טובה</div>
+    </div>
+    <div class="resume-card">
+      <div class="rc-label">פריט אחרון שהושלם</div>
+      <div class="rc-val" id="resumeLastText">—</div>
+    </div>
+    <div>
+      <div class="prog-row"><span id="resumeProgLabel"></span><span id="resumeProgPct"></span></div>
+      <div class="prog-track"><div class="prog-fill" id="resumeProgFill" style="width:0%"></div></div>
+    </div>
+    <button class="btn btn-blue" onclick="resumeFlight()">המשך טיסה</button>
+    <button class="btn btn-ghost" onclick="openModal()">טיסה חדשה</button>
+    <button class="btn btn-ghost" onclick="showScreen('screenImport')" style="font-size:14px;padding:12px;">טעינת רשימה מ-Excel 📊</button>
+    <div class="footer">built by eligrt &middot; v1.59</div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="screen" id="screenChecklist">
+    <div class="top-card">
+      <div class="topbar">
+        <div class="topbar-left">
+          <button class="topbar-btn" onclick="openModal()">חדש</button>
+          <button class="topbar-btn" onclick="showScreen('screenImport')">XLS</button>
+        </div>
+        <div style="flex:1"></div>
+        <div class="theme-toggle" onclick="toggleTheme()">
+          <span class="theme-icon">🌙</span>
+          <div class="toggle-track" id="toggleTrack"><div class="toggle-thumb"></div></div>
+          <span class="theme-icon">☀️</span>
+        </div>
+      </div>
+      <div class="segs-bar" id="segsBar"></div>
+      <div class="card-area">
+        <div class="groups-bar" id="groupsBar"></div>
+        <div class="item-card" id="itemCard">
+          <div class="item-main" id="itemMain"></div>
+          <div class="item-sub" id="itemSub"></div>
+          <div class="item-bullets" id="itemBullets"></div>
+        </div>
+        <button class="hold-btn" id="holdBtn"
+          onmousedown="startHold()" onmouseup="cancelHold()" onmouseleave="cancelHold()"
+          ontouchstart="startHold(event)" ontouchend="cancelHold()" ontouchcancel="cancelHold()">
+          <div class="hold-fill" id="holdFill"></div>
+          <span class="hold-label" id="holdLabel">לחץ לאישור</span>
+        </button>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn" onclick="goBack()">‹ קודם</button>
+        <button class="nav-btn" id="uncheckBtn" onclick="uncheckCurrent()" style="display:none">בטל ✓</button>
+        <button class="nav-btn primary" onclick="nextItem()">הבא ›</button>
+      </div>
+      <div id="editModeBanner" style="display:none;padding:8px 14px;background:var(--amber);text-align:center;">
+        <button onclick="editMode=false;showScreen('screenDone')" style="background:none;border:none;font-family:'Heebo',sans-serif;font-size:13px;font-weight:700;color:#412402;cursor:pointer;width:100%;">← חזרה לסיכום הטיסה</button>
+      </div>
+    </div>
+    <div class="tree-panel" id="treePanel"></div>
+    <div class="footer">built by eligrt &middot; v1.59</div>
+  </div>
+
+  <!-- REVIEW -->
+  <div class="screen" id="screenReview">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="topbar-btn" onclick="leaveReview()">← חזרה</button>
+      </div>
+      <div class="phase-info">
+        <div class="phase-name" style="color:var(--green)">סקירה ועריכה</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px;">לחץ ✓ לביטול סימון</div>
+      </div>
+    </div>
+    <div class="tree-panel" id="reviewPanel"></div>
+    <div class="footer">built by eligrt &middot; v1.59</div>
+  </div>
+
+  <!-- DONE -->
+  <div class="screen" id="screenDone">
+    <div class="done-mark">✓</div>
+    <div class="done-title">הצ׳קליסט הושלם</div>
+    <div class="done-sub">כל הבדיקות אושרו.<br>טיסה בטוחה!</div>
+    <button class="btn btn-blue" style="width:100%;margin-top:8px" onclick="goBackToChecklist()">חזרה לצ׳קליסט</button>
+    <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="openModal()">טיסה חדשה</button>
+    <div class="footer">built by eligrt &middot; v1.59</div>
+  </div>
+
+  <!-- IMPORT -->
+  <div class="screen" id="screenImport" style="background:var(--bg);padding:12px;gap:12px;flex-direction:column;">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <button class="topbar-btn" onclick="showScreen('screenResume')">חזרה</button>
+      <div style="font-size:14px;font-weight:700;color:var(--text);">טעינת רשימה</div>
+      <div style="width:52px;"></div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px 16px;font-size:13px;color:var(--text2);line-height:1.7;text-align:right;">
+      טען את קובץ ה-Excel עם הצ׳קליסט שלך
+    </div>
+    <label class="upload-label" id="uploadLabel"
+      ondragover="event.preventDefault();this.style.borderColor='var(--blue)'"
+      ondragleave="this.style.borderColor=''"
+      ondrop="event.preventDefault();this.style.borderColor='';handleFileDrop(event)">
+      <div class="upload-icon" id="uploadIcon">📊</div>
+      <div class="upload-text" id="uploadText">לחץ או גרור קובץ Excel לכאן</div>
+      <div class="upload-hint" id="uploadHint">.xlsx / .xls</div>
+      <input type="file" id="xlsxInput" accept=".xlsx,.xls" onchange="handleFileUpload(event)" style="display:none">
+    </label>
+    <button class="btn btn-ghost" id="loadAnotherBtn" onclick="resetUploadLabel()" style="display:none">טען קובץ אחר</button>
+    <div class="import-error" id="importError"></div>
+    <div class="footer">built by eligrt &middot; v1.59</div>
+  </div>
+
+  <!-- PHASE COMPLETE OVERLAY -->
+  <div id="phaseOverlay" onclick="dismissPhaseOverlay()" style="display:none;position:absolute;inset:0;z-index:200;align-items:center;justify-content:center;background:rgba(10,14,26,.75);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);">
+    <div id="phaseOverlayBox" style="background:var(--bg2);border:1px solid #4ade80;border-radius:20px;padding:32px 28px;text-align:center;max-width:280px;width:85%;">
+      <div style="font-size:40px;margin-bottom:12px">✓</div>
+      <div id="phaseOverlayTitle" style="font-size:20px;font-weight:700;color:#4ade80;margin-bottom:6px;"></div>
+      <div id="phaseOverlayNext" style="font-size:13px;color:var(--text2);margin-bottom:20px;"></div>
+      <button onclick="dismissPhaseOverlay()" style="width:100%;padding:13px;border-radius:10px;border:none;background:#3b82f6;color:#fff;font-family:'Heebo',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:8px;">המשך עכשיו ›</button>
+      <button onclick="dismissPhaseOverlay();saveAndHint()" style="width:100%;padding:12px;border-radius:10px;border:1px solid #1e2d47;background:transparent;color:#94a3b8;font-family:'Heebo',sans-serif;font-size:13px;cursor:pointer;">סגור — אמשיך מאוחר יותר</button>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div id="modal">
+    <div class="modal-box">
+      <div class="modal-title">טיסה חדשה?</div>
+      <div class="modal-sub">פעולה זו תאפס את כל ההתקדמות הנוכחית.</div>
+      <div class="modal-btns">
+        <button class="btn btn-blue" onclick="closeModal();startNew()">כן, אפס והתחל מחדש</button>
+        <button class="btn btn-ghost" onclick="closeModal()">ביטול</button>
+      </div>
+    </div>
+  </div>
+  <!-- UNCHECK MODAL -->
+  <div id="uncheckModal">
+    <div class="uncheck-box">
+      <div class="uncheck-item-name" id="uncheckItemName"></div>
+      <div class="uncheck-sub">לבטל את הסימון של פריט זה?</div>
+      <div class="uncheck-btns">
+        <button class="btn btn-ghost" onclick="closeUncheckModal()">ביטול</button>
+        <button class="btn btn-blue" onclick="confirmUncheck()">בטל סימון</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const CL=[
+  // ─── שלב א ───────────────────────────────────────────
+  {phase:"שלב א — בדיקות יום לפני",group:"תיעוד ורישוי",main:"רישיון טיס בתוקף",sub:""},
+  {phase:"שלב א — בדיקות יום לפני",group:"תיעוד ורישוי",main:"תעודה רפואית בתוקף",sub:""},
+  {phase:"שלב א — בדיקות יום לפני",group:"תיעוד ורישוי",main:"כושר טיסה (טסט) בתוקף",sub:""},
+  {phase:"שלב א — בדיקות יום לפני",group:"מזג אוויר ותכנון",main:"בדיקת תחזית מזג אוויר",sub:"METAR / TAF"},
+  {phase:"שלב א — בדיקות יום לפני",group:"מזג אוויר ותכנון",main:"בדיקת NOTAM",sub:""},
+  {phase:"שלב א — בדיקות יום לפני",group:"מזג אוויר ותכנון",main:"הכנת תוכנית טיסה",sub:"נתיב, דלק, אלטרנטיבים"},
+  {phase:"שלב א — בדיקות יום לפני",group:"מזג אוויר ותכנון",main:"הגשת מרשה טיסה",sub:""},
+
+  // ─── שלב ב ───────────────────────────────────────────
+  {phase:"שלב ב — התארגנות קרקע",group:"ציוד אישי",main:"דפיות ומפות",sub:""},
+  {phase:"שלב ב — התארגנות קרקע",group:"ציוד אישי",main:"GPS: הדלק ובדוק לוויינים",sub:""},
+  {phase:"שלב ב — התארגנות קרקע",group:"ציוד אישי",main:"מצלמה: הפעל הקלטה",sub:"SD ובטריה"},
+  {phase:"שלב ב — התארגנות קרקע",group:"בדיקת מטוס",main:"סיבוב חיצוני",sub:""},
+  {phase:"שלב ב — התארגנות קרקע",group:"בדיקת מטוס",main:"בדיקת דלק: כמות וסוג",sub:""},
+  {phase:"שלב ב — התארגנות קרקע",group:"בדיקת מטוס",main:"תדרוך נוסע",sub:"יציאות חירום, נהלים"},
+
+  // ─── שלב ג ───────────────────────────────────────────
+  {phase:"שלב ג — התנעה ולפני המראה",group:"התנעה",main:"מאסטר: ON",sub:""},
+  {phase:"שלב ג — התנעה ולפני המראה",group:"התנעה",main:"בלם חניה: נעול",sub:""},
+  {phase:"שלב ג — התנעה ולפני המראה",group:"התנעה",main:"הכרז והתנע",sub:""},
+  {phase:"שלב ג — התנעה ולפני המראה",group:"התנעה",main:"לחץ שמן: תקין",sub:"עד 5 שניות"},
+  {phase:"שלב ג — התנעה ולפני המראה",group:"לפני המראה",main:"רדיו: ON, ביל ובדוק",sub:""},
+  {phase:"שלב ג — התנעה ולפני המראה",group:"לפני המראה",main:"טרנספונדר: ALT",sub:""},
+  {phase:"שלב ג — התנעה ולפני המראה",group:"לפני המראה",main:"סריקה ויזואלית אחרונה",sub:"תנועה, מסלול, רוח"},
+];
+
+// Build index
+const PHASES=[];
+const PHASE_IDX={};
+CL.forEach((item,i)=>{
+  if(!PHASE_IDX[item.phase]){
+    const p={name:item.phase,start:i,end:i,groups:[],gIdx:{}};
+    PHASE_IDX[item.phase]=p; PHASES.push(p);
+  }
+  const p=PHASE_IDX[item.phase]; p.end=i;
+  const gk=item.group;
+  if(!p.gIdx[gk]){
+    const g={name:gk,start:i,end:i,items:[]};
+    p.gIdx[gk]=g; p.groups.push(g);
+  }
+  const g=p.gIdx[gk]; g.end=i; g.items.push(i);
+});
+
+const KEY='checklist_test_v1';
+const LIST_KEY='checklist_list_v1';
+
+// Load custom list from localStorage if available
+function loadCustomList(){
+  try{
+    const raw=localStorage.getItem(LIST_KEY);
+    if(raw){
+      const parsed=JSON.parse(raw);
+      if(Array.isArray(parsed)&&parsed.length>0) return parsed;
+    }
+  }catch(e){}
+  return null;
+}
+
+function importCSV(){
+  const raw=document.getElementById('importTextarea').value.trim();
+  const errEl=document.getElementById('importError');
+  errEl.style.display='none';
+  if(!raw){errEl.textContent='אנא הדבק תוכן CSV';errEl.style.display='block';return;}
+
+  const lines=raw.split('\n').map(l=>l.trim()).filter(l=>l);
+  // Detect and skip header row
+  const firstLower=lines[0].toLowerCase();
+  const startIdx=(firstLower.includes('phase')||firstLower.includes('group')||firstLower.includes('item'))?1:0;
+  const items=[];
+
+  for(let i=startIdx;i<lines.length;i++){
+    // Split by comma but respect quoted fields
+    const cols=parseCSVLine(lines[i]);
+    if(cols.length<3){errEl.textContent='שגיאה בשורה '+(i+1)+': נדרשות לפחות 3 עמודות (Phase, Group, Item)';errEl.style.display='block';return;}
+    const cleaned=cols.map(c=>c.trim().replace(/^"|"$/g,'').trim());
+    const [phase,group,main,sub='',bulletsRaw='']=cleaned;
+    if(!phase||!group||!main) continue;
+    const bullets=bulletsRaw?bulletsRaw.split('|').map(b=>b.trim()).filter(b=>b):[];
+    items.push({phase,group,main,sub,bullets});
+  }
+
+  if(items.length===0){errEl.textContent='לא נמצאו פריטים תקינים ב-CSV';errEl.style.display='block';return;}
+
+  // Save list and reset progress
+  try{localStorage.setItem(LIST_KEY,JSON.stringify(items));}catch(e){}
+  clearSave();
+
+  // Rebuild app with new list
+  rebuildWithList(items);
+  showScreen('screenChecklist');
+}
+
+function parseCSVLine(line){
+  const cols=[];let cur='';let inQ=false;
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(c==='"'){inQ=!inQ;}
+    else if(c===','&&!inQ){cols.push(cur);cur='';}
+    else cur+=c;
+  }
+  cols.push(cur);
+  return cols;
+}
+
+function rebuildWithList(list){
+  // Replace global CL and rebuild PHASES index
+  CL.length=0;
+  list.forEach(item=>CL.push(item));
+  PHASES.length=0;
+  Object.keys(PHASE_IDX).forEach(k=>delete PHASE_IDX[k]);
+  CL.forEach((item,i)=>{
+    if(!PHASE_IDX[item.phase]){
+      const p={name:item.phase,start:i,end:i,groups:[],gIdx:{}};
+      PHASE_IDX[item.phase]=p; PHASES.push(p);
+    }
+    const p=PHASE_IDX[item.phase]; p.end=i;
+    const gk=item.group;
+    if(!p.gIdx[gk]){const g={name:gk,start:i,end:i,items:[]};p.gIdx[gk]=g;p.groups.push(g);}
+    const g=p.gIdx[gk]; g.end=i; g.items.push(i);
+  });
+  current=0; status=[]; phOpen={}; grOpen={};
+  renderCurrent();
+}
+let current=0, status=[], holdTimer=null, holdFilling=false, holdCooldown=false;
+let phOpen={}, grOpen={};
+
+function setThemeUI(isLight){
+  document.querySelectorAll('.toggle-track').forEach(t=>t.classList.toggle('on',isLight));
+}
+function toggleTheme(){
+  const isLight=document.body.classList.toggle('light');
+  setThemeUI(isLight);
+  try{localStorage.setItem('theme',isLight?'light':'dark');}catch(e){}
+}
+function applyTheme(){
+  try{
+    const t=localStorage.getItem('theme');
+    const isLight=t==='light';
+    if(isLight) document.body.classList.add('light');
+    setThemeUI(isLight);
+  }catch(e){}
+}
+
+function save(){try{localStorage.setItem(KEY,JSON.stringify({current,status}));}catch(e){}}
+function load(){try{return JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){return null;}}
+function clearSave(){try{localStorage.removeItem(KEY);}catch(e){}}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function init(){
+  const s=load();
+  if(s&&s.current>0&&s.current<CL.length){
+    current=s.current; status=s.status||[];
+    document.getElementById('resumeLastText').textContent=CL[current-1].main;
+    const pct=Math.round(current/CL.length*100);
+    document.getElementById('resumeProgLabel').textContent=current+' / '+CL.length+' פריטים';
+    document.getElementById('resumeProgPct').textContent=pct+'%';
+    document.getElementById('resumeProgFill').style.width=pct+'%';
+    showScreen('screenResume');
+  } else if(s&&s.current>=CL.length){
+    showScreen('screenDone');
+  } else {
+    current=0; status=[];
+    showScreen('screenChecklist');
+    renderCurrent();
+  }
+}
+
+function reviewFlight(){
+  renderReview();
+  showScreen('screenReview');
+}
+
+function renderReview(){
+  const panel=document.getElementById('reviewPanel');
+  panel.innerHTML='';
+
+  PHASES.forEach(ph=>{
+    const phDiv=document.createElement('div');phDiv.className='tree-phase';
+    const hdr=document.createElement('div');hdr.className='tree-phase-hdr';
+    const arrow=document.createElement('div');arrow.className='ph-arrow';arrow.textContent='▼';
+    const name=document.createElement('div');name.className='ph-name done';name.textContent=ph.name;
+    const cnt=ph.groups.reduce((s,g)=>s+g.items.filter(i=>status[i]==='done'||status[i]==='skip').length,0);
+    const stat=document.createElement('div');stat.className='ph-stat done';stat.textContent=cnt+'/'+(ph.end-ph.start+1);
+    hdr.appendChild(stat);hdr.appendChild(arrow);hdr.appendChild(name);
+
+    const groups=document.createElement('div');groups.className='ph-groups open';
+    ph.groups.forEach(g=>{
+      const gDiv=document.createElement('div');gDiv.className='tree-group';
+      const ghdr=document.createElement('div');ghdr.className='tree-group-hdr';
+      const ga=document.createElement('div');ga.className='gr-arrow';ga.textContent='▼';
+      const gDoneCount=g.items.filter(i=>status[i]==='done'||status[i]==='skip').length;
+      const gn=document.createElement('div');
+      gn.className='gr-name '+(gDoneCount===g.items.length?'done':'upcoming');
+      gn.textContent=g.name;
+      const gs=document.createElement('div');gs.className='gr-stat '+(gDoneCount===g.items.length?'done':'upcoming');
+      gs.textContent=gDoneCount+'/'+g.items.length;
+      ghdr.appendChild(gs);ghdr.appendChild(ga);ghdr.appendChild(gn);
+
+      const itemsDiv=document.createElement('div');itemsDiv.className='gr-items open';
+      g.items.forEach(idx=>{
+        const s=status[idx];
+        const isDone=s==='done'||s==='skip';
+        const row=document.createElement('div');
+        row.className='tree-item '+(isDone?'done':'upcoming');
+
+        const dot=document.createElement('div');dot.className='ti-dot';
+        const txt=document.createElement('div');txt.className='ti-text';txt.textContent=CL[idx].main;
+
+        const toggle=document.createElement('div');
+        toggle.style.cssText='font-size:15px;flex-shrink:0;padding:0 2px;color:'+(isDone?'#4ade80':'var(--border2)');
+        toggle.textContent=isDone?'✓':'○';
+
+        if(isDone){
+          toggle.style.cursor='pointer';
+          toggle.title='לחץ לביטול סימון';
+          toggle.onclick=(e)=>{
+            e.stopPropagation();
+            status[idx]=undefined;
+            save();
+            current=idx;
+            showScreen('screenChecklist');
+            renderCurrent();
+          };
+        }
+
+        row.appendChild(dot);
+        row.appendChild(txt);
+        row.appendChild(toggle);
+        itemsDiv.appendChild(row);
+      });
+      gDiv.appendChild(ghdr);gDiv.appendChild(itemsDiv);
+      groups.appendChild(gDiv);
+    });
+    phDiv.appendChild(hdr);phDiv.appendChild(groups);
+    panel.appendChild(phDiv);
+  });
+}
+
+function leaveReview(){
+  if(allDoneCheck()){
+    showScreen('screenDone');
+  } else {
+    // Something was unchecked — go back into active checklist
+    current=CL.findIndex((_,i)=>status[i]!=='done'&&status[i]!=='skip');
+    if(current===-1) current=0;
+    showScreen('screenChecklist');
+    renderCurrent();
+  }
+}
+
+function resumeFlight(){showScreen('screenChecklist');renderCurrent();}
+function openModal(){document.getElementById('modal').classList.add('open');}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+function startNew(){clearSave();current=0;status=[];phOpen={};grOpen={};editMode=false;showScreen('screenChecklist');renderCurrent();}
+
+// Uncheck current item via the בטל סימון button
+function uncheckCurrent(){
+  status[current]=undefined;
+  editMode=false;
+  save();
+  renderCurrent();
+}
+
+// Select any item from list — just sets it as current card
+function selectItem(idx){
+  current=idx;
+  save();
+  renderCurrent();
+}
+
+// Toggle done/undone for current item (called after hold completes)
+function allDoneCheck(){
+  return CL.every((_,i)=>status[i]==='done'||status[i]==='skip');
+}
+
+function markDone(){
+  const prevPhase=CL[current].phase;
+  if(status[current]==='done'){
+    status[current]=undefined;
+  } else {
+    status[current]='done';
+    let next=current+1;
+    while(next<CL.length&&(status[next]==='done'||status[next]==='skip')) next++;
+    current=next<CL.length?next:current;
+  }
+  save();
+  if(allDoneCheck()){save();showScreen('screenDone');return;}
+  // Check if we just completed a phase
+  const prevPhaseObj=PHASE_IDX[prevPhase];
+  if(prevPhaseObj){
+    const prevDone=prevPhaseObj.groups.reduce((s,g)=>s+g.items.filter(j=>status[j]==='done'||status[j]==='skip').length,0);
+    const prevTotal=prevPhaseObj.end-prevPhaseObj.start+1;
+    if(prevDone===prevTotal&&CL[current].phase!==prevPhase){
+      // Phase just completed — show overlay
+      const nextPhase=CL[current].phase;
+      document.getElementById('phaseOverlayTitle').textContent=prevPhase+' — הושלם!';
+      document.getElementById('phaseOverlayNext').textContent='השלב הבא: '+nextPhase;
+      const ov=document.getElementById('phaseOverlay');
+      ov.style.display='flex';
+      renderCurrent();
+      return;
+    }
+  }
+  renderCurrent();
+}
+
+let editMode=false;
+
+function goBackToChecklist(){
+  editMode=true;
+  // Set current to first item so tree is fully navigable
+  current=CL.length-1;
+  showScreen('screenChecklist');
+  renderCurrent();
+}
+
+function dismissPhaseOverlay(){
+  document.getElementById('phaseOverlay').style.display='none';
+}
+
+function saveAndHint(){
+  save();
+  // Show a brief toast
+  const toast=document.createElement('div');
+  toast.style.cssText='position:absolute;bottom:32px;right:50%;transform:translateX(50%);background:#1a2236;border:1px solid #4ade80;color:#4ade80;font-family:Heebo,sans-serif;font-size:13px;font-weight:500;padding:10px 20px;border-radius:20px;z-index:300;white-space:nowrap;';
+  toast.textContent='ההתקדמות נשמרה ✓';
+  document.getElementById('app').appendChild(toast);
+  setTimeout(()=>toast.remove(),2500);
+}
+
+function renderCurrent(){
+  if(allDoneCheck()&&!editMode){save();showScreen('screenDone');return;}
+  // If out of bounds, find last item in edit mode, or first unchecked otherwise
+  if(current>=CL.length||current<0){
+    current=editMode?CL.length-1:CL.findIndex((_,i)=>status[i]!=='done'&&status[i]!=='skip');
+    if(current===-1){save();showScreen('screenDone');return;}
+  }
+  const it=CL[current];
+  const phIdx=PHASES.findIndex(p=>p.name===it.phase);
+  const ph=PHASES[phIdx];
+  const phDone=ph.groups.reduce((sum,g)=>sum+g.items.filter(i=>status[i]==='done'||status[i]==='skip').length,0);
+  const phTotal=ph.end-ph.start+1;
+
+  document.getElementById('itemMain').textContent=it.main;
+  document.getElementById('itemSub').textContent=it.sub||'';
+
+  // Render bullets if item has them
+  const bulletsEl=document.getElementById('itemBullets');
+  bulletsEl.innerHTML='';
+  if(it.bullets&&it.bullets.length){
+    it.bullets.forEach(b=>{
+      const row=document.createElement('div');row.className='item-bullet';
+      const dot=document.createElement('div');dot.className='bullet-dot';
+      const txt=document.createElement('div');txt.textContent=b;
+      row.appendChild(txt); row.appendChild(dot);
+      bulletsEl.appendChild(row);
+    });
+  }
+
+  // Show/hide uncheck button based on whether current item is already done
+  const isDone=status[current]==='done'||status[current]==='skip';
+  const uncheckBtn=document.getElementById('uncheckBtn');
+  uncheckBtn.style.display=isDone?'block':'none';
+
+  // If already done, show card in done state but don't auto-advance
+  const card=document.getElementById('itemCard');
+  const btn=document.getElementById('holdBtn');
+  const fill=document.getElementById('holdFill');
+  btn.classList.remove('confirmed','confirming');
+  fill.style.transition='none'; fill.style.width='0%';
+  card.classList.remove('confirming','confirmed');
+  if(isDone){
+    card.classList.add('confirmed');
+    document.getElementById('holdLabel').textContent='מסומן ✓';
+    btn.classList.add('confirmed');
+  } else {
+    document.getElementById('holdLabel').textContent='לחץ לאישור';
+  }
+
+  renderSegs();
+  renderGroupsBar();
+  renderTree();
+  const banner=document.getElementById('editModeBanner');
+  if(banner) banner.style.display=editMode?'block':'none';
+}
+
+function renderSegs(){
+  const bar=document.getElementById('segsBar');
+  bar.innerHTML='';
+  PHASES.forEach((ph,i)=>{
+    if(i>0){const dot=document.createElement('div');dot.className='seg-dot';bar.appendChild(dot);}
+    const phTotal=ph.end-ph.start+1;
+    const phDone=ph.groups.reduce((s,g)=>s+g.items.filter(j=>status[j]==='done'||status[j]==='skip').length,0);
+    const allDone=phDone===phTotal;
+    const isCur=current>=ph.start&&current<=ph.end;
+
+    const seg=document.createElement('div');seg.className='seg';
+    const track=document.createElement('div');track.className='seg-track';
+
+    if(allDone){
+      track.style.background='#4ade80';
+    } else if(isCur){
+      track.style.background='var(--blue)';
+      const pct=phTotal>0?Math.round(phDone/phTotal*100):0;
+      const fill=document.createElement('div');fill.className='seg-fill-el';
+      fill.style.cssText='width:'+pct+'%;background:#4ade80;transition:width .4s;';
+      track.appendChild(fill);
+    }
+    seg.appendChild(track);
+
+    const lbl=document.createElement('div');
+    lbl.className='seg-lbl '+(allDone?'done':isCur?'cur':'');
+    lbl.textContent=ph.name.replace(/^שלב\s+[א-ת\d]+\s*[—–-]\s*/,'');
+    seg.appendChild(lbl);
+
+    bar.appendChild(seg);
+  });
+}
+
+function renderGroupsBar(){
+  const bar=document.getElementById('groupsBar');
+  if(!bar) return;
+  bar.innerHTML='';
+  const curPhase=CL[current].phase;
+  const ph=PHASE_IDX[curPhase];
+  if(!ph||ph.groups.length<=1){bar.style.display='none';return;}
+  bar.style.display='flex';
+  bar.style.overflow='hidden'; // no scrollbar, clips gracefully
+  const curGroup=CL[current].group;
+  const curIdx=ph.groups.findIndex(g=>g.name===curGroup);
+
+  ph.groups.forEach((g,i)=>{
+    if(i>0){const dot=document.createElement('div');dot.className='grp-seg-dot';bar.appendChild(dot);}
+    const gDone=g.items.filter(j=>status[j]==='done'||status[j]==='skip').length;
+    const allDone=gDone===g.items.length;
+    const isCur=i===curIdx;
+    const isPast=i<curIdx||allDone;
+    const hasAny=gDone>0;
+
+    const seg=document.createElement('div');seg.className='grp-seg';
+
+    // Sizing: current = flex:3, done/past = flex:1, upcoming = flex:1
+    seg.style.flex=isCur?'3':'1';
+    seg.style.minWidth='0'; // allow shrinking
+
+    const track=document.createElement('div');track.className='grp-track';
+    const fill=document.createElement('div');fill.className='grp-fill';
+
+    if(allDone){
+      fill.style.width='100%';
+      fill.style.background='#4ade80';
+    } else if(isCur||hasAny){
+      track.style.background='var(--blue)';
+      const pct=g.items.length>0?Math.round(gDone/g.items.length*100):0;
+      fill.style.width=pct+'%';
+      fill.style.background='#4ade80';
+    }
+    track.appendChild(fill);
+    seg.appendChild(track);
+
+    const lbl=document.createElement('div');
+    lbl.className='grp-name '+(allDone?'done':isCur?'cur':'');
+
+    if(isCur){
+      // Full name on current
+      lbl.textContent=g.name;
+    } else if(isPast){
+      // Shrunk — show ... for done
+      lbl.textContent='✓';
+      lbl.style.fontSize='8px';
+    } else {
+      // Upcoming — no label, just the bar
+      lbl.textContent='';
+    }
+    seg.appendChild(lbl);
+    bar.appendChild(seg);
+  });
+}
+
+function renderTree(){
+  const panel=document.getElementById('treePanel');
+  panel.innerHTML='';
+  const curPhase=CL[current].phase;
+  const curGroup=CL[current].group;
+
+  PHASES.forEach(ph=>{
+    const isCur=ph.name===curPhase;
+    if(phOpen[ph.name]===undefined) phOpen[ph.name]=isCur;
+    if(isCur) phOpen[ph.name]=true; // always open current phase
+
+    const phDoneCount=ph.groups.reduce((sum,g)=>sum+g.items.filter(i=>status[i]==='done'||status[i]==='skip').length,0);
+    const phTotal=ph.end-ph.start+1;
+    const isDone=phDoneCount===phTotal;
+
+    const phDiv=document.createElement('div');phDiv.className='tree-phase';
+
+    const hdr=document.createElement('div');hdr.className='tree-phase-hdr';
+
+    const arrow=document.createElement('div');
+    arrow.className='ph-arrow';
+    arrow.textContent=phOpen[ph.name]?'▼':'◀';
+
+    const name=document.createElement('div');
+    name.className='ph-name '+(isDone?'done':isCur?'current':'upcoming');
+    name.textContent=ph.name;
+
+    const stat=document.createElement('div');
+    stat.className='ph-stat '+(isDone?'done':isCur?'current':'upcoming');
+    stat.textContent=isDone?'✓ הושלם':isCur?(phDoneCount+'/'+phTotal):'';
+
+    // RTL flex: first=rightmost. Stat+arrow on right, name fills left.
+    hdr.appendChild(stat); hdr.appendChild(arrow); hdr.appendChild(name);
+
+    const groups=document.createElement('div');
+    groups.className='ph-groups'+(phOpen[ph.name]?' open':'');
+
+    hdr.onclick=()=>{
+      phOpen[ph.name]=!phOpen[ph.name];
+      arrow.textContent=phOpen[ph.name]?'▼':'◀';
+      groups.className='ph-groups'+(phOpen[ph.name]?' open':'');
+    };
+
+    ph.groups.forEach(g=>{
+      const gKey=ph.name+'||'+g.name;
+      const gDoneCount=g.items.filter(i=>status[i]==='done'||status[i]==='skip').length;
+      const gDone=gDoneCount===g.items.length;
+      const gCur=isCur&&g.name===curGroup;
+      if(grOpen[gKey]===undefined) grOpen[gKey]=gCur;
+      if(gCur) grOpen[gKey]=true; // always open current group
+
+      const gDiv=document.createElement('div');gDiv.className='tree-group';
+
+      const ghdr=document.createElement('div');ghdr.className='tree-group-hdr';
+      const garrow=document.createElement('div');
+      garrow.className='gr-arrow';
+      garrow.textContent=grOpen[gKey]?'▼':'◀';
+      const gname=document.createElement('div');
+      gname.className='gr-name '+(gDone?'done':gCur?'current':'upcoming');
+      gname.textContent=g.name;
+      const gstat=document.createElement('div');
+      gstat.className='gr-stat '+(gDone?'done':gCur?'current':'upcoming');
+      gstat.textContent=gDone?'✓':gCur?(gDoneCount+'/'+g.items.length):'';
+
+      // RTL flex: stat+arrow on right, name fills left
+      ghdr.appendChild(gstat); ghdr.appendChild(garrow); ghdr.appendChild(gname);
+
+      const itemsDiv=document.createElement('div');
+      itemsDiv.className='gr-items'+(grOpen[gKey]?' open':'');
+
+      ghdr.onclick=()=>{
+        grOpen[gKey]=!grOpen[gKey];
+        garrow.textContent=grOpen[gKey]?'▼':'◀';
+        itemsDiv.className='gr-items'+(grOpen[gKey]?' open':'');
+      };
+
+      g.items.forEach(idx=>{
+        const it=CL[idx];
+        const s=status[idx];
+        const isDone=s==='done';
+        const isSkipped=s==='skip';
+        const isCurItem=idx===current;
+        let cls=isDone?'done':isSkipped?'skipped':isCurItem?'current':'upcoming';
+
+        const row=document.createElement('div');
+        row.className='tree-item '+cls;
+        // Tap any item = make it the active card
+        row.onclick=(e)=>{e.stopPropagation();selectItem(idx);};
+
+        // RTL flex: dot first=rightmost, then checkmark, then text fills left
+        const dot=document.createElement('div');dot.className='ti-dot';
+        const txt=document.createElement('div');txt.className='ti-text';txt.textContent=it.main;
+        row.appendChild(dot);
+
+        if(isDone||isSkipped){
+          const chk=document.createElement('div');
+          chk.className='ti-check';
+          chk.textContent=isSkipped?'—':'✓';
+          row.appendChild(chk);
+        }
+
+        row.appendChild(txt);
+
+        itemsDiv.appendChild(row);
+        if(isCurItem) setTimeout(()=>row.scrollIntoView({block:'nearest',behavior:'smooth'}),80);
+      });
+
+      gDiv.appendChild(ghdr); gDiv.appendChild(itemsDiv);
+      groups.appendChild(gDiv);
+    });
+
+    phDiv.appendChild(hdr); phDiv.appendChild(groups);
+    panel.appendChild(phDiv);
+    if(isCur) setTimeout(()=>phDiv.scrollIntoView({block:'nearest',behavior:'smooth'}),60);
+  });
+}
+
+function nextItem(){
+  if(current<CL.length-1){current++;save();renderCurrent();}
+}
+function goBack(){
+  if(current>0){current--;save();renderCurrent();}
+}
+
+let holdConfirmed=false;
+
+function startHold(e){
+  if(e) e.preventDefault();
+  if(holdCooldown) return;
+  if(status[current]==='done'||status[current]==='skip') return;
+  holdConfirmed=false;
+  const btn=document.getElementById('holdBtn');
+  const fill=document.getElementById('holdFill');
+  fill.style.transition='none'; fill.style.width='0%';
+  requestAnimationFrame(()=>{fill.style.transition='width .3s linear';fill.style.width='100%';});
+  btn.classList.add('confirming');
+  document.getElementById('itemCard').classList.add('confirming');
+  document.getElementById('holdLabel').textContent='מחזיק...';
+  holdFilling=true;
+  holdTimer=setTimeout(()=>{
+    // Clear blue fill so green bg shows
+    fill.style.transition='none'; fill.style.width='0%';
+    btn.classList.remove('confirming');btn.classList.add('confirmed');
+    document.getElementById('itemCard').classList.remove('confirming');
+    document.getElementById('itemCard').classList.add('confirmed');
+    document.getElementById('holdLabel').textContent='✓ אושר';
+    holdFilling=false;
+    holdConfirmed=true;
+  },300);
+}
+
+function cancelHold(){
+  clearTimeout(holdTimer);
+  const btn=document.getElementById('holdBtn');
+  const fill=document.getElementById('holdFill');
+  const card=document.getElementById('itemCard');
+  if(holdConfirmed){
+    // Finger lifted after confirm — now advance
+    holdConfirmed=false;
+    holdCooldown=true;
+    holdFilling=false;
+    setTimeout(()=>{holdCooldown=false;},300);
+    markDone();
+    return;
+  }
+  if(!holdFilling) return;
+  holdFilling=false;
+  btn.classList.remove('confirming');
+  card.classList.remove('confirming');
+  fill.style.transition='width .2s ease';fill.style.width='0%';
+  document.getElementById('holdLabel').textContent='לחץ לאישור';
+}
+
+async function keepAwake(){try{if('wakeLock' in navigator)await navigator.wakeLock.request('screen');}catch(e){}}
+keepAwake();
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)keepAwake();});
+
+applyTheme();
+const customList=loadCustomList();
+if(customList) rebuildWithList(customList);
+init();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+function handleFileDrop(event){
+  const file=event.dataTransfer&&event.dataTransfer.files[0];
+  if(file) processFile(file);
+}
+function handleFileUpload(event){
+  const file=event.target.files[0];
+  if(file) processFile(file);
+  event.target.value=''; // reset so same file can be re-selected
+}
+function resetUploadLabel(){
+  const label=document.getElementById('uploadLabel');
+  label.classList.remove('success');
+  label.style.display='flex';
+  // Remove any success summary card
+  const summary=document.getElementById('uploadSummary');
+  if(summary) summary.remove();
+  document.getElementById('loadAnotherBtn').style.display='none';
+  document.getElementById('importError').style.display='none';
+}
+function processFile(file){
+  const errEl=document.getElementById('importError');
+  errEl.style.display='none';
+  const label=document.getElementById('uploadLabel');
+
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=new Uint8Array(e.target.result);
+      const wb=XLSX.read(data,{type:'array'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+
+      let headerIdx=-1,colPhase=-1,colGroup=-1,colItem=-1,colSub=-1,colBullets=-1;
+      for(let r=0;r<Math.min(rows.length,10);r++){
+        const row=rows[r].map(c=>String(c||'').trim().toLowerCase());
+        const pi=row.findIndex(c=>c==='phase'),gi=row.findIndex(c=>c==='group'),ii=row.findIndex(c=>c==='item');
+        if(pi>=0&&gi>=0&&ii>=0){
+          headerIdx=r; colPhase=pi; colGroup=gi; colItem=ii;
+          colSub=row.findIndex(c=>c==='sub');
+          colBullets=row.findIndex(c=>c==='bullets');
+          break;
+        }
+      }
+      if(headerIdx===-1){errEl.textContent='לא נמצאה שורת כותרות — ודא שיש שורה עם Phase, Group, Item';errEl.style.display='block';return;}
+
+      const items=[];let lastPhase='',lastGroup='';
+      for(let i=headerIdx+1;i<rows.length;i++){
+        const row=rows[i];
+        const rp=String(row[colPhase]||'').trim(),rg=String(row[colGroup]||'').trim();
+        if(rp) lastPhase=rp; if(rg) lastGroup=rg;
+        let rawItem=String(row[colItem]||'').trim(),autoSub='';
+        if(rawItem.includes('|')){const p=rawItem.split('|');rawItem=p[0].trim();autoSub=p.slice(1).join(' ').trim();}
+        const main=rawItem;
+        const sub=colSub>=0&&String(row[colSub]||'').trim()?String(row[colSub]||'').trim():autoSub;
+        const bulletsRaw=colBullets>=0?String(row[colBullets]||'').trim():'';
+        if(!lastPhase||!lastGroup||!main) continue;
+        const bullets=bulletsRaw?bulletsRaw.split('|').map(b=>b.trim()).filter(b=>b):[];
+        items.push({phase:lastPhase,group:lastGroup,main,sub,bullets});
+      }
+      if(items.length===0){errEl.textContent='לא נמצאו פריטים תקינים';errEl.style.display='block';return;}
+
+      try{localStorage.setItem(LIST_KEY,JSON.stringify(items));}catch(err){}
+      clearSave();
+      rebuildWithList(items);
+
+      // Show success summary, hide upload zone
+      label.style.display='none';
+      const old=document.getElementById('uploadSummary');if(old) old.remove();
+      const s=document.createElement('div');
+      s.id='uploadSummary';
+      s.style.cssText='background:var(--green-bg);border:1.5px solid var(--green);border-radius:14px;padding:20px;text-align:center;';
+      s.innerHTML='<div style="font-size:28px;color:var(--green);margin-bottom:6px">✓</div>'
+        +'<div style="font-size:16px;font-weight:700;color:var(--green)">נטען בהצלחה — '+items.length+' פריטים</div>'
+        +'<div style="font-size:12px;color:var(--text3);margin-top:4px">'+file.name+'</div>';
+      label.parentNode.insertBefore(s,label);
+      document.getElementById('loadAnotherBtn').style.display='block';
+
+      setTimeout(()=>showScreen('screenChecklist'),900);
+
+    } catch(err){
+      errEl.textContent='שגיאה — אם הקובץ פתוח ב-Excel: File → Save a Copy ובחר את העותק';
+      errEl.style.display='block';
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+</script>
