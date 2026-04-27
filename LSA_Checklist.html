@@ -282,7 +282,7 @@ html,body{height:100%;background:var(--bg);font-family:'Heebo',sans-serif;color:
     <button class="btn btn-blue" onclick="resumeFlight()">המשך טיסה</button>
     <button class="btn btn-ghost" onclick="openModal()">טיסה חדשה</button>
     <button class="btn btn-ghost" onclick="showScreen('screenImport')" style="font-size:14px;padding:12px;">טעינת רשימה מ-Excel 📊</button>
-    <div class="footer">built by eligrt &middot; v1.61</div>
+    <div class="footer">built by eligrt &middot; v1.63</div>
   </div>
 
   <!-- CHECKLIST -->
@@ -326,7 +326,7 @@ html,body{height:100%;background:var(--bg);font-family:'Heebo',sans-serif;color:
       </div>
     </div>
     <div class="tree-panel" id="treePanel"></div>
-    <div class="footer">built by eligrt &middot; v1.61</div>
+    <div class="footer">built by eligrt &middot; v1.63</div>
   </div>
 
   <!-- REVIEW -->
@@ -341,7 +341,7 @@ html,body{height:100%;background:var(--bg);font-family:'Heebo',sans-serif;color:
       </div>
     </div>
     <div class="tree-panel" id="reviewPanel"></div>
-    <div class="footer">built by eligrt &middot; v1.61</div>
+    <div class="footer">built by eligrt &middot; v1.63</div>
   </div>
 
   <!-- DONE -->
@@ -351,7 +351,7 @@ html,body{height:100%;background:var(--bg);font-family:'Heebo',sans-serif;color:
     <div class="done-sub">כל הבדיקות אושרו.<br>טיסה בטוחה!</div>
     <button class="btn btn-blue" style="width:100%;margin-top:8px" onclick="goBackToChecklist()">חזרה לצ׳קליסט</button>
     <button class="btn btn-ghost" style="width:100%;margin-top:8px" onclick="openModal()">טיסה חדשה</button>
-    <div class="footer">built by eligrt &middot; v1.61</div>
+    <div class="footer">built by eligrt &middot; v1.63</div>
   </div>
 
   <!-- IMPORT -->
@@ -375,7 +375,7 @@ html,body{height:100%;background:var(--bg);font-family:'Heebo',sans-serif;color:
     </label>
     <button class="btn btn-ghost" id="loadAnotherBtn" onclick="resetUploadLabel()" style="display:none">טען קובץ אחר</button>
     <div class="import-error" id="importError"></div>
-    <div class="footer">built by eligrt &middot; v1.61</div>
+    <div class="footer">built by eligrt &middot; v1.63</div>
   </div>
 
   <!-- PHASE COMPLETE OVERLAY -->
@@ -475,7 +475,7 @@ const CL=[
   {phase:"הגעה למנחת ולמטוס",group:"הכנת קוקפיט",main:"GPS: מקם והפעל",sub:""},
   {phase:"הגעה למנחת ולמטוס",group:"הכנת קוקפיט",main:"אוזניות: בדוק סוללות",sub:""},
   {phase:"הגעה למנחת ולמטוס",group:"כללי",main:"עדכון בקרה בהמראה (אם נדרש)",sub:""},
-  {phase:"הגעה למנחת ולמטוס",group:"כללי",main:"דאבל צ׳ק מז״א (בשדה המראה ונחיתה METAR)",sub:""},
+  {phase:"הגעה למנחת ולמטוס",group:"כללי",main:"דאבל צ׳ק מז״א",sub:"בשדה המראה ובשדה נחיתה"},
 
   // ─── סגירת טיסה ──────────────────────────────────────
   {phase:"סגירת טיסה",group:"רישום וניירת",main:"ספר מטוס: סגירת שורה",sub:""},
