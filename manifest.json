@@ -9,8 +9,8 @@
   "theme_color": "#1c3d6e",
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/eligrt/AirCheck/main/AirCheck_logo_RD.png",
-      "sizes": "512x512",
+      "src": "https://raw.githubusercontent.com/eligrt/AirCheck/main/AirCheck_icon_RD.png",
+      "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "any maskable"
     }
