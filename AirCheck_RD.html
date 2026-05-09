@@ -383,7 +383,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
 
     <div class="tree-panel" id="treePanel"></div>
-    <div class="footer-strip">AirCheck+ · v2.02.009 · built by eligrt</div>
+    <div class="footer-strip">AirCheck+ · v2.02.010 · built by eligrt</div>
   </div>
 
   <div id="modal">
@@ -498,7 +498,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
         <button class="danger-btn" onclick="confirmReset()">אפס את כל הנתונים</button>
       </div>
 
-      <div class="settings-footer">AIRCHECK+ · v2.02.009 · BUILD eligrt</div>
+      <div class="settings-footer">AIRCHECK+ · v2.02.010 · BUILD eligrt</div>
     </div>
   </div>
 
@@ -904,7 +904,7 @@ function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-loadState();loadReg();loadRoute();drawRings();render();
+loadSettings();loadState();loadReg();loadRoute();drawRings();render();
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
 </body>
