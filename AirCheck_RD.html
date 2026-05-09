@@ -401,7 +401,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="splash-footer-wrap">
       <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
         <span class="footer-refresh" onclick="location.reload()">רענון</span>
-        <span>AirCheck+ · v2.04.011 · built by eligrt</span>
+        <span>AirCheck+ · v2.04.012 · built by eligrt</span>
         <span style="width:40px;"></span>
       </div>
     </div>
@@ -513,7 +513,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="tree-panel" id="treePanel"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.011 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.012 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -612,7 +612,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.011 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.012 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -629,7 +629,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="editor-list" id="editorList"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.011 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.012 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -973,29 +973,43 @@ function buildItemRow(it,ii,g,gi,ph,pi){
   drag.addEventListener('touchstart',e=>{
     e.preventDefault();
     dragSrc=row;row.classList.add('dragging');
-    const touch=e.touches[0];
     let lastOver=null;
     function onMove(ev){
       const t=ev.touches[0];
       const el=document.elementFromPoint(t.clientX,t.clientY);
-      const targetRow=el?el.closest('.ed-item'):null;
+      // Accept ed-item OR ed-items (group container) as drop target
+      const targetRow=el?(el.closest('.ed-item')||null):null;
+      const targetGroup=el?(el.closest('.ed-items')):null;
       if(lastOver&&lastOver!==row)lastOver.classList.remove('drag-over');
       if(targetRow&&targetRow!==row){targetRow.classList.add('drag-over');lastOver=targetRow;}
+      else if(targetGroup){targetGroup.style.outline='2px solid var(--gold)';lastOver=targetGroup;}
+      else{lastOver=null;}
     }
-    function onEnd(ev){
+    function cleanup(){
       row.classList.remove('dragging');
       if(lastOver){
         lastOver.classList.remove('drag-over');
-        const sp=+row.dataset.pi,sg=+row.dataset.gi,si=+row.dataset.ii;
-        const dp=+lastOver.dataset.pi,dg=+lastOver.dataset.gi,di=+lastOver.dataset.ii;
-        if(edData[sp]&&edData[sp].groups[sg]&&edData[dp]&&edData[dp].groups[dg]){
-          if(safeDragMove(sp,sg,si,dp,dg,di)){dragSrc=null;renderEditor();return;}
-          dragSrc=null;
-        }
+        lastOver.style.outline='';
       }
       dragSrc=null;
       document.removeEventListener('touchmove',onMove);
       document.removeEventListener('touchend',onEnd);
+    }
+    function onEnd(ev){
+      if(lastOver){
+        const sp=+row.dataset.pi,sg=+row.dataset.gi,si=+row.dataset.ii;
+        // Drop on item — insert before it
+        if(lastOver.classList.contains('ed-item')&&lastOver!==row){
+          const dp=+lastOver.dataset.pi,dg=+lastOver.dataset.gi,di=+lastOver.dataset.ii;
+          if(safeDragMove(sp,sg,si,dp,dg,di)){cleanup();renderEditor();return;}
+        }
+        // Drop on group container — append to that group
+        if(lastOver.classList.contains('ed-items')){
+          const dp=+lastOver.dataset.pi,dg=+lastOver.dataset.gi;
+          if(safeDragMove(sp,sg,si,dp,dg,undefined)){cleanup();renderEditor();return;}
+        }
+      }
+      cleanup();
     }
     document.addEventListener('touchmove',onMove,{passive:false});
     document.addEventListener('touchend',onEnd);
