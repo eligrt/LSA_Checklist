@@ -149,7 +149,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 /* ── MODALS ── */
 #modal{display:none;position:absolute;inset:0;background:rgba(26,19,8,.8);z-index:100;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(3px);}
 #modal.open{display:flex;}
-.modal-box{background:var(--paper-hi);border:2px solid var(--gold);border-radius:8px;padding:24px 20px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.modal-box{background:var(--paper-hi);border:2px solid var(--gold);border-radius:8px;padding:24px 20px;width:100%;max-width:340px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4);}
 .modal-title{font-size:18px;font-weight:700;margin-bottom:8px;color:var(--ink-body);}
 .modal-sub{font-size:14px;color:var(--ink-muted);margin-bottom:20px;line-height:1.5;}
 .modal-btns{display:flex;gap:10px;flex-direction:column;}
@@ -229,7 +229,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 /* ── XLS IMPORT OVERLAY ── */
 #xlsImportOverlay{display:none;position:absolute;inset:0;z-index:400;align-items:center;justify-content:center;background:rgba(26,19,8,.85);backdrop-filter:blur(4px);padding:24px;}
 #xlsImportOverlay.open{display:flex;}
-.xls-import-box{background:var(--paper-hi);border:2px solid var(--gold);border-radius:8px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.5);overflow:hidden;display:flex;flex-direction:column;max-height:85vh;}
+.xls-import-box{background:var(--paper-hi);border:2px solid var(--gold);border-radius:8px;width:100%;max-width:340px;box-shadow:0 20px 60px rgba(0,0,0,.5);overflow:hidden;display:flex;flex-direction:column;max-height:85vh;}
 .xls-import-header{background:var(--ink);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;}
 .xls-import-title{font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.2em;color:var(--paper);}
 .xls-import-close{background:transparent;border:none;color:rgba(244,236,220,.6);font-size:20px;cursor:pointer;line-height:1;padding:0;}
@@ -442,7 +442,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
 
     <div class="tree-panel" id="treePanel"></div>
-    <div class="footer-strip">AirCheck+ · v2.02.029 · built by eligrt</div>
+    <div class="footer-strip">AirCheck+ · v2.02.031 · built by eligrt</div>
   </div>
 
   <div id="modal">
@@ -549,7 +549,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
         <button class="danger-btn" onclick="confirmReset()">אפס את כל הנתונים</button>
       </div>
 
-      <div class="settings-footer">AIRCHECK+ · v2.02.029 · BUILD eligrt</div>
+      <div class="settings-footer">AIRCHECK+ · v2.02.031 · BUILD eligrt</div>
     </div>
   </div>
 
@@ -776,9 +776,8 @@ function renderEditor(){
     delBtn.onclick=e=>{e.stopPropagation();if(confirm('למחוק את השלב "'+ph.phase+'"?')){edData.splice(pi,1);renderEditor();}};
     hdr.appendChild(arrow);hdr.appendChild(name);hdr.appendChild(count);hdr.appendChild(editBtn);hdr.appendChild(delBtn);
     const groups=document.createElement('div');groups.className='ed-groups';
-    // Current phase (contains current checklist item) opens by default
-    const isCurrentPhase=CL[current]&&CL[current].phase===ph.phase;
-    let open=isCurrentPhase;
+    // All phases collapsed by default in editor
+    let open=false;
     groups.style.display=open?'block':'none';
     arrow.style.transform=open?'rotate(90deg)':'rotate(180deg)';
     hdr.onclick=()=>{open=!open;groups.style.display=open?'block':'none';arrow.style.transform=open?'rotate(90deg)':'rotate(180deg)';};
