@@ -223,6 +223,60 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 .ed-popup-btns{display:flex;gap:8px;margin-top:4px;}
 @keyframes edBlink{0%,100%{opacity:1;}50%{opacity:.3;}}
 
+/* ── XLS IMPORT OVERLAY ── */
+#xlsImportOverlay{display:none;position:absolute;inset:0;z-index:400;align-items:center;justify-content:center;background:rgba(26,19,8,.85);backdrop-filter:blur(4px);padding:24px;}
+#xlsImportOverlay.open{display:flex;}
+.xls-import-box{background:var(--paper-hi);border:2px solid var(--gold);border-radius:8px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.5);overflow:hidden;}
+.xls-import-header{background:var(--ink);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;}
+.xls-import-title{font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.2em;color:var(--paper);}
+.xls-import-close{background:transparent;border:none;color:rgba(244,236,220,.6);font-size:20px;cursor:pointer;line-height:1;padding:0;}
+.xls-import-body{padding:20px 16px;}
+/* Step 1: drop zone */
+.xls-dropzone{border:2px dashed var(--gold);border-radius:6px;padding:32px 20px;text-align:center;cursor:pointer;transition:background .15s;}
+.xls-dropzone:hover,.xls-dropzone.dragover{background:rgba(200,160,74,.08);}
+.xls-dropzone-icon{font-size:32px;margin-bottom:10px;display:block;}
+.xls-dropzone-label{font-size:14px;font-weight:700;color:var(--ink-body);margin-bottom:4px;}
+.xls-dropzone-sub{font-size:11px;color:var(--ink-muted);}
+/* Step 2: preview */
+.xls-preview-stat{display:flex;align-items:baseline;gap:8px;padding:12px 0;border-bottom:1px dashed var(--gold-lite);}
+.xls-preview-num{font-family:var(--font-mono);font-size:28px;font-weight:700;color:var(--ink);direction:ltr;}
+.xls-preview-label{font-size:13px;color:var(--ink-muted);}
+.xls-preview-phases{margin-top:10px;display:flex;flex-direction:column;gap:4px;}
+.xls-preview-phase-row{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:var(--paper);border:1px solid var(--gold-lite);border-radius:3px;}
+.xls-preview-phase-name{font-size:13px;color:var(--ink-body);font-weight:600;}
+.xls-preview-phase-cnt{font-family:var(--font-mono);font-size:10px;color:var(--ink-muted);direction:ltr;}
+.xls-warning{margin-top:10px;padding:8px 10px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.4);border-radius:3px;font-size:11px;color:#92620a;direction:rtl;}
+/* Step footer buttons */
+.xls-import-footer{display:flex;gap:8px;padding:16px 16px 18px;}
+/* Step ribbon */
+.xls-step-ribbon{display:flex;align-items:center;gap:6px;padding:10px 16px 0;direction:ltr;}
+.xls-step{display:flex;align-items:center;gap:5px;padding:4px 8px;border-radius:3px;border:1px solid var(--gold-lite);font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--ink-muted);}
+.xls-step.active{background:var(--ink);border-color:var(--ink-dark);color:var(--paper);}
+.xls-step.done{background:var(--cleared);border-color:var(--cleared);color:var(--paper);}
+.xls-step-line{flex:1;height:1px;background:var(--gold-lite);}
+/* Preview expandable phases */
+.xls-phase-row{border:1px solid var(--gold-lite);border-radius:3px;margin-bottom:4px;overflow:hidden;}
+.xls-phase-hdr{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;cursor:pointer;background:var(--paper);user-select:none;}
+.xls-phase-hdr:active{background:rgba(200,160,74,.08);}
+.xls-phase-hdr-left{display:flex;align-items:center;gap:8px;}
+.xls-phase-chev{font-size:9px;color:var(--ink-muted);transition:transform .2s;font-family:var(--font-mono);}
+.xls-phase-title{font-size:12px;font-weight:700;color:var(--ink-body);}
+.xls-phase-cnt{font-family:var(--font-mono);font-size:9px;color:var(--ink-muted);}
+.xls-phase-items{background:var(--paper-hi);border-top:1px dashed var(--gold-lite);padding:4px 10px 6px;display:none;}
+.xls-phase-items.open{display:block;}
+.xls-group-name{font-size:10px;font-weight:600;color:var(--ink-muted);padding:4px 0 2px;border-bottom:1px dotted rgba(200,160,74,.3);margin-bottom:2px;}
+.xls-item-row{font-size:11px;color:var(--ink-body);padding:2px 0 2px 8px;border-bottom:1px dotted rgba(200,160,74,.15);}
+.xls-item-row:last-child{border-bottom:none;}
+.xls-item-sub{font-size:10px;color:var(--ink-muted);font-style:italic;}
+/* Success step */
+.xls-success-stamp{display:flex;justify-content:center;margin:18px 0 16px;}
+.xls-success-stamp-box{border:3px solid var(--cleared);padding:8px 18px 10px;text-align:center;color:var(--cleared);font-family:var(--font-mono);transform:rotate(-6deg);}
+.xls-success-stamp-loaded{font-size:10px;letter-spacing:.3em;font-weight:700;margin-bottom:2px;}
+.xls-success-stamp-count{font-size:20px;font-weight:700;letter-spacing:.08em;}
+.xls-success-stamp-file{font-size:8px;letter-spacing:.12em;margin-top:3px;opacity:.75;}
+.xls-success-title{font-size:20px;font-weight:700;color:var(--ink-body);text-align:center;margin-bottom:6px;}
+.xls-success-sub{font-size:13px;color:var(--ink-muted);text-align:center;line-height:1.6;margin-bottom:20px;}
+
 /* ── SETTINGS SCREEN ── */
 #screenSettings{overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--paper);background-image:repeating-linear-gradient(0deg,transparent 0,transparent 27px,var(--paper-line) 27px,var(--paper-line) 28px);}
 #screenSettings::-webkit-scrollbar{width:0;}
@@ -383,7 +437,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
 
     <div class="tree-panel" id="treePanel"></div>
-    <div class="footer-strip">AirCheck+ · v2.02.010 · built by eligrt</div>
+    <div class="footer-strip">AirCheck+ · v2.02.016 · built by eligrt</div>
   </div>
 
   <div id="modal">
@@ -467,10 +521,6 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
         <span class="settings-section-label">INTERACTION</span>
         <div class="settings-card">
           <div class="settings-row">
-            <span class="settings-row-label">רטט בעת אישור</span>
-            <button class="tog off" id="togHaptics" onclick="toggleSetting('haptics')"><div class="tog-knob"></div></button>
-          </div>
-          <div class="settings-row">
             <span class="settings-row-label">צליל בעת אישור</span>
             <button class="tog off" id="togSounds" onclick="toggleSetting('sounds')"><div class="tog-knob"></div></button>
           </div>
@@ -482,11 +532,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
         <span class="settings-section-label">DATA</span>
         <div class="settings-card">
           <div class="settings-row tappable" onclick="closeSettings();openEditor()">
-            <span class="settings-row-label">עריכת רשימה</span>
-            <span class="settings-row-arrow">›</span>
-          </div>
-          <div class="settings-row tappable" onclick="">
-            <span class="settings-row-label">ייצוא לקובץ XLS</span>
+            <span class="settings-row-label">עריכת הצ'קליסט</span>
             <span class="settings-row-arrow">›</span>
           </div>
         </div>
@@ -498,7 +544,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
         <button class="danger-btn" onclick="confirmReset()">אפס את כל הנתונים</button>
       </div>
 
-      <div class="settings-footer">AIRCHECK+ · v2.02.010 · BUILD eligrt</div>
+      <div class="settings-footer">AIRCHECK+ · v2.02.016 · BUILD eligrt</div>
     </div>
   </div>
 
@@ -535,6 +581,23 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
   </div>
 </div>
+  <!-- XLS IMPORT OVERLAY -->
+  <div id="xlsImportOverlay">
+    <div class="xls-import-box">
+      <div class="xls-import-header">
+        <span class="xls-import-title" id="xlsImportTitle">IMPORT · XLS</span>
+        <button class="xls-import-close" onclick="closeXLSImport()">✕</button>
+      </div>
+      <div class="xls-import-body" id="xlsImportBody">
+        <!-- populated by JS -->
+      </div>
+      <div class="xls-import-footer" id="xlsImportFooter">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="xlsImportInput"  accept=".xlsx,.xls" style="display:none" onchange="handleXLSImport(this)">
 
 <script>
 const CL=[
@@ -601,7 +664,7 @@ function togglePhase(phaseName){expandedPhases[phaseName]=!expandedPhases[phaseN
 function renderTree(){const panel=document.getElementById('treePanel');panel.innerHTML='';PHASES.forEach((p)=>{const pDone=p.groups.reduce((s,g)=>s+g.items.filter(j=>status[j]==='done').length,0);const pTot=p.end-p.start+1;const isCurPhase=current>=p.start&&current<=p.end;const isDone=pDone===pTot;let isOpen;if(expandedPhases[p.name]===undefined){isOpen=isCurPhase;}else{isOpen=expandedPhases[p.name];}const phDiv=document.createElement('div');phDiv.className='tree-phase';const hdr=document.createElement('div');hdr.className='tree-phase-hdr';hdr.style.cursor='pointer';hdr.onclick=()=>togglePhase(p.name);const nm=document.createElement('span');nm.className='tree-ph-name '+(isDone?'done':isCurPhase?'cur':'upcoming');nm.textContent=p.name;const right=document.createElement('span');right.style.cssText='display:flex;align-items:center;gap:8px;direction:ltr;';const stat=document.createElement('span');stat.className='tree-ph-stat';stat.textContent=pDone+'/'+pTot;const chevron=document.createElement('span');chevron.style.cssText='font-size:10px;color:var(--ink-muted);font-family:var(--font-mono);display:inline-block;';chevron.textContent=isOpen?'▼':'►';right.appendChild(stat);right.appendChild(chevron);hdr.appendChild(nm);hdr.appendChild(right);phDiv.appendChild(hdr);if(isOpen){p.groups.forEach((g)=>{const gDiv=document.createElement('div');gDiv.className='tree-group';const gnm=document.createElement('div');gnm.className='tree-gr-name';gnm.textContent=g.name;gDiv.appendChild(gnm);g.items.forEach(ii=>{const s=status[ii]||'upcoming';const isCurItem=ii===current;const row=document.createElement('div');row.className='tree-item';row.onclick=(e)=>{e.stopPropagation();current=ii;holdState='idle';resetRunwayBtn();render();};const mark=document.createElement('span');mark.className='tree-mark '+(s==='done'?'done':isCurItem?'cur':s==='skipped'?'skipped':'upcoming');mark.textContent=s==='done'?'✓':isCurItem?'●':s==='skipped'?'~':'○';const txt=document.createElement('span');txt.className='tree-item-text '+(s==='done'?'done':isCurItem?'cur':s==='skipped'?'skipped':'upcoming');txt.textContent=CL[ii].main;row.appendChild(mark);row.appendChild(txt);gDiv.appendChild(row);});phDiv.appendChild(gDiv);});}panel.appendChild(phDiv);});}
 const HOLD_MS=300;const FLIP_MS=520;
 let holdState='idle';let holdTimer=null;
-function startHold(){if(holdState==='flipping'||holdState==='confirmed')return;if(status[current]==='done')return;holdState='holding';document.getElementById('confirmHint').textContent='מחזיק…';const fill=document.getElementById('runwayFill');fill.classList.remove('releasing');fill.classList.add('holding');const plane=document.getElementById('runwayPlane');plane.classList.add('holding');plane.classList.remove('confirmed');const btn=document.getElementById('runwayBtn');btn.classList.remove('idle');holdTimer=setTimeout(()=>{holdState='confirmed';const now=new Date();document.getElementById('stampTime').textContent=String(now.getUTCHours()).padStart(2,'0')+':'+String(now.getUTCMinutes()).padStart(2,'0')+' UTC';document.getElementById('cardStamp').classList.add('visible');if(settings&&settings.haptics&&navigator.vibrate){navigator.vibrate(40);}if(settings&&settings.sounds){playConfirmSound();}document.getElementById('confirmHint').textContent='אושר — שחרר להמשך';document.getElementById('confirmHint').classList.add('confirmed');fill.classList.add('confirmed');fill.classList.remove('holding');const p=document.getElementById('runwayPlane');p.classList.add('confirmed');p.classList.remove('holding');},(settings&&settings.holdMs?settings.holdMs:HOLD_MS));}
+function startHold(){if(holdState==='flipping'||holdState==='confirmed')return;if(status[current]==='done')return;holdState='holding';document.getElementById('confirmHint').textContent='מחזיק…';const fill=document.getElementById('runwayFill');fill.classList.remove('releasing');fill.classList.add('holding');const plane=document.getElementById('runwayPlane');plane.classList.add('holding');plane.classList.remove('confirmed');const btn=document.getElementById('runwayBtn');btn.classList.remove('idle');holdTimer=setTimeout(()=>{holdState='confirmed';const now=new Date();document.getElementById('stampTime').textContent=String(now.getUTCHours()).padStart(2,'0')+':'+String(now.getUTCMinutes()).padStart(2,'0')+' UTC';document.getElementById('cardStamp').classList.add('visible');if(navigator.vibrate){navigator.vibrate(40);}if(settings&&settings.sounds){playConfirmSound();}document.getElementById('confirmHint').textContent='אושר — שחרר להמשך';document.getElementById('confirmHint').classList.add('confirmed');fill.classList.add('confirmed');fill.classList.remove('holding');const p=document.getElementById('runwayPlane');p.classList.add('confirmed');p.classList.remove('holding');},(settings&&settings.holdMs?settings.holdMs:HOLD_MS));}
 function releaseHold(){clearTimeout(holdTimer);if(holdState==='confirmed'){holdState='flipping';const card=document.getElementById('cardTop');document.getElementById('cardStamp').classList.remove('visible');card.classList.add('flipping');setTimeout(()=>{status[current]='done';const prevPhase=CL[current].phase;advanceToNext();holdState='idle';resetRunwayBtn(true);const newPhase=CL[current]?CL[current].phase:null;const prevPhaseObj=PHASE_IDX[prevPhase];if(prevPhaseObj){const pDone=prevPhaseObj.groups.reduce((s,g)=>s+g.items.filter(j=>status[j]==='done').length,0);const pTot=prevPhaseObj.end-prevPhaseObj.start+1;if(pDone===pTot&&newPhase&&newPhase!==prevPhase){card.classList.remove('flipping');showPhaseOverlay(prevPhase,newPhase);return;}}render();card.classList.remove('flipping');},450);}else{cancelHold();}}
 function cancelHold(){if(holdState==='flipping'||holdState==='confirmed')return;clearTimeout(holdTimer);holdState='idle';resetRunwayBtn();document.getElementById('confirmHint').textContent='לחץ והחזק את המסלול לאישור';document.getElementById('confirmHint').classList.remove('confirmed');document.getElementById('cardStamp').classList.remove('visible');}
 function resetRunwayBtn(instant){
@@ -636,7 +699,7 @@ function closeModal(){document.getElementById('modal').classList.remove('open');
 function startNew(){clearState();holdState='idle';resetRunwayBtn();render();}
 // ── SETTINGS ──
 const SETTINGS_KEY='aircheck_rd_settings';
-let settings={tail:'',holdMs:300,haptics:false,sounds:false,theme:'day'};
+let settings={tail:'',holdMs:300,sounds:false,theme:'day'};
 
 function loadSettings(){
   try{const r=localStorage.getItem(SETTINGS_KEY);if(r)settings=Object.assign(settings,JSON.parse(r));}catch(e){}
@@ -700,7 +763,11 @@ function renderEditor(){
     delBtn.onclick=e=>{e.stopPropagation();if(confirm('למחוק את השלב "'+ph.phase+'"?')){edData.splice(pi,1);renderEditor();}};
     hdr.appendChild(arrow);hdr.appendChild(name);hdr.appendChild(count);hdr.appendChild(editBtn);hdr.appendChild(delBtn);
     const groups=document.createElement('div');groups.className='ed-groups';
-    let open=true;
+    // Current phase (contains current checklist item) opens by default
+    const isCurrentPhase=CL[current]&&CL[current].phase===ph.phase;
+    let open=isCurrentPhase;
+    groups.style.display=open?'block':'none';
+    arrow.style.transform=open?'':'rotate(-90deg)';
     hdr.onclick=()=>{open=!open;groups.style.display=open?'block':'none';arrow.style.transform=open?'':'rotate(-90deg)';};
     ph.groups.forEach((g,gi)=>{
       const gDiv=document.createElement('div');gDiv.className='ed-group';
@@ -751,11 +818,13 @@ function renderEditor(){
   addPhase.onclick=()=>openEdPopup('הוסף שלב','','',false,val=>{edData.push({phase:val,groups:[]});renderEditor();});
   el.appendChild(addPhase);
   const actions=document.createElement('div');actions.className='ed-actions';
+  const importBtn=document.createElement('button');importBtn.className='ed-action-btn';importBtn.textContent='ייבוא XLS ↑';
+  importBtn.onclick=triggerXLSImport;
   const exportBtn=document.createElement('button');exportBtn.className='ed-action-btn';exportBtn.textContent='ייצוא XLS ↓';
   exportBtn.onclick=exportEditorToXLS;
   const resetBtn=document.createElement('button');resetBtn.className='ed-action-btn danger';resetBtn.textContent='איפוס לברירת מחדל';
   resetBtn.onclick=()=>{if(confirm('לאפס לרשימת ברירת המחדל?')){CL.length=0;CL_DEFAULT.forEach(it=>CL.push({...it}));buildIndex();edData=clToEdData(CL);renderEditor();}};
-  actions.appendChild(exportBtn);actions.appendChild(resetBtn);el.appendChild(actions);
+  actions.appendChild(importBtn);actions.appendChild(exportBtn);actions.appendChild(resetBtn);el.appendChild(actions);
 }
 
 function buildItemRow(it,ii,g,gi,ph,pi){
@@ -805,6 +874,202 @@ function confirmEdPopup(){
 }
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('edPopup').classList.contains('open'))confirmEdPopup();});
 
+let xlsParsedList=null;
+
+function triggerXLSImport(){
+  showXLSStep1();
+  document.getElementById('xlsImportOverlay').classList.add('open');
+}
+
+function closeXLSImport(){
+  document.getElementById('xlsImportOverlay').classList.remove('open');
+  xlsParsedList=null;
+}
+
+function showXLSStep1(){setStepRibbon(1);
+  const body=document.getElementById('xlsImportBody');
+  const footer=document.getElementById('xlsImportFooter');
+  body.innerHTML=`
+    <div class="xls-dropzone" id="xlsDropzone" onclick="document.getElementById('xlsImportInput').click()">
+      <span class="xls-dropzone-icon">📋</span>
+      <div class="xls-dropzone-label">בחר קובץ XLS / XLSX</div>
+      <div class="xls-dropzone-sub">Phase · Group · Item · Sub</div>
+    </div>`;
+  footer.innerHTML=`<button class="btn btn-ghost" style="flex:1" onclick="closeXLSImport()">ביטול</button>`;
+  // Drag and drop
+  const dz=document.getElementById('xlsDropzone');
+  dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('dragover');});
+  dz.addEventListener('dragleave',()=>dz.classList.remove('dragover'));
+  dz.addEventListener('drop',e=>{
+    e.preventDefault();dz.classList.remove('dragover');
+    const f=e.dataTransfer.files[0];if(f)processXLSFile(f);
+  });
+}
+
+function handleXLSImport(input){
+  if(!input.files||!input.files[0])return;
+  processXLSFile(input.files[0]);
+  input.value='';
+}
+
+function processXLSFile(file){
+  if(typeof XLSX==='undefined'){
+    document.getElementById('xlsImportBody').innerHTML='<div class="xls-warning">⏳ טוען ספריה... נסה שוב</div>';
+    return;
+  }
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const wb=XLSX.read(e.target.result,{type:'array'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+      const newList=[];let ph='',gr='';
+      const warnings=[];
+      rows.forEach((r,i)=>{
+        if(i===0&&String(r[0]).toLowerCase().includes('phase'))return; // skip header
+        if(!r[0]&&!r[1]&&!r[2])return; // skip empty
+        if(r[0])ph=String(r[0]).trim();
+        if(r[1])gr=String(r[1]).trim();
+        const main=String(r[2]||'').trim();
+        const sub=String(r[3]||'').trim();
+        if(main&&ph&&gr)newList.push({phase:ph,group:gr,main,sub});
+        else if(r[2]&&(!ph||!gr))warnings.push('שורה '+(i+1)+': חסר שלב או קבוצה');
+      });
+      if(!newList.length){
+        document.getElementById('xlsImportBody').innerHTML='<div class="xls-warning">⚠ לא נמצאו פריטים תקינים בקובץ. ודא שהעמודות: Phase, Group, Item, Sub</div>';
+        return;
+      }
+      xlsParsedList=newList;
+      showXLSStep2(newList,warnings,file.name);
+    }catch(ex){
+      document.getElementById('xlsImportBody').innerHTML='<div class="xls-warning">⚠ שגיאה בקריאת הקובץ. ודא שהקובץ תקין.</div>';
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function setStepRibbon(active){
+  document.getElementById('xlsImportTitle').textContent='IMPORT · XLS';
+  const labels=[['01','FILE'],['02','PREVIEW'],['03','LOADED']];
+  const html=labels.map((l,i)=>{
+    const cls=i+1<active?'done':i+1===active?'active':'';
+    const sep=i<2?'<div class="xls-step-line"></div>':'';
+    return `<div class="xls-step ${cls}"><span>${l[0]}</span><span>${l[1]}</span></div>${sep}`;
+  }).join('');
+  // Inject ribbon above body
+  let ribbon=document.getElementById('xlsRibbon');
+  if(!ribbon){
+    ribbon=document.createElement('div');ribbon.id='xlsRibbon';ribbon.className='xls-step-ribbon';
+    document.getElementById('xlsImportBody').parentNode.insertBefore(ribbon,document.getElementById('xlsImportBody'));
+  }
+  ribbon.innerHTML=html;
+}
+
+function showXLSStep2(list,warnings,filename){
+  setStepRibbon(2);
+  // Build phase/group/item tree
+  const phaseMap={};const phaseOrder=[];
+  list.forEach(it=>{
+    if(!phaseMap[it.phase]){phaseMap[it.phase]={groups:{},groupOrder:[]};phaseOrder.push(it.phase);}
+    const p=phaseMap[it.phase];
+    if(!p.groups[it.group]){p.groups[it.group]=[];p.groupOrder.push(it.group);}
+    p.groups[it.group].push(it);
+  });
+  const groupSet=new Set(list.map(it=>it.phase+'||'+it.group));
+  let warnHTML=warnings.length?`<div class="xls-warning">⚠ ${warnings.length} שורות דולגו — חסר שלב או קבוצה</div>`:'';
+  let phasesHTML=phaseOrder.map((pname,pi)=>{
+    const p=phaseMap[pname];
+    const cnt=list.filter(it=>it.phase===pname).length;
+    let groupsHTML=p.groupOrder.map(gname=>{
+      const items=p.groups[gname];
+      let itemsHTML=items.map(it=>`<div class="xls-item-row">${it.main}${it.sub?`<div class="xls-item-sub">${it.sub}</div>`:''}</div>`).join('');
+      return `<div class="xls-group-name">${gname}</div>${itemsHTML}`;
+    }).join('');
+    return `<div class="xls-phase-row">
+      <div class="xls-phase-hdr" onclick="toggleXLSPhase(this)">
+        <div class="xls-phase-hdr-left">
+          <span class="xls-phase-chev">►</span>
+          <span class="xls-phase-title">${pname}</span>
+        </div>
+        <span class="xls-phase-cnt">${cnt} פריטים</span>
+      </div>
+      <div class="xls-phase-items">${groupsHTML}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('xlsImportBody').innerHTML=`
+    <div style="padding:10px 0 6px;">
+      <div class="xls-preview-stat">
+        <span class="xls-preview-num">${list.length}</span>
+        <span class="xls-preview-label">פריטים · ${phaseOrder.length} שלבים · ${groupSet.size} קבוצות</span>
+      </div>
+      <div style="font-family:var(--font-mono);font-size:9px;color:var(--ink-faint);letter-spacing:.1em;margin:6px 0 10px;direction:ltr;">SOURCE: ${filename}</div>
+      <div>${phasesHTML}</div>
+      ${warnHTML}
+    </div>`;
+
+  document.getElementById('xlsImportFooter').innerHTML=`
+    <button class="btn btn-ghost" style="flex:1" onclick="showXLSStep1()">‹ חזור</button>
+    <button class="btn btn-ink" style="flex:1" onclick="confirmXLSImport()">טען רשימה ✓</button>`;
+}
+
+function toggleXLSPhase(hdr){
+  const items=hdr.nextElementSibling;
+  const chev=hdr.querySelector('.xls-phase-chev');
+  const open=items.classList.toggle('open');
+  chev.textContent=open?'▼':'►';
+}
+
+function showXLSStep3(list,filename){
+  setStepRibbon(3);
+  const phaseSet=new Set(list.map(it=>it.phase));
+  document.getElementById('xlsImportBody').innerHTML=`
+    <div style="padding:0 0 8px;">
+      <div class="xls-success-stamp">
+        <div class="xls-success-stamp-box">
+          <div class="xls-success-stamp-loaded">LOADED</div>
+          <div class="xls-success-stamp-count">${list.length} ITEMS</div>
+          <div class="xls-success-stamp-file">${filename}</div>
+        </div>
+      </div>
+      <div class="xls-success-title">הרשימה נטענה ✓</div>
+      <div class="xls-success-sub">${list.length} פריטים · ${phaseSet.size} שלבים<br/>מוכן לטיסה</div>
+    </div>`;
+  document.getElementById('xlsImportFooter').innerHTML=`
+    <button class="btn btn-ink" style="flex:1" onclick="closeXLSImport()">התחל טיסה ✈</button>`;
+}
+
+function confirmXLSImport(){
+  if(!xlsParsedList)return;
+  const imported=xlsParsedList;
+  const fname=document.querySelector('.xls-preview-stat')?.closest('[id]')?.dataset?.filename||'import.xlsx';
+  CL.length=0;imported.forEach(it=>CL.push(it));
+  buildIndex();clearState();
+  try{localStorage.setItem(LIST_KEY,JSON.stringify(imported));}catch(ex){}
+  // Show success step before closing
+  const srcLabel=document.querySelector('[style*="SOURCE:"]');
+  const fn=srcLabel?srcLabel.textContent.replace('SOURCE: ','').trim():'import.xlsx';
+  xlsParsedList=null;
+  showXLSStep3(imported,fn);
+  // Refresh editor/checklist in background
+  if(document.getElementById('screenEditor').classList.contains('active')){
+    edData=clToEdData(CL);renderEditor();
+  } else {render();}
+}
+function exportChecklist(){
+  if(typeof XLSX==='undefined'){alert('טוען...');return;}
+  const wb=XLSX.utils.book_new();
+  const aoa=[['AirCheck+ — Personal Flight Checklist','','',''],['Phase','Group','Item','Sub']];
+  let prevPhase='',prevGroup='';
+  CL.forEach(it=>{
+    aoa.push([it.phase!==prevPhase?it.phase:'',it.group!==prevGroup?it.group:'',it.main,it.sub||'']);
+    prevPhase=it.phase;prevGroup=it.group;
+  });
+  const ws=XLSX.utils.aoa_to_sheet(aoa);
+  ws['!cols']=[{wch:28},{wch:22},{wch:36},{wch:30}];
+  XLSX.utils.book_append_sheet(wb,ws,'Checklist');
+  XLSX.writeFile(wb,'AirCheck+_Export.xlsx');
+}
 function exportEditorToXLS(){
   if(typeof XLSX==='undefined'){alert('טוען...');return;}
   const wb=XLSX.utils.book_new();
@@ -825,7 +1090,6 @@ function openSettings(){
   const tail=settings.tail||'';
   document.getElementById('settingsTailInput').value=tail;
   updateStampPreview(tail);
-  updateTog('togHaptics',settings.haptics);
   updateTog('togSounds',settings.sounds);
   // Populate route fields
   const r=localStorage.getItem(ROUTE_KEY);
@@ -893,7 +1157,7 @@ function confirmReset(){
   if(confirm('אפס את כל הנתונים? פעולה זו בלתי הפיכה.')){
     clearState();
     try{localStorage.removeItem(SETTINGS_KEY);localStorage.removeItem(REG_KEY);localStorage.removeItem(ROUTE_KEY);}catch(e){}
-    settings={tail:'',holdMs:300,haptics:false,sounds:false,theme:'day'};
+    settings={tail:'',holdMs:300,sounds:false,theme:'day'};
     closeSettings();
     render();
   }
