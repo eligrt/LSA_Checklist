@@ -7,6 +7,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="AirCheck+">
 <meta name="theme-color" content="#1c3d6e">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/eligrt/AirCheck/main/AirCheck_logo_RD.png">
 <title>AirCheck+</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Hebrew:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -27,23 +29,23 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 .screen.active{display:flex;}
 
 /* ── SPLASH SCREEN ── */
-#screenSplash{flex-direction:column;overflow:hidden;}
-.splash-hero{flex-shrink:0;background:linear-gradient(180deg,#0e2348 0%,#1c3d6e 75%,#f4ecdc 100%);padding:24px 24px 28px;display:flex;flex-direction:column;align-items:center;gap:8px;}
-.splash-logo-wrap{width:280px;height:280px;border-radius:0;overflow:hidden;flex-shrink:0;}
-.splash-logo-wrap img{width:280px;height:280px;object-fit:contain;display:block;}
+#screenSplash{flex-direction:column;overflow:hidden;background:linear-gradient(180deg,#0e2348 0%,#1c3d6e 40%,#4a6a8a 52%,#c0b090 62%,#f4ecdc 70%,#f4ecdc 100%);}
+.splash-hero{flex-shrink:0;background:transparent;padding:24px 24px 20px;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.splash-logo-wrap{width:220px;height:220px;border-radius:0;overflow:hidden;flex-shrink:0;}
+.splash-logo-wrap img{width:220px;height:220px;object-fit:contain;display:block;}
 .splash-app-title{font-family:var(--font-mono);font-size:28px;font-weight:700;color:var(--paper);direction:ltr;letter-spacing:-.5px;}
 .splash-app-sub{font-size:9px;color:rgba(244,236,220,.85);letter-spacing:.18em;font-family:var(--font-mono);text-transform:uppercase;}
 .splash-app-slogan{font-size:10px;color:rgba(244,236,220,.7);letter-spacing:.05em;font-family:var(--font-mono);font-style:italic;margin-top:2px;}
-.splash-body{flex:1;padding:16px 18px 0;display:flex;flex-direction:column;gap:10px;background-image:repeating-linear-gradient(0deg,transparent 0,transparent 27px,var(--paper-line) 27px,var(--paper-line) 28px);}
+.splash-body{flex:1;padding:56px 18px 20px;display:flex;flex-direction:column;gap:10px;background:transparent;}
 .splash-resume-card{background:var(--paper-hi);border:1px solid var(--gold);border-radius:4px;padding:10px 12px;direction:rtl;}
 .splash-resume-lbl{font-size:8px;font-family:var(--font-mono);letter-spacing:.1em;color:var(--ink-faint);margin-bottom:3px;text-transform:uppercase;direction:ltr;}
 .splash-resume-val{font-size:13px;font-weight:700;color:var(--ink-body);margin-bottom:6px;}
-.splash-runway{height:8px;background:var(--asphalt);border-radius:2px;overflow:hidden;}
-.splash-runway-fill{height:100%;border-radius:2px;background:var(--ink);transition:width .4s ease;}
+.splash-runway{height:8px;background:rgba(100,90,80,.45);border-radius:2px;overflow:hidden;}
+.splash-runway-fill{height:100%;border-radius:2px;background:var(--cleared);transition:width .4s ease;}
 .splash-runway-pct{font-size:8px;font-family:var(--font-mono);color:var(--ink-muted);margin-top:3px;direction:ltr;}
 .splash-btn-primary{width:100%;padding:14px;background:var(--ink);color:var(--paper);border:none;border-radius:4px;font-family:var(--font-ui);font-size:15px;font-weight:700;cursor:pointer;text-align:center;transition:opacity .12s;}
 .splash-btn-primary:active{opacity:.85;}
-.splash-btn-secondary{width:100%;padding:13px;background:transparent;color:var(--ink);border:1px solid var(--gold);border-radius:4px;font-family:var(--font-ui);font-size:14px;font-weight:600;cursor:pointer;text-align:center;transition:background .12s;}
+.splash-btn-secondary{width:100%;padding:13px;background:transparent;color:var(--ink);border:2px solid var(--ink);border-radius:4px;font-family:var(--font-ui);font-size:14px;font-weight:600;cursor:pointer;text-align:center;transition:background .12s;}
 .splash-btn-secondary:active{background:rgba(200,160,74,.1);}
 .splash-footer-wrap{margin-top:auto;padding-bottom:0;}
 
@@ -376,7 +378,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
       </div>
       <div class="splash-app-title">AirCheck+</div>
       <div class="splash-app-sub">personal flight checklist</div>
-      <div class="splash-app-slogan">the checklist on top of the checklist</div>
+      <div class="splash-app-slogan">"the checklist on top of the checklist"</div>
     </div>
     <div class="splash-body">
       <div class="splash-resume-card" id="splashResumeCard" style="display:none;">
@@ -395,7 +397,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="splash-footer-wrap">
       <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
         <span class="footer-refresh" onclick="location.reload()">רענון</span>
-        <span>AirCheck+ · v2.03.009 · built by eligrt</span>
+        <span>AirCheck+ · v2.04.001 · built by eligrt</span>
         <span style="width:40px;"></span>
       </div>
     </div>
@@ -507,7 +509,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="tree-panel" id="treePanel"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.03.009 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.001 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -606,7 +608,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.03.009 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.001 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -623,7 +625,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="editor-list" id="editorList"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.03.009 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.001 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -729,8 +731,8 @@ let current=0;let status={};let treeOpen=true;
 function saveState(){try{localStorage.setItem(KEY,JSON.stringify({current,status}));}catch(e){}}
 function loadState(){try{const raw=localStorage.getItem(KEY);if(raw){const d=JSON.parse(raw);current=d.current||0;status=d.status||{};}}catch(e){}}
 function clearState(){current=0;status={};saveState();}
-function saveReg(val){try{localStorage.setItem(REG_KEY,val);}catch(e){}document.getElementById('stampInit').textContent='PIC · 4X-'+(val||'???');}
-function loadReg(){try{const v=localStorage.getItem(REG_KEY)||'';document.getElementById('stampInit').textContent='PIC · 4X-'+(v||'???');}catch(e){}}
+function saveReg(val){try{localStorage.setItem(REG_KEY,val);}catch(e){}document.getElementById('stampInit').textContent='PIC · 4X-'+(val||'HHH');}
+function loadReg(){try{const v=localStorage.getItem(REG_KEY)||'';document.getElementById('stampInit').textContent='PIC · 4X-'+(v||'HHH');}catch(e){}}
 function saveRoute(){try{const f=document.getElementById('stripFrom').value;const t=document.getElementById('stripTo').value;localStorage.setItem(ROUTE_KEY,JSON.stringify({from:f,to:t}));}catch(e){}}
 function loadRoute(){try{const raw=localStorage.getItem(ROUTE_KEY);if(raw){const d=JSON.parse(raw);document.getElementById('stripFrom').value=d.from||'';document.getElementById('stripTo').value=d.to||'';}}catch(e){}}
 function updateClock(){const now=new Date();const h=String(now.getUTCHours()).padStart(2,'0');const m=String(now.getUTCMinutes()).padStart(2,'0');document.getElementById('utcClock').textContent=h+':'+m;document.getElementById('stampTime').textContent=h+':'+m+' UTC';}
@@ -739,7 +741,7 @@ function drawRings(){const g=document.getElementById('ringCoils');g.innerHTML=''
 function render(){
   // Sync stamp tail from settings on every render
   const stampEl=document.getElementById('stampInit');
-  if(stampEl){const t=settings&&settings.tail?settings.tail:(localStorage.getItem(REG_KEY)||'');stampEl.textContent='PIC · 4X-'+(t||'???');}
+  if(stampEl){const t=settings&&settings.tail?settings.tail:(localStorage.getItem(REG_KEY)||'');stampEl.textContent='PIC · 4X-'+(t||'HHH');}
   const item=CL[current];if(!item)return;const phase=PHASE_IDX[item.phase];const group=phase?phase.groups.find(g=>g.name===item.group):null;document.getElementById('crumbPhase').textContent=item.phase;document.getElementById('crumbGroup').textContent=item.group;const numEl=document.getElementById('cardItemNum');numEl.innerHTML='ITEM <b>'+(current+1).toString().padStart(2,'0')+'</b><span> / '+CL.length+'</span>';const badge=document.getElementById('cardBadge');if(group){const pos=group.items.indexOf(current)+1;badge.textContent=pos+'/'+group.items.length+' בקבוצה';badge.style.display='';}else{badge.style.display='none';}document.getElementById('cardMain').textContent=item.main;const subEl=document.getElementById('cardSub');subEl.textContent=item.sub||'';subEl.style.display=item.sub?'':'none';document.getElementById('cardStamp').classList.remove('visible');const next=CL[current+1];const under=document.getElementById('cardUnder');if(next){under.style.display='';document.getElementById('cardUnderNum').innerHTML='ITEM <b>'+(current+2).toString().padStart(2,'0')+'</b>';document.getElementById('cardUnderMain').textContent=next.main;}else{under.style.display='none';}renderRunway();if(treeOpen)renderTree();const ub=document.getElementById('uncheckBtn');ub.style.display=(status[current]==='done')?'':'none';document.getElementById('confirmHint').textContent='לחץ והחזק את המסלול לאישור';document.getElementById('confirmHint').classList.remove('confirmed');saveState();}
 function renderRunway(){const totalDone=Object.values(status).filter(s=>s==='done').length;const totalPct=Math.round((totalDone/CL.length)*100);document.getElementById('runwayCountLabel').textContent=totalDone.toString().padStart(2,'0')+' / '+CL.length;document.getElementById('runwayPctLabel').textContent=totalPct+'%';const container=document.getElementById('runwayPhases');container.innerHTML='';PHASES.forEach(p=>{const pDone=p.groups.reduce((s,g)=>s+g.items.filter(j=>status[j]==='done').length,0);const pTot=p.end-p.start+1;const pct=Math.round((pDone/pTot)*100);const isCur=current>=p.start&&current<=p.end;const isDone=pDone===pTot;const seg=document.createElement('div');seg.className='runway-seg';const nm=document.createElement('div');nm.className='runway-seg-name'+(isDone?' done':isCur?' cur':'');nm.textContent=p.name;seg.appendChild(nm);const track=document.createElement('div');track.className='runway-track'+(isCur?' cur':'');const fill=document.createElement('div');fill.className='runway-fill';fill.style.width=pct+'%';fill.style.background=isDone?'#1f6f3f':'#1c3d6e';track.appendChild(fill);const dashes=document.createElement('div');dashes.className='runway-dashes';for(let i=0;i<8;i++){const d=document.createElement('div');d.className='runway-dash';dashes.appendChild(d);}track.appendChild(dashes);seg.appendChild(track);const cnt=document.createElement('div');cnt.className='runway-seg-count';cnt.textContent=pDone+'/'+pTot;seg.appendChild(cnt);container.appendChild(seg);});}
 const expandedPhases={};
@@ -1314,7 +1316,7 @@ function playConfirmSound(){
   }catch(e){}
 }
 function updateStampPreview(tail){
-  document.getElementById('settingsStampPreview').textContent='PIC · 4X-'+(tail||'???');
+  document.getElementById('settingsStampPreview').textContent='PIC · 4X-'+(tail||'HHH');
 }
 function closeSettings(){
   showScreen('screenChecklist');
@@ -1323,7 +1325,7 @@ function saveSettingsTail(val){
   settings.tail=val;
   saveSettings();
   updateStampPreview(val);
-  document.getElementById('stampInit').textContent='PIC · 4X-'+(val||'???');
+  document.getElementById('stampInit').textContent='PIC · 4X-'+(val||'HHH');
   try{localStorage.setItem(REG_KEY,val);}catch(e){}
 }
 function saveSettingsRoute(){
@@ -1426,8 +1428,20 @@ function splashMainAction(){
 }
 
 function splashSecondaryAction(){
-  // New flight from splash
-  openNewFlightModal();
+  // If progress exists — confirm before resetting
+  const done=Object.values(status).filter(s=>s==='done').length;
+  if(done>0){
+    document.querySelector('.modal-box').className='modal-box danger';
+    document.getElementById('modalTitle').innerHTML='<span style="color:var(--stamp-red);margin-left:6px;">⚠</span> התחלת טיסה חדשה?';
+    document.getElementById('modalSub').textContent='הטיסה הנוכחית תאבד — '+done+' פריטים מסומנים יימחקו. לא ניתן לשחזר.';
+    document.getElementById('modalConfirmBtn').textContent='כן, אפס והתחל';
+    document.getElementById('modalConfirmBtn').onclick=()=>{closeModal();clearState();showScreen('screenChecklist');render();};
+    openModal();
+  } else {
+    clearState();
+    showScreen('screenChecklist');
+    render();
+  }
 }
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
