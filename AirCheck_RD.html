@@ -234,6 +234,10 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 .ed-icon:hover{color:var(--paper);}
 .ed-icon.del{color:rgba(255,140,120,.8);}
 .ed-icon.del:active{color:#ff8070;}
+.ed-icon.on-paper{color:var(--ink-muted);}
+.ed-icon.on-paper:hover{color:var(--ink);}
+.ed-icon.on-paper.del{color:rgba(185,74,58,.6);}
+.ed-icon.on-paper.del:active{color:var(--stamp-red);}
 /* Add buttons */
 .ed-add{display:flex;align-items:center;width:100%;padding:6px 10px;background:transparent;border:none;border-top:1px dashed rgba(200,160,74,.35);color:var(--gold-deep);font-family:var(--font-ui);font-size:12px;font-weight:600;cursor:pointer;text-align:right;direction:rtl;}
 .ed-add:active{background:rgba(200,160,74,.06);}
@@ -397,7 +401,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="splash-footer-wrap">
       <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
         <span class="footer-refresh" onclick="location.reload()">רענון</span>
-        <span>AirCheck+ · v2.04.002 · built by eligrt</span>
+        <span>AirCheck+ · v2.04.004 · built by eligrt</span>
         <span style="width:40px;"></span>
       </div>
     </div>
@@ -509,7 +513,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="tree-panel" id="treePanel"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.002 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.004 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -608,7 +612,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.002 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.004 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -625,7 +629,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="editor-list" id="editorList"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.002 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.004 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -700,7 +704,7 @@ const CL=[
   {phase:"יום לפני",group:"מודיעין טיס",main:"בדוק NOTAM",sub:""},
   {phase:"יום לפני",group:"מודיעין טיס",main:"הגשת תוכנית טיסה",sub:""},
   {phase:"יום לפני",group:"מודיעין טיס",main:"קבלת מרשה טיסה",sub:""},
-  {phase:"הגעה למנחת ולמטוס",group:"רישומים וניירת",main:"רישום טיסה במחשב מנחת (עוכד)",sub:""},
+  {phase:"הגעה למנחת ולמטוס",group:"רישומים וניירת",main:"פתיחת טיסה במחשב המנחת (עודד)",sub:""},
   {phase:"הגעה למנחת ולמטוס",group:"רישומים וניירת",main:"ודא המצאות תעודות המטוס בקוקפיט",sub:"בעלות, כושר טיסה ורדיו"},
   {phase:"הגעה למנחת ולמטוס",group:"רישומים וניירת",main:"בדיקת תקלות (אדומים)",sub:""},
   {phase:"הגעה למנחת ולמטוס",group:"הכנת קוקפיט",main:"תדרוך נוסע (אם נדרש)",sub:""},
@@ -720,7 +724,7 @@ const CL=[
   {phase:"סגירת טיסה",group:"קיפול ציוד אישי",main:"ודא קוקפיט Cold & Dark",sub:""},
   {phase:"סגירת טיסה",group:"זיכוי מטוס",main:"חניה וכיסוי",sub:""},
   {phase:"סגירת טיסה",group:"זיכוי מטוס",main:"כיסוי פיטו: במקום",sub:""},
-  {phase:"סגירת טיסה",group:"עודד",main:"סגירת טיסה במחשב המנחת",sub:""},
+  {phase:"סגירת טיסה",group:"עודד",main:"סגירת טיסה במחשב המנחת (עודד)",sub:""},
 ];
 const CL_DEFAULT=CL.map(it=>({...it}));
 const PHASES=[];const PHASE_IDX={};
@@ -878,9 +882,9 @@ function renderEditor(){
       const gDiv=document.createElement('div');gDiv.className='ed-group';
       const ghdr=document.createElement('div');ghdr.className='ed-group-hdr';
       const gname=document.createElement('div');gname.className='ed-group-name';gname.textContent=g.name;
-      const gedit=document.createElement('button');gedit.className='ed-icon';gedit.textContent='✎';
+      const gedit=document.createElement('button');gedit.className='ed-icon on-paper';gedit.textContent='✎';
       gedit.onclick=e=>{e.stopPropagation();openEdPopup('שינוי שם קבוצה',g.name,'',false,val=>{g.name=val;renderEditor();});};
-      const gdel=document.createElement('button');gdel.className='ed-icon del';gdel.textContent='✕';
+      const gdel=document.createElement('button');gdel.className='ed-icon del on-paper';gdel.textContent='✕';
       gdel.onclick=e=>{e.stopPropagation();showConfirm('מחיקת קבוצה','למחוק את הקבוצה "'+g.name+'"?',()=>{ph.groups.splice(gi,1);renderEditor();},'danger');};
       ghdr.appendChild(gname);ghdr.appendChild(gedit);ghdr.appendChild(gdel);
       const itemsDiv=document.createElement('div');itemsDiv.className='ed-items';
@@ -939,9 +943,9 @@ function buildItemRow(it,ii,g,gi,ph,pi){
   const txt=document.createElement('div');txt.className='ed-item-text';
   const main=document.createElement('div');main.className='ed-item-main';main.textContent=it.main;txt.appendChild(main);
   if(it.sub){const sub=document.createElement('div');sub.className='ed-item-sub';sub.textContent=it.sub;txt.appendChild(sub);}
-  const editBtn=document.createElement('button');editBtn.className='ed-icon';editBtn.textContent='✎';
+  const editBtn=document.createElement('button');editBtn.className='ed-icon on-paper';editBtn.textContent='✎';
   editBtn.onclick=e=>{e.stopPropagation();openEdPopup('עריכת פריט',it.main,it.sub,true,(m,s)=>{it.main=m;it.sub=s;renderEditor();});};
-  const delBtn=document.createElement('button');delBtn.className='ed-icon del';delBtn.textContent='✕';
+  const delBtn=document.createElement('button');delBtn.className='ed-icon del on-paper';delBtn.textContent='✕';
   delBtn.onclick=e=>{e.stopPropagation();showConfirm('מחיקת פריט','למחוק את הפריט "'+it.main+'"?',()=>{g.items.splice(ii,1);renderEditor();},'danger');};
   // Desktop drag — on full row
   row.addEventListener('dragstart',e=>{dragSrc=row;row.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
