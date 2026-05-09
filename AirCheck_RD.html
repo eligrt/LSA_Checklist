@@ -401,7 +401,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="splash-footer-wrap">
       <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
         <span class="footer-refresh" onclick="location.reload()">רענון</span>
-        <span>AirCheck+ · v2.04.005 · built by eligrt</span>
+        <span>AirCheck+ · v2.04.006 · built by eligrt</span>
         <span style="width:40px;"></span>
       </div>
     </div>
@@ -513,7 +513,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="tree-panel" id="treePanel"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.005 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.006 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -612,7 +612,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.005 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.006 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -629,7 +629,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="editor-list" id="editorList"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.005 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.006 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -1006,15 +1006,43 @@ function openEdPopup(title,main,sub,hasSub,cb){
   setTimeout(()=>{
     const inp=document.getElementById('edInputMain');
     inp.focus();
-    inp.scrollIntoView({behavior:'smooth',block:'center'});
+    // On mobile: listen for viewport resize (keyboard appearing) and shift popup up
+    if(window.visualViewport){
+      const onResize=()=>{
+        const popup=document.querySelector('.ed-popup-box');
+        if(!popup)return;
+        const vh=window.visualViewport.height;
+        const appH=document.getElementById('app').offsetHeight;
+        const offset=Math.max(0,appH-vh-20);
+        popup.style.transform=offset>0?'translateY(-'+offset+'px)':'';
+      };
+      window.visualViewport.addEventListener('resize',onResize);
+      // Clean up when popup closes
+      document.getElementById('edPopup')._vpListener=onResize;
+    }
   },300);
 }
-function closeEdPopup(){document.getElementById('edPopup').classList.remove('open');edPopupCallback=null;}
+function closeEdPopup(){
+  document.getElementById('edPopup').classList.remove('open');
+  edPopupCallback=null;
+  // Remove keyboard listener and reset position
+  const popup=document.querySelector('.ed-popup-box');
+  if(popup)popup.style.transform='';
+  const el=document.getElementById('edPopup');
+  if(el._vpListener&&window.visualViewport){
+    window.visualViewport.removeEventListener('resize',el._vpListener);
+    el._vpListener=null;
+  }
+}
 function confirmEdPopup(){
   const main=document.getElementById('edInputMain').value.trim();if(!main)return;
   const sub=document.getElementById('edInputSub').value.trim();
-  if(edPopupCallback){if(edPopupCallback.hasSub)edPopupCallback.cb(main,sub);else edPopupCallback.cb(main);}
+  const cb=edPopupCallback;
   closeEdPopup();
+  // Defer render until after popup close animation to prevent flicker
+  requestAnimationFrame(()=>{
+    if(cb){if(cb.hasSub)cb.cb(main,sub);else cb.cb(main);}
+  });
 }
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('edPopup').classList.contains('open'))confirmEdPopup();});
 
