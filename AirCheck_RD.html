@@ -222,6 +222,9 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 .ed-input:focus{border-color:var(--ink);}
 .ed-popup-btns{display:flex;gap:8px;margin-top:4px;}
 @keyframes edBlink{0%,100%{opacity:1;}50%{opacity:.3;}}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+@keyframes toastOut{from{opacity:1;}to{opacity:0;}}
+.toast{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:20px;font-size:13px;font-family:var(--font-ui);font-weight:600;white-space:nowrap;z-index:500;animation:toastIn .2s ease-out;box-shadow:0 4px 16px rgba(0,0,0,.35);}
 
 /* ── XLS IMPORT OVERLAY ── */
 #xlsImportOverlay{display:none;position:absolute;inset:0;z-index:400;align-items:center;justify-content:center;background:rgba(26,19,8,.85);backdrop-filter:blur(4px);padding:24px;}
@@ -352,7 +355,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
       </div>
       <div class="strip-actions" style="margin-left:auto;align-self:center;">
         <button class="strip-pill" onclick="openSettings()">⚙ הגדרות</button>
-        <button class="strip-pill strip-pill-gold" onclick="openModal()"><span style="display:inline-block;transform:scaleX(-1)">✈</span> חדש</button>
+        <button class="strip-pill strip-pill-gold" onclick="openNewFlightModal()"><span style="display:inline-block;transform:scaleX(-1)">✈</span> חדש</button>
       </div>
     </div>
 
@@ -439,15 +442,15 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
 
     <div class="tree-panel" id="treePanel"></div>
-    <div class="footer-strip">AirCheck+ · v2.02.026 · built by eligrt</div>
+    <div class="footer-strip">AirCheck+ · v2.02.029 · built by eligrt</div>
   </div>
 
   <div id="modal">
     <div class="modal-box">
-      <div class="modal-title">טיסה חדשה?</div>
-      <div class="modal-sub">פעולה זו תאפס את כל ההתקדמות הנוכחית.</div>
+      <div class="modal-title" id="modalTitle">טיסה חדשה?</div>
+      <div class="modal-sub" id="modalSub">פעולה זו תאפס את כל ההתקדמות הנוכחית.</div>
       <div class="modal-btns">
-        <button class="btn btn-ink" onclick="closeModal();startNew()">כן, אפס והתחל מחדש</button>
+        <button class="btn btn-ink" id="modalConfirmBtn" onclick="closeModal();startNew()">כן, אפס והתחל מחדש</button>
         <button class="btn btn-ghost" onclick="closeModal()">ביטול</button>
       </div>
     </div>
@@ -546,7 +549,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
         <button class="danger-btn" onclick="confirmReset()">אפס את כל הנתונים</button>
       </div>
 
-      <div class="settings-footer">AIRCHECK+ · v2.02.026 · BUILD eligrt</div>
+      <div class="settings-footer">AIRCHECK+ · v2.02.029 · BUILD eligrt</div>
     </div>
   </div>
 
@@ -582,7 +585,6 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
       </div>
     </div>
   </div>
-</div>
   <!-- XLS IMPORT OVERLAY -->
   <div id="xlsImportOverlay">
     <div class="xls-import-box">
@@ -696,7 +698,16 @@ function uncheckCurrent(){delete status[current];holdState='idle';resetRunwayBtn
 function showPhaseOverlay(donePhaseName,nextPhaseName){document.getElementById('phaseOverlayTitle').textContent=donePhaseName+' — הושלם ✓';document.getElementById('phaseOverlayNext').textContent=nextPhaseName?'השלב הבא: '+nextPhaseName:'כל השלבים הושלמו!';document.getElementById('phaseOverlay').classList.add('open');}
 function dismissPhaseOverlay(){document.getElementById('phaseOverlay').classList.remove('open');render();}
 function showAllDone(){document.getElementById('confirmHint').textContent='🎉 הצ׳קליסט הושלם!';document.getElementById('confirmHint').classList.add('confirmed');}
-function openModal(){document.getElementById('modal').classList.add('open');}
+function openModal(){
+  document.getElementById('modal').classList.add('open');
+}
+function openNewFlightModal(){
+  document.getElementById('modalTitle').textContent='טיסה חדשה?';
+  document.getElementById('modalSub').textContent='פעולה זו תאפס את כל ההתקדמות הנוכחית.';
+  document.getElementById('modalConfirmBtn').textContent='כן, אפס והתחל מחדש';
+  document.getElementById('modalConfirmBtn').onclick=()=>{closeModal();startNew();};
+  openModal();
+}
 function closeModal(){document.getElementById('modal').classList.remove('open');}
 function startNew(){clearState();holdState='idle';resetRunwayBtn();render();}
 // ── SETTINGS ──
@@ -825,7 +836,7 @@ function renderEditor(){
   const exportBtn=document.createElement('button');exportBtn.className='ed-action-btn';exportBtn.textContent='ייצוא XLS ↓';
   exportBtn.onclick=exportEditorToXLS;
   const resetBtn=document.createElement('button');resetBtn.className='ed-action-btn danger';resetBtn.textContent='איפוס לברירת מחדל';
-  resetBtn.onclick=()=>{if(confirm('לאפס לרשימת ברירת המחדל?')){CL.length=0;CL_DEFAULT.forEach(it=>CL.push({...it}));buildIndex();edData=clToEdData(CL);renderEditor();}};
+  resetBtn.onclick=()=>showEditorResetConfirm();
   actions.appendChild(importBtn);actions.appendChild(exportBtn);actions.appendChild(resetBtn);el.appendChild(actions);
 }
 
@@ -1058,11 +1069,11 @@ function showXLSStep3(list,filename){
   setStepRibbon(3);
   const phaseSet=new Set(list.map(it=>it.phase));
   document.getElementById('xlsImportBody').innerHTML=`
-    <div style="padding:0 0 8px;">
+    <div style="padding:0 0 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:220px;">
       <div class="xls-success-stamp">
         <div class="xls-success-stamp-box">
           <div class="xls-success-stamp-loaded">LOADED</div>
-          <div class="xls-success-stamp-count">${list.length} ITEMS</div>
+          <div class="xls-success-stamp-count" style="direction:ltr;">${list.length} ITEMS</div>
           <div class="xls-success-stamp-file">${filename}</div>
         </div>
       </div>
@@ -1091,7 +1102,7 @@ function confirmXLSImport(){
   } else {render();}
 }
 function exportChecklist(){
-  if(typeof XLSX==='undefined'){alert('טוען...');return;}
+  if(typeof XLSX==='undefined'){showToast('טוען ספריה...');return;}
   const wb=XLSX.utils.book_new();
   const aoa=[['AirCheck+ — Personal Flight Checklist','','',''],['Phase','Group','Item','Sub']];
   let prevPhase='',prevGroup='';
@@ -1103,6 +1114,7 @@ function exportChecklist(){
   ws['!cols']=[{wch:28},{wch:22},{wch:36},{wch:30}];
   XLSX.utils.book_append_sheet(wb,ws,'Checklist');
   XLSX.writeFile(wb,'AirCheck+_Export.xlsx');
+  showToast('✓ הקובץ יוצא בהצלחה — בדוק את ההורדות');
 }
 function exportEditorToXLS(){
   if(typeof XLSX==='undefined'){alert('טוען...');return;}
@@ -1117,13 +1129,45 @@ function exportEditorToXLS(){
   ws['!cols']=[{wch:28},{wch:22},{wch:36},{wch:30}];
   XLSX.utils.book_append_sheet(wb,ws,'Checklist');
   XLSX.writeFile(wb,'AirCheck+_Export.xlsx');
+  showToast('✓ הקובץ יוצא בהצלחה — בדוק את ההורדות');
+}
+
+// ── TOAST ──
+let toastTimer=null;
+function showToast(msg,duration=2800){
+  let t=document.getElementById('appToast');
+  if(!t){t=document.createElement('div');t.id='appToast';t.className='toast';document.getElementById('app').appendChild(t);}
+  t.textContent=msg;t.style.display='block';t.style.animation='toastIn .2s ease-out';
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{t.style.animation='toastOut .3s ease-in forwards';setTimeout(()=>{t.style.display='none';},300);},duration);
+}
+
+// ── CUSTOM CONFIRM MODALS ──
+function showEditorResetConfirm(){
+  document.getElementById('modalTitle').textContent='איפוס רשימה?';
+  document.getElementById('modalSub').textContent='הרשימה תחזור לברירת המחדל. פעולה זו בלתי הפיכה.';
+  document.getElementById('modalConfirmBtn').textContent='כן, אפס';
+  document.getElementById('modalConfirmBtn').onclick=()=>{
+    closeModal();
+    CL.length=0;CL_DEFAULT.forEach(it=>CL.push({...it}));buildIndex();
+    edData=clToEdData(CL);renderEditor();
+    showToast('✓ הרשימה אופסה לברירת המחדל');
+  };
+  openModal();
+}
+function showSettingsResetConfirm(){
+  document.getElementById('modalTitle').textContent='איפוס הגדרות?';
+  document.getElementById('modalSub').textContent='כל הנתונים וההגדרות יימחקו. פעולה זו בלתי הפיכה.';
+  document.getElementById('modalConfirmBtn').textContent='כן, אפס הכל';
+  document.getElementById('modalConfirmBtn').onclick=doSettingsReset;
+  openModal();
 }
 
 function openSettings(){
   loadSettings();
   const tail=settings.tail||'';
   document.getElementById('settingsTailInput').value=tail;
-  updateStampPreview(tail);
+  updateStampPreview(tail||'HHH');
   updateTog('togSounds',settings.sounds);
   // Populate route fields
   const r=localStorage.getItem(ROUTE_KEY);
@@ -1187,14 +1231,15 @@ function updateThemeCtrl(val){
   const vals=['day','dusk','night'];
   btns.forEach((b,i)=>{b.className='seg-btn '+(vals[i]===val?'active':'inactive');});
 }
-function confirmReset(){
-  if(confirm('אפס את כל הנתונים? פעולה זו בלתי הפיכה.')){
-    clearState();
-    try{localStorage.removeItem(SETTINGS_KEY);localStorage.removeItem(REG_KEY);localStorage.removeItem(ROUTE_KEY);}catch(e){}
-    settings={tail:'',holdMs:300,sounds:false,theme:'day'};
-    closeSettings();
-    render();
-  }
+function confirmReset(){showSettingsResetConfirm();}
+function doSettingsReset(){
+  clearState();
+  try{localStorage.removeItem(SETTINGS_KEY);localStorage.removeItem(REG_KEY);localStorage.removeItem(ROUTE_KEY);}catch(e){}
+  settings={tail:'',holdMs:300,sounds:false,theme:'day'};
+  closeModal();
+  // Show toast then go to settings
+  showToast('ההגדרות אופסו לברירת המחדל');
+  openSettings();
 }
 function editRoute(){}
 
