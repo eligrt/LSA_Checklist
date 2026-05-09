@@ -226,11 +226,12 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 /* ── XLS IMPORT OVERLAY ── */
 #xlsImportOverlay{display:none;position:absolute;inset:0;z-index:400;align-items:center;justify-content:center;background:rgba(26,19,8,.85);backdrop-filter:blur(4px);padding:24px;}
 #xlsImportOverlay.open{display:flex;}
-.xls-import-box{background:var(--paper-hi);border:2px solid var(--gold);border-radius:8px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.5);overflow:hidden;}
+.xls-import-box{background:var(--paper-hi);border:2px solid var(--gold);border-radius:8px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.5);overflow:hidden;display:flex;flex-direction:column;max-height:85vh;}
 .xls-import-header{background:var(--ink);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;}
 .xls-import-title{font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.2em;color:var(--paper);}
 .xls-import-close{background:transparent;border:none;color:rgba(244,236,220,.6);font-size:20px;cursor:pointer;line-height:1;padding:0;}
-.xls-import-body{padding:20px 16px;}
+.xls-import-body{padding:12px 16px;overflow-y:auto;max-height:55vh;-webkit-overflow-scrolling:touch;}
+.xls-import-body::-webkit-scrollbar{width:0;}
 /* Step 1: drop zone */
 .xls-dropzone{border:2px dashed var(--gold);border-radius:6px;padding:32px 20px;text-align:center;cursor:pointer;transition:background .15s;}
 .xls-dropzone:hover,.xls-dropzone.dragover{background:rgba(200,160,74,.08);}
@@ -253,6 +254,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 .xls-step{display:flex;align-items:center;gap:5px;padding:4px 8px;border-radius:3px;border:1px solid var(--gold-lite);font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--ink-muted);}
 .xls-step.active{background:var(--ink);border-color:var(--ink-dark);color:var(--paper);}
 .xls-step.done{background:var(--cleared);border-color:var(--cleared);color:var(--paper);}
+.xls-step.loaded{background:var(--cleared);border-color:var(--cleared);color:var(--paper);}
 .xls-step-line{flex:1;height:1px;background:var(--gold-lite);}
 /* Preview expandable phases */
 .xls-phase-row{border:1px solid var(--gold-lite);border-radius:3px;margin-bottom:4px;overflow:hidden;}
@@ -262,12 +264,12 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 .xls-phase-chev{font-size:9px;color:var(--ink-muted);transition:transform .2s;font-family:var(--font-mono);}
 .xls-phase-title{font-size:12px;font-weight:700;color:var(--ink-body);}
 .xls-phase-cnt{font-family:var(--font-mono);font-size:9px;color:var(--ink-muted);}
-.xls-phase-items{background:var(--paper-hi);border-top:1px dashed var(--gold-lite);padding:4px 10px 6px;display:none;}
+.xls-phase-items{background:var(--paper-hi);border-top:1px dashed var(--gold-lite);padding:4px 0 6px;display:none;}
 .xls-phase-items.open{display:block;}
-.xls-group-name{font-size:10px;font-weight:600;color:var(--ink-muted);padding:4px 0 2px;border-bottom:1px dotted rgba(200,160,74,.3);margin-bottom:2px;}
-.xls-item-row{font-size:11px;color:var(--ink-body);padding:2px 0 2px 8px;border-bottom:1px dotted rgba(200,160,74,.15);}
+.xls-group-name{font-size:10px;font-weight:600;color:var(--ink-muted);padding:4px 14px 3px;border-bottom:1px dotted rgba(200,160,74,.3);margin-bottom:2px;}
+.xls-item-row{font-size:11px;color:var(--ink-body);padding:3px 10px 3px 0;padding-right:28px;border-bottom:1px dotted rgba(200,160,74,.15);direction:rtl;}
 .xls-item-row:last-child{border-bottom:none;}
-.xls-item-sub{font-size:10px;color:var(--ink-muted);font-style:italic;}
+.xls-item-sub{font-size:10px;color:var(--ink-muted);font-style:italic;padding-right:8px;}
 /* Success step */
 .xls-success-stamp{display:flex;justify-content:center;margin:18px 0 16px;}
 .xls-success-stamp-box{border:3px solid var(--cleared);padding:8px 18px 10px;text-align:center;color:var(--cleared);font-family:var(--font-mono);transform:rotate(-6deg);}
@@ -437,7 +439,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
 
     <div class="tree-panel" id="treePanel"></div>
-    <div class="footer-strip">AirCheck+ · v2.02.016 · built by eligrt</div>
+    <div class="footer-strip">AirCheck+ · v2.02.026 · built by eligrt</div>
   </div>
 
   <div id="modal">
@@ -544,7 +546,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
         <button class="danger-btn" onclick="confirmReset()">אפס את כל הנתונים</button>
       </div>
 
-      <div class="settings-footer">AIRCHECK+ · v2.02.016 · BUILD eligrt</div>
+      <div class="settings-footer">AIRCHECK+ · v2.02.026 · BUILD eligrt</div>
     </div>
   </div>
 
@@ -753,7 +755,7 @@ function renderEditor(){
   edData.forEach((ph,pi)=>{
     const card=document.createElement('div');card.className='ed-phase';
     const hdr=document.createElement('div');hdr.className='ed-phase-hdr';
-    const arrow=document.createElement('span');arrow.className='ed-phase-arrow';arrow.textContent='▼';
+    const arrow=document.createElement('span');arrow.className='ed-phase-arrow';arrow.textContent='▶';
     const name=document.createElement('div');name.className='ed-phase-name';name.textContent=ph.phase;
     const count=document.createElement('div');count.className='ed-phase-count';
     count.textContent=ph.groups.reduce((s,g)=>s+g.items.length,0)+' פריטים';
@@ -767,8 +769,8 @@ function renderEditor(){
     const isCurrentPhase=CL[current]&&CL[current].phase===ph.phase;
     let open=isCurrentPhase;
     groups.style.display=open?'block':'none';
-    arrow.style.transform=open?'':'rotate(-90deg)';
-    hdr.onclick=()=>{open=!open;groups.style.display=open?'block':'none';arrow.style.transform=open?'':'rotate(-90deg)';};
+    arrow.style.transform=open?'rotate(90deg)':'rotate(180deg)';
+    hdr.onclick=()=>{open=!open;groups.style.display=open?'block':'none';arrow.style.transform=open?'rotate(90deg)':'rotate(180deg)';};
     ph.groups.forEach((g,gi)=>{
       const gDiv=document.createElement('div');gDiv.className='ed-group';
       const ghdr=document.createElement('div');ghdr.className='ed-group-hdr';
@@ -838,6 +840,7 @@ function buildItemRow(it,ii,g,gi,ph,pi){
   editBtn.onclick=e=>{e.stopPropagation();openEdPopup('עריכת פריט',it.main,it.sub,true,(m,s)=>{it.main=m;it.sub=s;renderEditor();});};
   const delBtn=document.createElement('button');delBtn.className='ed-icon del';delBtn.textContent='✕';
   delBtn.onclick=e=>{e.stopPropagation();g.items.splice(ii,1);renderEditor();};
+  // Desktop drag — on full row
   row.addEventListener('dragstart',e=>{dragSrc=row;row.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
   row.addEventListener('dragend',()=>{row.classList.remove('dragging');document.querySelectorAll('.drag-over').forEach(r=>r.classList.remove('drag-over'));dragSrc=null;});
   row.addEventListener('dragover',e=>{e.preventDefault();row.classList.add('drag-over');});
@@ -852,6 +855,38 @@ function buildItemRow(it,ii,g,gi,ph,pi){
     if(!edData[dp]||!edData[dp].groups[dg])return;
     edData[dp].groups[dg].items.splice(di,0,moved);renderEditor();
   });
+  // Mobile touch drag — starts immediately on handle touchstart
+  drag.addEventListener('touchstart',e=>{
+    e.preventDefault();
+    dragSrc=row;row.classList.add('dragging');
+    const touch=e.touches[0];
+    let lastOver=null;
+    function onMove(ev){
+      const t=ev.touches[0];
+      const el=document.elementFromPoint(t.clientX,t.clientY);
+      const targetRow=el?el.closest('.ed-item'):null;
+      if(lastOver&&lastOver!==row)lastOver.classList.remove('drag-over');
+      if(targetRow&&targetRow!==row){targetRow.classList.add('drag-over');lastOver=targetRow;}
+    }
+    function onEnd(ev){
+      row.classList.remove('dragging');
+      if(lastOver){
+        lastOver.classList.remove('drag-over');
+        const sp=+row.dataset.pi,sg=+row.dataset.gi,si=+row.dataset.ii;
+        const dp=+lastOver.dataset.pi,dg=+lastOver.dataset.gi,di=+lastOver.dataset.ii;
+        if(edData[sp]&&edData[sp].groups[sg]&&edData[dp]&&edData[dp].groups[dg]){
+          const[moved]=edData[sp].groups[sg].items.splice(si,1);
+          edData[dp].groups[dg].items.splice(di,0,moved);
+          dragSrc=null;renderEditor();return;
+        }
+      }
+      dragSrc=null;
+      document.removeEventListener('touchmove',onMove);
+      document.removeEventListener('touchend',onEnd);
+    }
+    document.addEventListener('touchmove',onMove,{passive:false});
+    document.addEventListener('touchend',onEnd);
+  },{passive:false});
   row.appendChild(drag);row.appendChild(txt);row.appendChild(editBtn);row.appendChild(delBtn);
   return row;
 }
@@ -949,10 +984,9 @@ function processXLSFile(file){
 }
 
 function setStepRibbon(active){
-  document.getElementById('xlsImportTitle').textContent='IMPORT · XLS';
   const labels=[['01','FILE'],['02','PREVIEW'],['03','LOADED']];
   const html=labels.map((l,i)=>{
-    const cls=i+1<active?'done':i+1===active?'active':'';
+    const cls=i+1<active?'done':i+1===active&&active===3?'loaded':i+1===active?'active':'';
     const sep=i<2?'<div class="xls-step-line"></div>':'';
     return `<div class="xls-step ${cls}"><span>${l[0]}</span><span>${l[1]}</span></div>${sep}`;
   }).join('');
@@ -988,7 +1022,7 @@ function showXLSStep2(list,warnings,filename){
     return `<div class="xls-phase-row">
       <div class="xls-phase-hdr" onclick="toggleXLSPhase(this)">
         <div class="xls-phase-hdr-left">
-          <span class="xls-phase-chev">►</span>
+          <span class="xls-phase-chev">◄</span>
           <span class="xls-phase-title">${pname}</span>
         </div>
         <span class="xls-phase-cnt">${cnt} פריטים</span>
@@ -1017,7 +1051,7 @@ function toggleXLSPhase(hdr){
   const items=hdr.nextElementSibling;
   const chev=hdr.querySelector('.xls-phase-chev');
   const open=items.classList.toggle('open');
-  chev.textContent=open?'▼':'►';
+  chev.textContent=open?'▼':'◄';
 }
 
 function showXLSStep3(list,filename){
@@ -1036,7 +1070,7 @@ function showXLSStep3(list,filename){
       <div class="xls-success-sub">${list.length} פריטים · ${phaseSet.size} שלבים<br/>מוכן לטיסה</div>
     </div>`;
   document.getElementById('xlsImportFooter').innerHTML=`
-    <button class="btn btn-ink" style="flex:1" onclick="closeXLSImport()">התחל טיסה ✈</button>`;
+    <button class="btn btn-ink" style="flex:1" onclick="closeXLSImport()">התחל טיסה <span style="display:inline-block;transform:scaleX(-1)">✈</span></button>`;
 }
 
 function confirmXLSImport(){
