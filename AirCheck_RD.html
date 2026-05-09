@@ -173,7 +173,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 
 /* ── MODALS ── */
 #modal{display:none;position:absolute;inset:0;background:rgba(26,19,8,.8);z-index:500;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(3px);}
-#modal{display:none;position:absolute;inset:0;background:rgba(26,19,8,.8);z-index:500;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(3px);}
+
 #modal.open{display:flex;}
 .modal-box{background:var(--paper-hi);border:2px solid var(--gold);border-radius:8px;padding:24px 20px;width:100%;max-width:340px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4);}
 .modal-box.danger{border-color:var(--stamp-red);box-shadow:0 0 0 1px rgba(185,74,58,.2),0 20px 60px rgba(0,0,0,.4);}
@@ -401,7 +401,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="splash-footer-wrap">
       <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
         <span class="footer-refresh" onclick="location.reload()">רענון</span>
-        <span>AirCheck+ · v2.04.004 · built by eligrt</span>
+        <span>AirCheck+ · v2.04.005 · built by eligrt</span>
         <span style="width:40px;"></span>
       </div>
     </div>
@@ -513,7 +513,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="tree-panel" id="treePanel"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.004 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.005 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -612,7 +612,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.004 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.005 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -629,7 +629,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="editor-list" id="editorList"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.004 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.005 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -646,9 +646,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
   </div>
 
-</div>
-
-  <!-- EDITOR POPUP — direct child of #app so position:absolute covers full screen -->
+  <!-- EDITOR POPUP — inside #app so bounded by 430px container -->
   <div id="edPopup">
     <div class="ed-popup-box">
       <div class="ed-popup-title" id="edPopupTitle">הוסף פריט</div>
@@ -1005,7 +1003,11 @@ function openEdPopup(title,main,sub,hasSub,cb){
   document.getElementById('edSubRow').style.display=hasSub?'block':'none';
   edPopupCallback={cb,hasSub};
   document.getElementById('edPopup').classList.add('open');
-  setTimeout(()=>document.getElementById('edInputMain').focus(),120);
+  setTimeout(()=>{
+    const inp=document.getElementById('edInputMain');
+    inp.focus();
+    inp.scrollIntoView({behavior:'smooth',block:'center'});
+  },300);
 }
 function closeEdPopup(){document.getElementById('edPopup').classList.remove('open');edPopupCallback=null;}
 function confirmEdPopup(){
