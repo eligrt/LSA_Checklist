@@ -401,7 +401,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="splash-footer-wrap">
       <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
         <span class="footer-refresh" onclick="location.reload()">רענון</span>
-        <span>AirCheck+ · v2.04.012 · built by eligrt</span>
+        <span>AirCheck+ · v2.04.013 · built by eligrt</span>
         <span style="width:40px;"></span>
       </div>
     </div>
@@ -513,7 +513,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="tree-panel" id="treePanel"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.012 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.013 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -612,7 +612,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.012 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.013 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -629,7 +629,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="editor-list" id="editorList"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.012 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.013 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -911,11 +911,11 @@ function renderEditor(){
       });
       g.items.forEach((it,ii)=>itemsDiv.appendChild(buildItemRow(it,ii,g,gi,ph,pi)));
       const dropZone=document.createElement('div');
-      dropZone.style.cssText='height:12px;width:100%;border-top:2px solid transparent;transition:border-color .15s;';
-      dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.style.borderTopColor='var(--gold)';});
-      dropZone.addEventListener('dragleave',()=>{dropZone.style.borderTopColor='transparent';});
+      dropZone.style.cssText='height:20px;width:100%;border-top:2px dashed transparent;transition:border-color .15s;display:flex;align-items:center;justify-content:center;';
+      dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.style.borderTopColor='var(--gold)';dropZone.style.background='rgba(200,160,74,.08)';});
+      dropZone.addEventListener('dragleave',()=>{dropZone.style.borderTopColor='transparent';dropZone.style.background='';dropZone.style.background='';});
       dropZone.addEventListener('drop',e=>{
-        e.preventDefault();e.stopPropagation();dropZone.style.borderTopColor='transparent';
+        e.preventDefault();e.stopPropagation();dropZone.style.borderTopColor='transparent';dropZone.style.background='';
         if(!dragSrc)return;
         const sp=+dragSrc.dataset.pi,sg=+dragSrc.dataset.gi,si=+dragSrc.dataset.ii;
         if(!edData[sp]||!edData[sp].groups[sg])return;
@@ -977,10 +977,11 @@ function buildItemRow(it,ii,g,gi,ph,pi){
     function onMove(ev){
       const t=ev.touches[0];
       const el=document.elementFromPoint(t.clientX,t.clientY);
-      // Accept ed-item OR ed-items (group container) as drop target
       const targetRow=el?(el.closest('.ed-item')||null):null;
-      const targetGroup=el?(el.closest('.ed-items')):null;
-      if(lastOver&&lastOver!==row)lastOver.classList.remove('drag-over');
+      // Only use group as target if NOT hovering over a child item
+      const targetGroup=(el&&!targetRow)?(el.closest('.ed-items')):null;
+      // Clear previous
+      if(lastOver){lastOver.classList.remove('drag-over');lastOver.style.outline='';}
       if(targetRow&&targetRow!==row){targetRow.classList.add('drag-over');lastOver=targetRow;}
       else if(targetGroup){targetGroup.style.outline='2px solid var(--gold)';lastOver=targetGroup;}
       else{lastOver=null;}
