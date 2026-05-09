@@ -401,7 +401,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="splash-footer-wrap">
       <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
         <span class="footer-refresh" onclick="location.reload()">רענון</span>
-        <span>AirCheck+ · v2.04.010 · built by eligrt</span>
+        <span>AirCheck+ · v2.04.011 · built by eligrt</span>
         <span style="width:40px;"></span>
       </div>
     </div>
@@ -513,7 +513,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="tree-panel" id="treePanel"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.010 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.011 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -612,7 +612,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.010 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.011 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -629,7 +629,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="editor-list" id="editorList"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.010 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.011 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -821,6 +821,20 @@ let edPopupCallback=null;
 let dragSrc=null;
 const edPhaseOpenState={};
 
+function safeDragMove(sp,sg,si,dp,dg,di){
+  try{
+    if(!edData[sp]||!edData[sp].groups[sg])return false;
+    if(!edData[dp]||!edData[dp].groups[dg])return false;
+    const srcItems=edData[sp].groups[sg].items;
+    const dstItems=edData[dp].groups[dg].items;
+    if(si<0||si>=srcItems.length)return false;
+    const[moved]=srcItems.splice(si,1);
+    if(di===undefined||di<0||di>dstItems.length){dstItems.push(moved);}
+    else{dstItems.splice(di,0,moved);}
+    return true;
+  }catch(e){console.error('drag error',e);return false;}
+}
+
 function clToEdData(list){
   const phases=[];const phMap={};
   list.forEach(item=>{
@@ -893,8 +907,7 @@ function renderEditor(){
         const sp=+dragSrc.dataset.pi,sg=+dragSrc.dataset.gi,si=+dragSrc.dataset.ii;
         if(!edData[sp]||!edData[sp].groups[sg])return;
         if(!edData[pi]||!edData[pi].groups[gi])return;
-        const[moved]=edData[sp].groups[sg].items.splice(si,1);
-        edData[pi].groups[gi].items.push(moved);renderEditor();
+        if(safeDragMove(sp,sg,si,pi,gi,undefined))renderEditor();
       });
       g.items.forEach((it,ii)=>itemsDiv.appendChild(buildItemRow(it,ii,g,gi,ph,pi)));
       const dropZone=document.createElement('div');
@@ -907,8 +920,7 @@ function renderEditor(){
         const sp=+dragSrc.dataset.pi,sg=+dragSrc.dataset.gi,si=+dragSrc.dataset.ii;
         if(!edData[sp]||!edData[sp].groups[sg])return;
         if(!edData[pi]||!edData[pi].groups[gi])return;
-        const[moved]=edData[sp].groups[sg].items.splice(si,1);
-        edData[pi].groups[gi].items.push(moved);renderEditor();
+        if(safeDragMove(sp,sg,si,pi,gi,undefined))renderEditor();
       });
       itemsDiv.appendChild(dropZone);
       const addItem=document.createElement('button');addItem.className='ed-add';addItem.textContent='+ הוסף פריט';
@@ -955,10 +967,7 @@ function buildItemRow(it,ii,g,gi,ph,pi){
     if(!dragSrc||dragSrc===row)return;
     const sp=+dragSrc.dataset.pi,sg=+dragSrc.dataset.gi,si=+dragSrc.dataset.ii;
     const dp=+row.dataset.pi,dg=+row.dataset.gi,di=+row.dataset.ii;
-    if(!edData[sp]||!edData[sp].groups[sg])return;
-    const[moved]=edData[sp].groups[sg].items.splice(si,1);
-    if(!edData[dp]||!edData[dp].groups[dg])return;
-    edData[dp].groups[dg].items.splice(di,0,moved);renderEditor();
+    if(safeDragMove(sp,sg,si,dp,dg,di))renderEditor();
   });
   // Mobile touch drag — starts immediately on handle touchstart
   drag.addEventListener('touchstart',e=>{
@@ -980,9 +989,8 @@ function buildItemRow(it,ii,g,gi,ph,pi){
         const sp=+row.dataset.pi,sg=+row.dataset.gi,si=+row.dataset.ii;
         const dp=+lastOver.dataset.pi,dg=+lastOver.dataset.gi,di=+lastOver.dataset.ii;
         if(edData[sp]&&edData[sp].groups[sg]&&edData[dp]&&edData[dp].groups[dg]){
-          const[moved]=edData[sp].groups[sg].items.splice(si,1);
-          edData[dp].groups[dg].items.splice(di,0,moved);
-          dragSrc=null;renderEditor();return;
+          if(safeDragMove(sp,sg,si,dp,dg,di)){dragSrc=null;renderEditor();return;}
+          dragSrc=null;
         }
       }
       dragSrc=null;
