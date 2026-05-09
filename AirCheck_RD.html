@@ -26,6 +26,27 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 .screen{display:none;flex-direction:column;flex:1;overflow:hidden;}
 .screen.active{display:flex;}
 
+/* ── SPLASH SCREEN ── */
+#screenSplash{flex-direction:column;overflow:hidden;}
+.splash-hero{flex-shrink:0;background:linear-gradient(180deg,#0e2348 0%,#1c3d6e 75%,#f4ecdc 100%);padding:24px 24px 28px;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.splash-logo-wrap{width:280px;height:280px;border-radius:0;overflow:hidden;flex-shrink:0;}
+.splash-logo-wrap img{width:280px;height:280px;object-fit:contain;display:block;}
+.splash-app-title{font-family:var(--font-mono);font-size:28px;font-weight:700;color:var(--paper);direction:ltr;letter-spacing:-.5px;}
+.splash-app-sub{font-size:9px;color:rgba(244,236,220,.85);letter-spacing:.18em;font-family:var(--font-mono);text-transform:uppercase;}
+.splash-app-slogan{font-size:10px;color:rgba(244,236,220,.7);letter-spacing:.05em;font-family:var(--font-mono);font-style:italic;margin-top:2px;}
+.splash-body{flex:1;padding:16px 18px 0;display:flex;flex-direction:column;gap:10px;background-image:repeating-linear-gradient(0deg,transparent 0,transparent 27px,var(--paper-line) 27px,var(--paper-line) 28px);}
+.splash-resume-card{background:var(--paper-hi);border:1px solid var(--gold);border-radius:4px;padding:10px 12px;direction:rtl;}
+.splash-resume-lbl{font-size:8px;font-family:var(--font-mono);letter-spacing:.1em;color:var(--ink-faint);margin-bottom:3px;text-transform:uppercase;direction:ltr;}
+.splash-resume-val{font-size:13px;font-weight:700;color:var(--ink-body);margin-bottom:6px;}
+.splash-runway{height:8px;background:var(--asphalt);border-radius:2px;overflow:hidden;}
+.splash-runway-fill{height:100%;border-radius:2px;background:var(--ink);transition:width .4s ease;}
+.splash-runway-pct{font-size:8px;font-family:var(--font-mono);color:var(--ink-muted);margin-top:3px;direction:ltr;}
+.splash-btn-primary{width:100%;padding:14px;background:var(--ink);color:var(--paper);border:none;border-radius:4px;font-family:var(--font-ui);font-size:15px;font-weight:700;cursor:pointer;text-align:center;transition:opacity .12s;}
+.splash-btn-primary:active{opacity:.85;}
+.splash-btn-secondary{width:100%;padding:13px;background:transparent;color:var(--ink);border:1px solid var(--gold);border-radius:4px;font-family:var(--font-ui);font-size:14px;font-weight:600;cursor:pointer;text-align:center;transition:background .12s;}
+.splash-btn-secondary:active{background:rgba(200,160,74,.1);}
+.splash-footer-wrap{margin-top:auto;padding-bottom:0;}
+
 /* ── FLIGHT STRIP ── */
 .flight-strip{flex-shrink:0;display:flex;align-items:center;justify-content:flex-start;padding:8px 14px;background:var(--ink);color:var(--paper);font-family:var(--font-mono);box-shadow:0 3px 0 var(--ink-dark);gap:14px;position:relative;z-index:10;}
 .strip-actions{display:flex;flex-direction:row;gap:6px;flex-shrink:0;margin-left:auto;align-self:center;}
@@ -144,12 +165,18 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 .tree-item-text.skipped{color:var(--amber);opacity:.75;}
 
 /* ── FOOTER ── */
-.footer-strip{margin-top:auto;flex-shrink:0;text-align:center;padding:5px 0 8px;font-size:9px;font-family:var(--font-mono);color:var(--ink-faint);letter-spacing:.1em;text-transform:uppercase;direction:ltr;border-top:1px solid var(--gold-lite);background:var(--paper-hi);}
+.footer-strip{margin-top:auto;flex-shrink:0;font-size:9px;font-family:var(--font-mono);color:var(--ink-faint);letter-spacing:.1em;text-transform:uppercase;direction:rtl;border-top:1px solid var(--gold-lite);background:var(--paper-hi);}
+.footer-refresh{font-size:11px;color:var(--ink-muted);cursor:pointer;text-decoration:underline;text-underline-offset:2px;opacity:.75;font-family:var(--font-ui);letter-spacing:.02em;}
+.footer-refresh:active{opacity:.4;}
 
 /* ── MODALS ── */
-#modal{display:none;position:absolute;inset:0;background:rgba(26,19,8,.8);z-index:100;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(3px);}
+#modal{display:none;position:absolute;inset:0;background:rgba(26,19,8,.8);z-index:500;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(3px);}
+#modal{display:none;position:absolute;inset:0;background:rgba(26,19,8,.8);z-index:500;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(3px);}
 #modal.open{display:flex;}
 .modal-box{background:var(--paper-hi);border:2px solid var(--gold);border-radius:8px;padding:24px 20px;width:100%;max-width:340px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.modal-box.danger{border-color:var(--stamp-red);box-shadow:0 0 0 1px rgba(185,74,58,.2),0 20px 60px rgba(0,0,0,.4);}
+.modal-box.success{border-color:var(--cleared);box-shadow:0 0 0 1px rgba(31,111,63,.15),0 20px 60px rgba(0,0,0,.4);}
+.modal-box.amber{border-color:var(--amber);box-shadow:0 0 0 1px rgba(245,158,11,.2),0 20px 60px rgba(0,0,0,.4);}
 .modal-title{font-size:18px;font-weight:700;margin-bottom:8px;color:var(--ink-body);}
 .modal-sub{font-size:14px;color:var(--ink-muted);margin-bottom:20px;line-height:1.5;}
 .modal-btns{display:flex;gap:10px;flex-direction:column;}
@@ -159,9 +186,11 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 .btn-ghost{background:transparent;color:var(--ink-muted);border:1px solid var(--gold-lite);font-size:14px;}
 #phaseOverlay{display:none;position:absolute;inset:0;z-index:200;align-items:center;justify-content:center;background:rgba(26,19,8,.8);backdrop-filter:blur(3px);}
 #phaseOverlay.open{display:flex;}
-.phase-overlay-box{background:var(--paper-hi);border:2px solid var(--cleared);border-radius:12px;padding:28px 24px;text-align:center;max-width:280px;width:85%;}
-.phase-overlay-check{font-size:36px;margin-bottom:10px;color:var(--cleared);}
-.phase-overlay-title{font-size:20px;font-weight:700;color:var(--cleared);margin-bottom:5px;}
+.phase-overlay-box{background:var(--paper-hi);border:2px solid var(--cleared);border-radius:8px;padding:24px 20px;text-align:center;max-width:300px;width:88%;background-image:repeating-linear-gradient(0deg,transparent 0,transparent 27px,var(--paper-line) 27px,var(--paper-line) 28px);box-shadow:0 0 0 1px rgba(31,111,63,.15),0 20px 40px rgba(0,0,0,.35);}
+.phase-overlay-stamp-wrap{display:flex;justify-content:center;margin-bottom:16px;}
+.phase-overlay-stamp{border:3px solid var(--cleared);padding:8px 20px 10px;text-align:center;color:var(--cleared);font-family:var(--font-mono);transform:rotate(-5deg);display:inline-block;}
+.phase-overlay-stamp-name{font-size:15px;font-weight:700;letter-spacing:.06em;margin-bottom:4px;}
+.phase-overlay-stamp-bottom{font-size:20px;font-weight:700;letter-spacing:.12em;direction:ltr;}
 .phase-overlay-next{font-size:13px;color:var(--ink-muted);margin-bottom:20px;line-height:1.5;}
 
 @keyframes runwayPulse{0%,100%{box-shadow:0 0 0 0 rgba(200,160,74,0);border-color:var(--gold);}50%{box-shadow:0 0 0 4px rgba(200,160,74,.35);border-color:#e8b85a;}}
@@ -199,10 +228,10 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 .ed-item-main{font-size:13px;color:var(--ink-body);line-height:1.3;}
 .ed-item-sub{font-size:10px;color:var(--ink-muted);margin-top:1px;font-style:italic;}
 /* Icon buttons */
-.ed-icon{background:transparent;border:none;cursor:pointer;font-size:14px;color:var(--ink-faint);padding:2px 4px;flex-shrink:0;line-height:1;transition:color .12s;}
-.ed-icon:hover{color:var(--ink);}
-.ed-icon.del{color:rgba(185,74,58,.5);}
-.ed-icon.del:active{color:var(--stamp-red);}
+.ed-icon{background:transparent;border:none;cursor:pointer;font-size:14px;color:rgba(244,236,220,.5);padding:2px 4px;flex-shrink:0;line-height:1;transition:color .12s;}
+.ed-icon:hover{color:var(--paper);}
+.ed-icon.del{color:rgba(255,140,120,.8);}
+.ed-icon.del:active{color:#ff8070;}
 /* Add buttons */
 .ed-add{display:flex;align-items:center;width:100%;padding:6px 10px;background:transparent;border:none;border-top:1px dashed rgba(200,160,74,.35);color:var(--gold-deep);font-family:var(--font-ui);font-size:12px;font-weight:600;cursor:pointer;text-align:right;direction:rtl;}
 .ed-add:active{background:rgba(200,160,74,.06);}
@@ -229,7 +258,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 /* ── XLS IMPORT OVERLAY ── */
 #xlsImportOverlay{display:none;position:absolute;inset:0;z-index:400;align-items:center;justify-content:center;background:rgba(26,19,8,.85);backdrop-filter:blur(4px);padding:24px;}
 #xlsImportOverlay.open{display:flex;}
-.xls-import-box{background:var(--paper-hi);border:2px solid var(--gold);border-radius:8px;width:100%;max-width:340px;box-shadow:0 20px 60px rgba(0,0,0,.5);overflow:hidden;display:flex;flex-direction:column;max-height:85vh;}
+.xls-import-box{background:var(--paper-hi);border:2px solid var(--amber);border-radius:8px;width:100%;max-width:340px;box-shadow:0 0 0 1px rgba(245,158,11,.15),0 20px 60px rgba(0,0,0,.5);overflow:hidden;display:flex;flex-direction:column;max-height:85vh;}
 .xls-import-header{background:var(--ink);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;}
 .xls-import-title{font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:.2em;color:var(--paper);}
 .xls-import-close{background:transparent;border:none;color:rgba(244,236,220,.6);font-size:20px;cursor:pointer;line-height:1;padding:0;}
@@ -283,12 +312,12 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 .xls-success-sub{font-size:13px;color:var(--ink-muted);text-align:center;line-height:1.6;margin-bottom:20px;}
 
 /* ── SETTINGS SCREEN ── */
-#screenSettings{overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--paper);background-image:repeating-linear-gradient(0deg,transparent 0,transparent 27px,var(--paper-line) 27px,var(--paper-line) 28px);}
+#screenSettings{flex-direction:column;overflow:hidden;background:var(--paper);background-image:repeating-linear-gradient(0deg,transparent 0,transparent 27px,var(--paper-line) 27px,var(--paper-line) 28px);}
 #screenSettings::-webkit-scrollbar{width:0;}
 .settings-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 12px;background:var(--ink);color:var(--paper);font-family:var(--font-ui);}
 .settings-back{background:transparent;border:none;color:var(--paper);font-size:22px;cursor:pointer;padding:0;line-height:1;}
 .settings-title{font-size:16px;font-weight:700;color:var(--paper);}
-.settings-body{padding:14px 14px 32px;}
+.settings-body{padding:14px 14px 16px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .settings-section{margin-bottom:16px;}
 .settings-section-label{font-family:var(--font-mono);font-size:9px;color:var(--ink-muted);letter-spacing:.18em;text-transform:uppercase;padding:0 2px 6px;display:block;}
 .settings-card{background:var(--paper-hi);border:1px solid var(--gold);border-radius:4px;overflow:hidden;}
@@ -319,8 +348,8 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 .tog-knob{width:16px;height:16px;border-radius:50%;background:var(--paper-hi);box-shadow:0 1px 3px rgba(0,0,0,.3);position:absolute;top:3px;transition:left .2s;}
 .tog.on{background:var(--cleared);}
 .tog.off{background:var(--ink-faint);}
-.tog.on .tog-knob{left:20px;}
-.tog.off .tog-knob{left:3px;}
+.tog.on .tog-knob{left:3px;}
+.tog.off .tog-knob{left:20px;}
 /* Segmented control */
 .seg-ctrl{display:flex;border:1px solid var(--gold);border-radius:3px;overflow:hidden;direction:ltr;flex-shrink:0;}
 .seg-btn{padding:5px 10px;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.1em;cursor:pointer;border:none;border-right:1px solid var(--gold);transition:background .12s,color .12s;}
@@ -333,12 +362,46 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 .danger-label{font-family:var(--font-mono);font-size:9px;color:var(--stamp-red);letter-spacing:.18em;text-transform:uppercase;padding:0 2px 6px;display:block;}
 .danger-btn{width:100%;padding:12px;background:transparent;border:1px solid rgba(185,74,58,.5);border-radius:4px;color:var(--stamp-red);font-family:var(--font-ui);font-size:14px;font-weight:700;cursor:pointer;transition:background .12s;}
 .danger-btn:active{background:rgba(185,74,58,.1);}
-.settings-footer{text-align:center;padding:16px 0 0;font-family:var(--font-mono);font-size:9px;color:var(--ink-faint);letter-spacing:.2em;direction:ltr;}
+
 </style>
 </head>
 <body>
 <div id="app">
-  <div class="screen active" id="screenChecklist">
+  <!-- ══ SPLASH SCREEN ══ -->
+  <div class="screen active" id="screenSplash">
+    <div class="splash-hero">
+      <div class="splash-logo-wrap">
+        <img src="https://raw.githubusercontent.com/eligrt/AirCheck/main/AirCheck_logo_RD.png"
+          alt="AirCheck+" onerror="this.style.display='none'">
+      </div>
+      <div class="splash-app-title">AirCheck+</div>
+      <div class="splash-app-sub">personal flight checklist</div>
+      <div class="splash-app-slogan">the checklist on top of the checklist</div>
+    </div>
+    <div class="splash-body">
+      <div class="splash-resume-card" id="splashResumeCard" style="display:none;">
+        <div class="splash-resume-lbl" id="splashResumePhase">—</div>
+        <div class="splash-resume-val" id="splashResumeItem">—</div>
+        <div class="splash-runway"><div class="splash-runway-fill" id="splashRunwayFill" style="width:0%"></div></div>
+        <div class="splash-runway-pct" id="splashRunwayPct"></div>
+      </div>
+      <button class="splash-btn-primary" id="splashMainBtn" onclick="splashMainAction()">
+        <span style="display:inline-block;transform:scaleX(-1)">✈</span> התחל טיסה
+      </button>
+      <button class="splash-btn-secondary" id="splashSecondaryBtn" onclick="splashSecondaryAction()" style="display:none;">
+        <span style="display:inline-block;transform:scaleX(-1)">✈</span> התחל טיסה חדשה
+      </button>
+    </div>
+    <div class="splash-footer-wrap">
+      <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
+        <span class="footer-refresh" onclick="location.reload()">רענון</span>
+        <span>AirCheck+ · v2.03.009 · built by eligrt</span>
+        <span style="width:40px;"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screenChecklist">
 
     <div class="flight-strip" style="direction:ltr;">
       <div class="strip-data">
@@ -349,7 +412,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
         <div class="strip-data-col">
           <span class="strip-label">FLT</span>
           <div class="strip-route-fields">
-            <input class="strip-icao-input" id="stripFrom" type="text" placeholder="LLHZ" maxlength="4" autocomplete="off" autocorrect="off" spellcheck="false" oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'');saveRoute()" onclick="this.select()"><span class="strip-route-space"> </span><span class="strip-route-arrow">→</span><span class="strip-route-space"> </span><input class="strip-icao-input" id="stripTo" type="text" placeholder="LLMR" maxlength="4" autocomplete="off" autocorrect="off" spellcheck="false" oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'');saveRoute()" onclick="this.select()">
+            <input class="strip-icao-input" id="stripFrom" type="text" placeholder="LLRS" maxlength="4" autocomplete="off" autocorrect="off" spellcheck="false" oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'');saveRoute()" onclick="this.select()"><span class="strip-route-space"> </span><span class="strip-route-arrow">→</span><span class="strip-route-space"> </span><input class="strip-icao-input" id="stripTo" type="text" placeholder="LLRS" maxlength="4" autocomplete="off" autocorrect="off" spellcheck="false" oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'');saveRoute()" onclick="this.select()">
           </div>
         </div>
       </div>
@@ -442,24 +505,21 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
 
     <div class="tree-panel" id="treePanel"></div>
-    <div class="footer-strip">AirCheck+ · v2.02.031 · built by eligrt</div>
-  </div>
-
-  <div id="modal">
-    <div class="modal-box">
-      <div class="modal-title" id="modalTitle">טיסה חדשה?</div>
-      <div class="modal-sub" id="modalSub">פעולה זו תאפס את כל ההתקדמות הנוכחית.</div>
-      <div class="modal-btns">
-        <button class="btn btn-ink" id="modalConfirmBtn" onclick="closeModal();startNew()">כן, אפס והתחל מחדש</button>
-        <button class="btn btn-ghost" onclick="closeModal()">ביטול</button>
-      </div>
+    <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
+      <span class="footer-refresh" onclick="location.reload()">רענון</span>
+      <span>AirCheck+ · v2.03.009 · built by eligrt</span>
+      <span style="width:40px;"></span>
     </div>
   </div>
 
   <div id="phaseOverlay">
     <div class="phase-overlay-box">
-      <div class="phase-overlay-check">✓</div>
-      <div class="phase-overlay-title" id="phaseOverlayTitle"></div>
+      <div class="phase-overlay-stamp-wrap">
+        <div class="phase-overlay-stamp">
+          <div class="phase-overlay-stamp-name" id="phaseOverlayTitle"></div>
+          <div class="phase-overlay-stamp-bottom">CHECKED &nbsp;✓</div>
+        </div>
+      </div>
       <div class="phase-overlay-next" id="phaseOverlayNext"></div>
       <button class="btn btn-ink" style="margin-bottom:8px" onclick="dismissPhaseOverlay()">המשך עכשיו ›</button>
       <button class="btn btn-ghost" onclick="dismissPhaseOverlay()">סגור — אמשיך מאוחר יותר</button>
@@ -507,12 +567,12 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
           <div class="settings-row">
             <span class="settings-row-label">מסלול ברירת מחדל</span>
             <div style="display:inline-flex;align-items:center;gap:4px;direction:ltr;">
-              <input class="tail-setting-input" id="settingsFrom" type="text" placeholder="LLHZ" maxlength="4"
+              <input class="tail-setting-input" id="settingsFrom" type="text" placeholder="LLRS" maxlength="4"
                 style="width:4ch;text-align:center;border-bottom:1.5px dashed rgba(28,61,110,.4);"
                 autocomplete="off" autocorrect="off" spellcheck="false"
                 oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'');saveSettingsRoute()">
               <span style="font-family:var(--font-mono);font-size:11px;color:var(--ink-muted);opacity:.6;">→</span>
-              <input class="tail-setting-input" id="settingsTo" type="text" placeholder="LLMR" maxlength="4"
+              <input class="tail-setting-input" id="settingsTo" type="text" placeholder="LLRS" maxlength="4"
                 style="width:4ch;text-align:center;border-bottom:1.5px dashed rgba(28,61,110,.4);"
                 autocomplete="off" autocorrect="off" spellcheck="false"
                 oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'');saveSettingsRoute()">
@@ -543,13 +603,11 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
         </div>
       </div>
 
-      <!-- DANGER ZONE -->
-      <div class="settings-section">
-        <span class="danger-label">DANGER ZONE</span>
-        <button class="danger-btn" onclick="confirmReset()">אפס את כל הנתונים</button>
-      </div>
-
-      <div class="settings-footer">AIRCHECK+ · v2.02.031 · BUILD eligrt</div>
+    </div>
+    <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
+      <span class="footer-refresh" onclick="location.reload()">רענון</span>
+      <span>AirCheck+ · v2.03.009 · built by eligrt</span>
+      <span style="width:40px;"></span>
     </div>
   </div>
 
@@ -563,6 +621,23 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
       <button class="editor-save-btn" onclick="saveEditor()">DONE ✓</button>
     </div>
     <div class="editor-list" id="editorList"></div>
+    <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
+      <span class="footer-refresh" onclick="location.reload()">רענון</span>
+      <span>AirCheck+ · v2.03.009 · built by eligrt</span>
+      <span style="width:40px;"></span>
+    </div>
+  </div>
+
+  <!-- MODAL — at end of #app so it renders above all screens -->
+  <div id="modal">
+    <div class="modal-box">
+      <div class="modal-title" id="modalTitle">טיסה חדשה?</div>
+      <div class="modal-sub" id="modalSub">פעולה זו תאפס את כל ההתקדמות הנוכחית.</div>
+      <div class="modal-btns">
+        <button class="btn btn-ink" id="modalConfirmBtn" onclick="closeModal();startNew()">כן, אפס והתחל מחדש</button>
+        <button class="btn btn-ghost" id="modalCancelBtn" onclick="closeModal()">ביטול</button>
+      </div>
+    </div>
   </div>
 
 </div>
@@ -661,7 +736,11 @@ function loadRoute(){try{const raw=localStorage.getItem(ROUTE_KEY);if(raw){const
 function updateClock(){const now=new Date();const h=String(now.getUTCHours()).padStart(2,'0');const m=String(now.getUTCMinutes()).padStart(2,'0');document.getElementById('utcClock').textContent=h+':'+m;document.getElementById('stampTime').textContent=h+':'+m+' UTC';}
 setInterval(updateClock,10000);updateClock();
 function drawRings(){const g=document.getElementById('ringCoils');g.innerHTML='';const n=8;for(let k=0;k<n;k++){const x=8+k*((352-8)/7);const ns='http://www.w3.org/2000/svg';const back=document.createElementNS(ns,'path');back.setAttribute('d',`M ${x-3} 30 Q ${x-5} 18 ${x+2} 8 Q ${x+5} 4 ${x+8} 6`);back.setAttribute('fill','none');back.setAttribute('stroke','url(#wireDark)');back.setAttribute('stroke-width','1.6');back.setAttribute('stroke-linecap','round');back.setAttribute('opacity','.9');g.appendChild(back);const hole=document.createElementNS(ns,'ellipse');hole.setAttribute('cx',x);hole.setAttribute('cy','30');hole.setAttribute('rx','5');hole.setAttribute('ry','2.2');hole.setAttribute('fill','url(#paperHole)');g.appendChild(hole);const hole2=document.createElementNS(ns,'ellipse');hole2.setAttribute('cx',x);hole2.setAttribute('cy','30.5');hole2.setAttribute('rx','4');hole2.setAttribute('ry','1.2');hole2.setAttribute('fill','#000');hole2.setAttribute('opacity','.55');g.appendChild(hole2);const front=document.createElementNS(ns,'path');front.setAttribute('d',`M ${x+8} 6 Q ${x+13} 9 ${x+12} 16 Q ${x+10} 24 ${x+5} 30`);front.setAttribute('fill','none');front.setAttribute('stroke','url(#wireGrad)');front.setAttribute('stroke-width','2.1');front.setAttribute('stroke-linecap','round');g.appendChild(front);const hl=document.createElementNS(ns,'circle');hl.setAttribute('cx',x+10);hl.setAttribute('cy','8');hl.setAttribute('r','.9');hl.setAttribute('fill','#fff');hl.setAttribute('opacity','.95');g.appendChild(hl);}}
-function render(){const item=CL[current];if(!item)return;const phase=PHASE_IDX[item.phase];const group=phase?phase.groups.find(g=>g.name===item.group):null;document.getElementById('crumbPhase').textContent=item.phase;document.getElementById('crumbGroup').textContent=item.group;const numEl=document.getElementById('cardItemNum');numEl.innerHTML='ITEM <b>'+(current+1).toString().padStart(2,'0')+'</b><span> / '+CL.length+'</span>';const badge=document.getElementById('cardBadge');if(group){const pos=group.items.indexOf(current)+1;badge.textContent=pos+'/'+group.items.length+' בקבוצה';badge.style.display='';}else{badge.style.display='none';}document.getElementById('cardMain').textContent=item.main;const subEl=document.getElementById('cardSub');subEl.textContent=item.sub||'';subEl.style.display=item.sub?'':'none';document.getElementById('cardStamp').classList.remove('visible');const next=CL[current+1];const under=document.getElementById('cardUnder');if(next){under.style.display='';document.getElementById('cardUnderNum').innerHTML='ITEM <b>'+(current+2).toString().padStart(2,'0')+'</b>';document.getElementById('cardUnderMain').textContent=next.main;}else{under.style.display='none';}renderRunway();if(treeOpen)renderTree();const ub=document.getElementById('uncheckBtn');ub.style.display=(status[current]==='done')?'':'none';document.getElementById('confirmHint').textContent='לחץ והחזק את המסלול לאישור';document.getElementById('confirmHint').classList.remove('confirmed');saveState();}
+function render(){
+  // Sync stamp tail from settings on every render
+  const stampEl=document.getElementById('stampInit');
+  if(stampEl){const t=settings&&settings.tail?settings.tail:(localStorage.getItem(REG_KEY)||'');stampEl.textContent='PIC · 4X-'+(t||'???');}
+  const item=CL[current];if(!item)return;const phase=PHASE_IDX[item.phase];const group=phase?phase.groups.find(g=>g.name===item.group):null;document.getElementById('crumbPhase').textContent=item.phase;document.getElementById('crumbGroup').textContent=item.group;const numEl=document.getElementById('cardItemNum');numEl.innerHTML='ITEM <b>'+(current+1).toString().padStart(2,'0')+'</b><span> / '+CL.length+'</span>';const badge=document.getElementById('cardBadge');if(group){const pos=group.items.indexOf(current)+1;badge.textContent=pos+'/'+group.items.length+' בקבוצה';badge.style.display='';}else{badge.style.display='none';}document.getElementById('cardMain').textContent=item.main;const subEl=document.getElementById('cardSub');subEl.textContent=item.sub||'';subEl.style.display=item.sub?'':'none';document.getElementById('cardStamp').classList.remove('visible');const next=CL[current+1];const under=document.getElementById('cardUnder');if(next){under.style.display='';document.getElementById('cardUnderNum').innerHTML='ITEM <b>'+(current+2).toString().padStart(2,'0')+'</b>';document.getElementById('cardUnderMain').textContent=next.main;}else{under.style.display='none';}renderRunway();if(treeOpen)renderTree();const ub=document.getElementById('uncheckBtn');ub.style.display=(status[current]==='done')?'':'none';document.getElementById('confirmHint').textContent='לחץ והחזק את המסלול לאישור';document.getElementById('confirmHint').classList.remove('confirmed');saveState();}
 function renderRunway(){const totalDone=Object.values(status).filter(s=>s==='done').length;const totalPct=Math.round((totalDone/CL.length)*100);document.getElementById('runwayCountLabel').textContent=totalDone.toString().padStart(2,'0')+' / '+CL.length;document.getElementById('runwayPctLabel').textContent=totalPct+'%';const container=document.getElementById('runwayPhases');container.innerHTML='';PHASES.forEach(p=>{const pDone=p.groups.reduce((s,g)=>s+g.items.filter(j=>status[j]==='done').length,0);const pTot=p.end-p.start+1;const pct=Math.round((pDone/pTot)*100);const isCur=current>=p.start&&current<=p.end;const isDone=pDone===pTot;const seg=document.createElement('div');seg.className='runway-seg';const nm=document.createElement('div');nm.className='runway-seg-name'+(isDone?' done':isCur?' cur':'');nm.textContent=p.name;seg.appendChild(nm);const track=document.createElement('div');track.className='runway-track'+(isCur?' cur':'');const fill=document.createElement('div');fill.className='runway-fill';fill.style.width=pct+'%';fill.style.background=isDone?'#1f6f3f':'#1c3d6e';track.appendChild(fill);const dashes=document.createElement('div');dashes.className='runway-dashes';for(let i=0;i<8;i++){const d=document.createElement('div');d.className='runway-dash';dashes.appendChild(d);}track.appendChild(dashes);seg.appendChild(track);const cnt=document.createElement('div');cnt.className='runway-seg-count';cnt.textContent=pDone+'/'+pTot;seg.appendChild(cnt);container.appendChild(seg);});}
 const expandedPhases={};
 function togglePhase(phaseName){expandedPhases[phaseName]=!expandedPhases[phaseName];renderTree();}
@@ -695,20 +774,26 @@ function advanceToNext(){let n=current+1;while(n<CL.length&&status[n]==='done')n
 function goBack(){if(current>0){current--;holdState='idle';resetRunwayBtn();render();}}
 function skipItem(){status[current]='skipped';let n=current+1;while(n<CL.length&&status[n]==='done')n++;if(n<CL.length)current=n;holdState='idle';resetRunwayBtn();render();}
 function uncheckCurrent(){delete status[current];holdState='idle';resetRunwayBtn();render();}
-function showPhaseOverlay(donePhaseName,nextPhaseName){document.getElementById('phaseOverlayTitle').textContent=donePhaseName+' — הושלם ✓';document.getElementById('phaseOverlayNext').textContent=nextPhaseName?'השלב הבא: '+nextPhaseName:'כל השלבים הושלמו!';document.getElementById('phaseOverlay').classList.add('open');}
+function showPhaseOverlay(donePhaseName,nextPhaseName){document.getElementById('phaseOverlayTitle').textContent=donePhaseName;document.getElementById('phaseOverlayNext').textContent=nextPhaseName?'השלב הבא: '+nextPhaseName:'כל השלבים הושלמו!';document.getElementById('phaseOverlay').classList.add('open');}
 function dismissPhaseOverlay(){document.getElementById('phaseOverlay').classList.remove('open');render();}
 function showAllDone(){document.getElementById('confirmHint').textContent='🎉 הצ׳קליסט הושלם!';document.getElementById('confirmHint').classList.add('confirmed');}
 function openModal(){
   document.getElementById('modal').classList.add('open');
 }
 function openNewFlightModal(){
+  document.querySelector('.modal-box').className='modal-box amber';
   document.getElementById('modalTitle').textContent='טיסה חדשה?';
   document.getElementById('modalSub').textContent='פעולה זו תאפס את כל ההתקדמות הנוכחית.';
   document.getElementById('modalConfirmBtn').textContent='כן, אפס והתחל מחדש';
   document.getElementById('modalConfirmBtn').onclick=()=>{closeModal();startNew();};
   openModal();
 }
-function closeModal(){document.getElementById('modal').classList.remove('open');}
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  const cb=document.getElementById('modalCancelBtn');
+  if(cb)cb.style.display='';
+  document.querySelector('.modal-box').className='modal-box';
+}
 function startNew(){clearState();holdState='idle';resetRunwayBtn();render();}
 // ── SETTINGS ──
 const SETTINGS_KEY='aircheck_rd_settings';
@@ -716,6 +801,11 @@ let settings={tail:'',holdMs:300,sounds:false,theme:'day'};
 
 function loadSettings(){
   try{const r=localStorage.getItem(SETTINGS_KEY);if(r)settings=Object.assign(settings,JSON.parse(r));}catch(e){}
+  // Sync tail to stamp on load
+  if(settings.tail){
+    document.getElementById('stampInit').textContent='PIC · 4X-'+settings.tail;
+    try{localStorage.setItem(REG_KEY,settings.tail);}catch(e){}
+  }
 }
 function saveSettings(){
   try{localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));}catch(e){}
@@ -725,6 +815,7 @@ const LIST_KEY='checklist_list_v1';
 let edData=[];
 let edPopupCallback=null;
 let dragSrc=null;
+const edPhaseOpenState={};
 
 function clToEdData(list){
   const phases=[];const phMap={};
@@ -773,14 +864,14 @@ function renderEditor(){
     const editBtn=document.createElement('button');editBtn.className='ed-icon';editBtn.textContent='✎';
     editBtn.onclick=e=>{e.stopPropagation();openEdPopup('שינוי שם שלב',ph.phase,'',false,val=>{ph.phase=val;renderEditor();});};
     const delBtn=document.createElement('button');delBtn.className='ed-icon del';delBtn.textContent='✕';
-    delBtn.onclick=e=>{e.stopPropagation();if(confirm('למחוק את השלב "'+ph.phase+'"?')){edData.splice(pi,1);renderEditor();}};
+    delBtn.onclick=e=>{e.stopPropagation();showConfirm('מחיקת שלב','למחוק את השלב "'+ph.phase+'"? כל הפריטים בו יימחקו.',()=>{edData.splice(pi,1);renderEditor();});};
     hdr.appendChild(arrow);hdr.appendChild(name);hdr.appendChild(count);hdr.appendChild(editBtn);hdr.appendChild(delBtn);
     const groups=document.createElement('div');groups.className='ed-groups';
-    // All phases collapsed by default in editor
-    let open=false;
+    const phaseKey=pi+'_'+ph.phase;
+    let open=edPhaseOpenState[phaseKey]===true;
     groups.style.display=open?'block':'none';
     arrow.style.transform=open?'rotate(90deg)':'rotate(180deg)';
-    hdr.onclick=()=>{open=!open;groups.style.display=open?'block':'none';arrow.style.transform=open?'rotate(90deg)':'rotate(180deg)';};
+    hdr.onclick=()=>{open=!open;edPhaseOpenState[phaseKey]=open;groups.style.display=open?'block':'none';arrow.style.transform=open?'rotate(90deg)':'rotate(180deg)';};
     ph.groups.forEach((g,gi)=>{
       const gDiv=document.createElement('div');gDiv.className='ed-group';
       const ghdr=document.createElement('div');ghdr.className='ed-group-hdr';
@@ -788,7 +879,7 @@ function renderEditor(){
       const gedit=document.createElement('button');gedit.className='ed-icon';gedit.textContent='✎';
       gedit.onclick=e=>{e.stopPropagation();openEdPopup('שינוי שם קבוצה',g.name,'',false,val=>{g.name=val;renderEditor();});};
       const gdel=document.createElement('button');gdel.className='ed-icon del';gdel.textContent='✕';
-      gdel.onclick=e=>{e.stopPropagation();if(confirm('למחוק "'+g.name+'"?')){ph.groups.splice(gi,1);renderEditor();}};
+      gdel.onclick=e=>{e.stopPropagation();showConfirm('מחיקת קבוצה','למחוק את הקבוצה "'+g.name+'"?',()=>{ph.groups.splice(gi,1);renderEditor();},'danger');};
       ghdr.appendChild(gname);ghdr.appendChild(gedit);ghdr.appendChild(gdel);
       const itemsDiv=document.createElement('div');itemsDiv.className='ed-items';
       itemsDiv.dataset.pi=pi;itemsDiv.dataset.gi=gi;
@@ -849,7 +940,7 @@ function buildItemRow(it,ii,g,gi,ph,pi){
   const editBtn=document.createElement('button');editBtn.className='ed-icon';editBtn.textContent='✎';
   editBtn.onclick=e=>{e.stopPropagation();openEdPopup('עריכת פריט',it.main,it.sub,true,(m,s)=>{it.main=m;it.sub=s;renderEditor();});};
   const delBtn=document.createElement('button');delBtn.className='ed-icon del';delBtn.textContent='✕';
-  delBtn.onclick=e=>{e.stopPropagation();g.items.splice(ii,1);renderEditor();};
+  delBtn.onclick=e=>{e.stopPropagation();showConfirm('מחיקת פריט','למחוק את הפריט "'+it.main+'"?',()=>{g.items.splice(ii,1);renderEditor();},'danger');};
   // Desktop drag — on full row
   row.addEventListener('dragstart',e=>{dragSrc=row;row.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
   row.addEventListener('dragend',()=>{row.classList.remove('dragging');document.querySelectorAll('.drag-over').forEach(r=>r.classList.remove('drag-over'));dragSrc=null;});
@@ -1142,20 +1233,54 @@ function showToast(msg,duration=2800){
 }
 
 // ── CUSTOM CONFIRM MODALS ──
+function showConfirm(title, msg, onConfirm, style){
+  document.getElementById('modalTitle').innerHTML=style==='danger'?'<span style="color:var(--stamp-red);margin-left:6px;">⚠</span> '+title:title;
+  document.getElementById('modalSub').textContent=msg;
+  document.getElementById('modalConfirmBtn').textContent='אישור';
+  document.getElementById('modalConfirmBtn').onclick=()=>{closeModal();onConfirm();};
+  const box=document.querySelector('.modal-box');
+  box.className='modal-box'+(style?' '+style:'');
+  openModal();
+}
 function showEditorResetConfirm(){
-  document.getElementById('modalTitle').textContent='איפוס רשימה?';
+  document.querySelector('.modal-box').className='modal-box danger';
+  document.getElementById('modalTitle').innerHTML='<span style="color:var(--stamp-red);margin-left:6px;">⚠</span> איפוס רשימה?';
   document.getElementById('modalSub').textContent='הרשימה תחזור לברירת המחדל. פעולה זו בלתי הפיכה.';
   document.getElementById('modalConfirmBtn').textContent='כן, אפס';
   document.getElementById('modalConfirmBtn').onclick=()=>{
-    closeModal();
+    // Do the reset
     CL.length=0;CL_DEFAULT.forEach(it=>CL.push({...it}));buildIndex();
-    edData=clToEdData(CL);renderEditor();
-    showToast('✓ הרשימה אופסה לברירת המחדל');
+    edData=clToEdData(CL);
+    // Show success — close and reopen
+    // Immediate feedback, then show success
+    document.getElementById('modalConfirmBtn').textContent='מאפס...';
+    document.getElementById('modalConfirmBtn').disabled=true;
+    setTimeout(()=>{
+    document.getElementById('modalTitle').innerHTML='';
+    document.getElementById('modalSub').innerHTML=`
+      <div style="display:flex;flex-direction:column;align-items:center;margin:8px 0 16px;">
+        <div style="transform:rotate(-6deg);margin-bottom:14px;">
+          <div style="border:2.5px solid var(--cleared);padding:6px 16px 8px;text-align:center;color:var(--cleared);font-family:var(--font-mono);">
+            <div style="font-size:9px;letter-spacing:.28em;font-weight:700;margin-bottom:2px;">RESET</div>
+            <div style="font-size:18px;font-weight:700;letter-spacing:.08em;">DEFAULT</div>
+            <div style="font-size:8px;letter-spacing:.15em;opacity:.75;margin-top:2px;">CHECKLIST</div>
+          </div>
+        </div>
+        <div style="font-size:17px;font-weight:700;color:var(--ink-body);margin-bottom:4px;">הרשימה אופסה ✓</div>
+        <div style="font-size:13px;color:var(--ink-muted);line-height:1.5;">הרשימה חזרה לברירת המחדל המקורית</div>
+      </div>`;
+    document.querySelector('.modal-box').className='modal-box success';
+    document.getElementById('modalConfirmBtn').disabled=false;
+    document.getElementById('modalConfirmBtn').textContent='חזור לעריכה';
+    document.getElementById('modalConfirmBtn').onclick=()=>{closeModal();renderEditor();};
+    document.getElementById('modalCancelBtn').style.display='none';
+    },600);
   };
   openModal();
 }
 function showSettingsResetConfirm(){
-  document.getElementById('modalTitle').textContent='איפוס הגדרות?';
+  document.querySelector('.modal-box').className='modal-box danger';
+  document.getElementById('modalTitle').innerHTML='<span style="color:var(--stamp-red);margin-left:6px;">⚠</span> איפוס הגדרות?';
   document.getElementById('modalSub').textContent='כל הנתונים וההגדרות יימחקו. פעולה זו בלתי הפיכה.';
   document.getElementById('modalConfirmBtn').textContent='כן, אפס הכל';
   document.getElementById('modalConfirmBtn').onclick=doSettingsReset;
@@ -1232,13 +1357,19 @@ function updateThemeCtrl(val){
 }
 function confirmReset(){showSettingsResetConfirm();}
 function doSettingsReset(){
+  // 1. Do the reset
   clearState();
   try{localStorage.removeItem(SETTINGS_KEY);localStorage.removeItem(REG_KEY);localStorage.removeItem(ROUTE_KEY);}catch(e){}
   settings={tail:'',holdMs:300,sounds:false,theme:'day'};
+  // 2. Close confirm modal, then show success modal
   closeModal();
-  // Show toast then go to settings
-  showToast('ההגדרות אופסו לברירת המחדל');
-  openSettings();
+  setTimeout(()=>{
+    document.getElementById('modalTitle').textContent='ההגדרות אופסו ✓';
+    document.getElementById('modalSub').textContent='כל הנתונים נמחקו. האפליקציה חזרה לברירת המחדל.';
+    document.getElementById('modalConfirmBtn').textContent='סגור';
+    document.getElementById('modalConfirmBtn').onclick=()=>{closeModal();openSettings();};
+    openModal();
+  },150);
 }
 function editRoute(){}
 
@@ -1246,7 +1377,58 @@ function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-loadSettings();loadState();loadReg();loadRoute();drawRings();render();
+loadSettings();loadState();loadReg();loadRoute();drawRings();
+initSplash();
+
+function initSplash(){
+  const done=Object.values(status).filter(s=>s==='done').length;
+  const hasProgress=done>0;
+  const resumeCard=document.getElementById('splashResumeCard');
+  const mainBtn=document.getElementById('splashMainBtn');
+  const secBtn=document.getElementById('splashSecondaryBtn');
+  if(hasProgress){
+    // Show resume card
+    resumeCard.style.display='';
+    // Find last done item
+    let lastDone=-1;
+    Object.keys(status).forEach(k=>{if(status[k]==='done'&&+k>lastDone)lastDone=+k;});
+    if(lastDone>=0&&CL[lastDone]){
+      document.getElementById('splashResumePhase').textContent='LAST ITEM · '+CL[lastDone].phase;
+      document.getElementById('splashResumeItem').textContent=CL[lastDone].main;
+    }
+    const pct=Math.round((done/CL.length)*100);
+    document.getElementById('splashRunwayFill').style.width=pct+'%';
+    document.getElementById('splashRunwayPct').textContent=done+' / '+CL.length+' · '+pct+'%';
+    // Primary = continue, secondary = new flight
+    mainBtn.innerHTML='המשך טיסה ›';
+    secBtn.style.display='';
+    secBtn.innerHTML='<span style="display:inline-block;transform:scaleX(-1)">✈</span> התחל טיסה חדשה';
+  } else {
+    // No progress — single button
+    mainBtn.innerHTML='<span style="display:inline-block;transform:scaleX(-1)">✈</span> התחל טיסה';
+    secBtn.style.display='none';
+    resumeCard.style.display='none';
+  }
+}
+
+function splashMainAction(){
+  const done=Object.values(status).filter(s=>s==='done').length;
+  if(done>0){
+    // Resume
+    showScreen('screenChecklist');
+    render();
+  } else {
+    // Fresh start
+    clearState();
+    showScreen('screenChecklist');
+    render();
+  }
+}
+
+function splashSecondaryAction(){
+  // New flight from splash
+  openNewFlightModal();
+}
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
 </body>
