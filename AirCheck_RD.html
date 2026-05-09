@@ -223,7 +223,8 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 .ed-item{display:flex;align-items:center;gap:6px;padding:6px 6px;border-radius:3px;border-bottom:1px dotted rgba(200,160,74,.25);}
 .ed-item:last-of-type{border-bottom:none;}
 .ed-item.dragging{opacity:.35;background:rgba(200,160,74,.08);}
-.ed-item.drag-over{border-top:2px solid var(--gold);border-bottom:none;}
+.ed-item.drag-over{border-top:2px solid var(--gold) !important;}
+.ed-item.drag-over-bottom{border-bottom:2px solid var(--gold) !important;}
 .ed-drag{font-size:16px;color:var(--ink-faint);cursor:grab;flex-shrink:0;line-height:1;}
 .ed-drag:active{cursor:grabbing;}
 .ed-item-text{flex:1;min-width:0;}
@@ -401,7 +402,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="splash-footer-wrap">
       <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
         <span class="footer-refresh" onclick="location.reload()">רענון</span>
-        <span>AirCheck+ · v2.04.014 · built by eligrt</span>
+        <span>AirCheck+ · v2.04.020 · built by eligrt</span>
         <span style="width:40px;"></span>
       </div>
     </div>
@@ -513,7 +514,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="tree-panel" id="treePanel"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.014 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.020 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -612,7 +613,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.014 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.020 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -629,7 +630,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="editor-list" id="editorList"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.014 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.020 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -910,19 +911,7 @@ function renderEditor(){
         if(safeDragMove(sp,sg,si,pi,gi,undefined))renderEditor();
       });
       g.items.forEach((it,ii)=>itemsDiv.appendChild(buildItemRow(it,ii,g,gi,ph,pi)));
-      const dropZone=document.createElement('div');
-      dropZone.style.cssText='height:20px;width:100%;border-top:2px dashed transparent;transition:border-color .15s;display:flex;align-items:center;justify-content:center;';
-      dropZone.addEventListener('dragover',e=>{e.preventDefault();e.stopPropagation();dropZone.style.borderTopColor='var(--gold)';dropZone.style.background='rgba(200,160,74,.08)';});
-      dropZone.addEventListener('dragleave',()=>{dropZone.style.borderTopColor='transparent';dropZone.style.background='';dropZone.style.background='';});
-      dropZone.addEventListener('drop',e=>{
-        e.preventDefault();e.stopPropagation();dropZone.style.borderTopColor='transparent';dropZone.style.background='';
-        if(!dragSrc)return;
-        const sp=+dragSrc.dataset.pi,sg=+dragSrc.dataset.gi,si=+dragSrc.dataset.ii;
-        if(!edData[sp]||!edData[sp].groups[sg])return;
-        if(!edData[pi]||!edData[pi].groups[gi])return;
-        if(safeDragMove(sp,sg,si,pi,gi,undefined))renderEditor();
-      });
-      itemsDiv.appendChild(dropZone);
+
       const addItem=document.createElement('button');addItem.className='ed-add';addItem.textContent='+ הוסף פריט';
       addItem.onclick=()=>openEdPopup('הוסף פריט','','',true,(m,s)=>{g.items.push({main:m,sub:s});renderEditor();});
       itemsDiv.appendChild(addItem);
@@ -959,15 +948,28 @@ function buildItemRow(it,ii,g,gi,ph,pi){
   delBtn.onclick=e=>{e.stopPropagation();showConfirm('מחיקת פריט','למחוק את הפריט "'+it.main+'"?',()=>{g.items.splice(ii,1);renderEditor();},'danger');};
   // Desktop drag — on full row
   row.addEventListener('dragstart',e=>{dragSrc=row;row.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
-  row.addEventListener('dragend',()=>{row.classList.remove('dragging');document.querySelectorAll('.drag-over').forEach(r=>r.classList.remove('drag-over'));dragSrc=null;});
-  row.addEventListener('dragover',e=>{e.preventDefault();row.classList.add('drag-over');});
+  row.addEventListener('dragend',()=>{row.classList.remove('dragging');document.querySelectorAll('.drag-over').forEach(r=>r.classList.remove('drag-over'));document.querySelectorAll('.drag-over-bottom').forEach(r=>r.classList.remove('drag-over-bottom'));dragSrc=null;});
+  row.addEventListener('dragover',e=>{
+    e.preventDefault();
+    const items=row.parentElement.querySelectorAll('.ed-item');
+    const isLast=items[items.length-1]===row;
+    const rect=row.getBoundingClientRect();
+    const inBottomHalf=e.clientY>rect.top+rect.height/2;
+    row.classList.remove('drag-over','drag-over-bottom');
+    if(isLast&&inBottomHalf){row.classList.add('drag-over-bottom');}
+    else{row.classList.add('drag-over');}
+  });
   row.addEventListener('dragleave',()=>row.classList.remove('drag-over'));
   row.addEventListener('drop',e=>{
     e.preventDefault();e.stopPropagation();row.classList.remove('drag-over');
     if(!dragSrc||dragSrc===row)return;
     const sp=+dragSrc.dataset.pi,sg=+dragSrc.dataset.gi,si=+dragSrc.dataset.ii;
     const dp=+row.dataset.pi,dg=+row.dataset.gi,di=+row.dataset.ii;
-    if(safeDragMove(sp,sg,si,dp,dg,di))renderEditor();
+    // If dropping on bottom half of last item — append instead of insert before
+    const isBottom=row.classList.contains('drag-over-bottom');
+    row.classList.remove('drag-over','drag-over-bottom');
+    if(isBottom){if(safeDragMove(sp,sg,si,dp,dg,undefined))renderEditor();}
+    else{if(safeDragMove(sp,sg,si,dp,dg,di))renderEditor();}
   });
   // Mobile touch drag — starts immediately on handle touchstart
   drag.addEventListener('touchstart',e=>{
