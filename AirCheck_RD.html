@@ -401,7 +401,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="splash-footer-wrap">
       <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
         <span class="footer-refresh" onclick="location.reload()">רענון</span>
-        <span>AirCheck+ · v2.04.008 · built by eligrt</span>
+        <span>AirCheck+ · v2.04.010 · built by eligrt</span>
         <span style="width:40px;"></span>
       </div>
     </div>
@@ -513,7 +513,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="tree-panel" id="treePanel"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.008 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.010 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -612,7 +612,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.008 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.010 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -629,7 +629,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="editor-list" id="editorList"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.008 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.010 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -1002,8 +1002,37 @@ function openEdPopup(title,main,sub,hasSub,cb){
   document.getElementById('edInputSub').value=sub||'';
   document.getElementById('edSubRow').style.display=hasSub?'block':'none';
   edPopupCallback={cb,hasSub};
-  document.getElementById('edPopup').classList.add('open');
-  setTimeout(()=>document.getElementById('edInputMain').focus(),120);
+  // Wait for keyboard via visualViewport, then show popup already positioned above it
+  if(window.visualViewport&&window.innerWidth<600){
+    const initialH=window.visualViewport.height;
+    const tempInp=document.createElement('input');
+    tempInp.style.cssText='position:fixed;top:0;left:0;opacity:0;height:1px;width:1px;';
+    document.body.appendChild(tempInp);
+    tempInp.focus();
+    let shown=false;
+    const onResize=()=>{
+      if(shown)return;
+      if(window.visualViewport.height<initialH-100){
+        shown=true;
+        window.visualViewport.removeEventListener('resize',onResize);
+        document.body.removeChild(tempInp);
+        document.getElementById('edPopup').classList.add('open');
+        setTimeout(()=>document.getElementById('edInputMain').focus(),50);
+      }
+    };
+    window.visualViewport.addEventListener('resize',onResize);
+    // Fallback if keyboard doesn't fire resize
+    setTimeout(()=>{
+      if(shown)return;
+      window.visualViewport.removeEventListener('resize',onResize);
+      try{document.body.removeChild(tempInp);}catch(e){}
+      document.getElementById('edPopup').classList.add('open');
+      setTimeout(()=>document.getElementById('edInputMain').focus(),50);
+    },600);
+  } else {
+    document.getElementById('edPopup').classList.add('open');
+    setTimeout(()=>document.getElementById('edInputMain').focus(),120);
+  }
 }
 function closeEdPopup(){
   document.getElementById('edPopup').classList.remove('open');
