@@ -248,7 +248,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 .ed-action-btn.danger{color:var(--stamp-red);border-color:rgba(185,74,58,.4);}
 .ed-action-btn:active{background:rgba(200,160,74,.08);}
 /* Editor popup */
-#edPopup{display:none;position:absolute;inset:0;z-index:300;align-items:center;justify-content:center;background:rgba(26,19,8,.75);backdrop-filter:blur(3px);padding:32px 28px;}
+#edPopup{display:none;position:fixed;inset:0;z-index:300;align-items:flex-end;justify-content:center;background:rgba(26,19,8,.75);backdrop-filter:blur(3px);padding:16px;}
 #edPopup.open{display:flex;}
 .ed-popup-box{background:var(--paper-hi);border:2px solid var(--gold);border-radius:8px;padding:22px 18px 24px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.4);}
 .ed-popup-title{font-size:15px;font-weight:700;color:var(--ink-body);margin-bottom:14px;direction:rtl;}
@@ -401,7 +401,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="splash-footer-wrap">
       <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
         <span class="footer-refresh" onclick="location.reload()">רענון</span>
-        <span>AirCheck+ · v2.04.007 · built by eligrt</span>
+        <span>AirCheck+ · v2.04.008 · built by eligrt</span>
         <span style="width:40px;"></span>
       </div>
     </div>
@@ -513,7 +513,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="tree-panel" id="treePanel"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.007 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.008 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -612,7 +612,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.007 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.008 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -629,7 +629,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="editor-list" id="editorList"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.007 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.008 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -1003,11 +1003,7 @@ function openEdPopup(title,main,sub,hasSub,cb){
   document.getElementById('edSubRow').style.display=hasSub?'block':'none';
   edPopupCallback={cb,hasSub};
   document.getElementById('edPopup').classList.add('open');
-  setTimeout(()=>{
-    const inp=document.getElementById('edInputMain');
-    inp.focus();
-    inp.scrollIntoView({behavior:'smooth',block:'nearest'});
-  },400);
+  setTimeout(()=>document.getElementById('edInputMain').focus(),120);
 }
 function closeEdPopup(){
   document.getElementById('edPopup').classList.remove('open');
@@ -1016,12 +1012,8 @@ function closeEdPopup(){
 function confirmEdPopup(){
   const main=document.getElementById('edInputMain').value.trim();if(!main)return;
   const sub=document.getElementById('edInputSub').value.trim();
-  const cb=edPopupCallback;
+  if(edPopupCallback){if(edPopupCallback.hasSub)edPopupCallback.cb(main,sub);else edPopupCallback.cb(main);}
   closeEdPopup();
-  // Defer render until after popup close animation to prevent flicker
-  requestAnimationFrame(()=>{
-    if(cb){if(cb.hasSub)cb.cb(main,sub);else cb.cb(main);}
-  });
 }
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('edPopup').classList.contains('open'))confirmEdPopup();});
 
