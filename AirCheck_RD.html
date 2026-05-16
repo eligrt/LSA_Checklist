@@ -202,6 +202,30 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 
 @keyframes runwayPulse{0%,100%{box-shadow:0 0 0 0 rgba(200,160,74,0);border-color:var(--gold);}50%{box-shadow:0 0 0 4px rgba(200,160,74,.35);border-color:#e8b85a;}}
 
+
+/* ── ALL DONE OVERLAY ── */
+#allDoneOverlay{display:none;position:absolute;inset:0;z-index:210;align-items:center;justify-content:center;background:rgba(26,19,8,.85);backdrop-filter:blur(3px);}
+#allDoneOverlay.open{display:flex;}
+.alldone-box{background:var(--paper-hi);border:2px solid var(--cleared);border-radius:8px;padding:20px 20px 0;text-align:center;max-width:320px;width:92%;background-image:repeating-linear-gradient(0deg,transparent 0,transparent 27px,var(--paper-line) 27px,var(--paper-line) 28px);box-shadow:0 0 0 1px rgba(31,111,63,.15),0 20px 40px rgba(0,0,0,.35);max-height:88vh;display:flex;flex-direction:column;}
+.alldone-stamp-wrap{display:flex;justify-content:center;margin-bottom:14px;flex-shrink:0;}
+.alldone-stamp{border:3px solid var(--cleared);padding:8px 20px 10px;text-align:center;color:var(--cleared);font-family:var(--font-mono);transform:rotate(-5deg);display:inline-block;}
+.alldone-stamp-name{font-size:15px;font-weight:700;letter-spacing:.06em;margin-bottom:4px;}
+.alldone-stamp-bottom{font-size:20px;font-weight:700;letter-spacing:.12em;direction:ltr;}
+.alldone-meta{font-size:12px;color:var(--ink-muted);margin-bottom:14px;line-height:1.8;flex-shrink:0;font-family:var(--font-mono);}
+.alldone-meta span{color:var(--ink-body);font-weight:700;}
+.alldone-summary{flex:1;overflow-y:auto;text-align:right;border-top:1px dotted rgba(200,160,74,.4);padding-top:10px;margin-bottom:12px;-webkit-overflow-scrolling:touch;}
+.alldone-phase-hdr{font-size:10px;font-family:var(--font-mono);letter-spacing:.12em;color:var(--ink-faint);text-transform:uppercase;padding:6px 0 3px;border-bottom:1px solid rgba(200,160,74,.25);margin-bottom:4px;}
+.alldone-group-hdr{font-size:11px;color:var(--ink-muted);font-weight:600;padding:4px 0 2px;letter-spacing:.03em;border-bottom:1px dotted rgba(200,160,74,.2);margin-bottom:2px;}
+.alldone-item{display:flex;align-items:center;gap:8px;padding:3px 0 3px 4px;font-size:12px;}
+.alldone-item .tree-mark{font-family:var(--font-mono);font-size:11px;width:14px;text-align:center;flex-shrink:0;}
+.alldone-item .tree-mark.done{color:var(--cleared);}
+.alldone-item .tree-mark.skipped{color:var(--amber);}
+.alldone-item .item-txt{flex:1;}
+.alldone-item .item-txt.done{color:var(--cleared);text-decoration:line-through;}
+.alldone-item .item-txt.skipped{color:var(--amber);opacity:.75;}
+.alldone-btns{flex-shrink:0;padding:0 0 16px;display:flex;flex-direction:column;gap:8px;}
+.btn-danger-ghost{background:transparent;color:var(--stamp-red);border:1px solid rgba(185,74,58,.4);font-size:14px;}
+
 /* ── EDITOR SCREEN ── */
 #screenEditor{overflow:hidden;flex-direction:column;}
 .editor-topbar{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--stamp-red);box-shadow:0 2px 0 #8a3527;color:var(--paper);}
@@ -407,7 +431,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="splash-footer-wrap">
       <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
         <span class="footer-refresh" onclick="location.reload()">רענון</span>
-        <span>AirCheck+ · v2.04.023 · built by eligrt</span>
+        <span>AirCheck+ · v2.04.024 · built by eligrt</span>
         <span style="width:40px;"></span>
       </div>
     </div>
@@ -519,7 +543,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="tree-panel" id="treePanel"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.023 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.024 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -535,6 +559,25 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
       <div class="phase-overlay-next" id="phaseOverlayNext"></div>
       <button class="btn btn-ink" style="margin-bottom:8px" onclick="dismissPhaseOverlay()">המשך עכשיו ›</button>
       <button class="btn btn-ghost" onclick="dismissPhaseOverlay()">סגור — אמשיך מאוחר יותר</button>
+    </div>
+  </div>
+
+
+  <div id="allDoneOverlay">
+    <div class="alldone-box">
+      <div class="alldone-stamp-wrap">
+        <div class="alldone-stamp">
+          <div class="alldone-stamp-name" id="allDonePhase"></div>
+          <div class="alldone-stamp-bottom">CHECKED &nbsp;✓</div>
+        </div>
+      </div>
+      <div class="alldone-meta" id="allDoneMeta"></div>
+      <div class="alldone-summary" id="allDoneSummary"></div>
+      <div class="alldone-btns">
+        <button class="btn btn-ink" onclick="dismissAllDone()">המשך עכשיו ›</button>
+        <button class="btn btn-ghost" onclick="dismissAllDone();showScreen('screenSplash')">סגור — אמשיך מאוחר יותר</button>
+        <button class="btn btn-ghost btn-danger-ghost" onclick="dismissAllDone();openNewFlightModal()">✦ טיסה חדשה</button>
+      </div>
     </div>
   </div>
 
@@ -618,7 +661,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.023 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.024 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -635,7 +678,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="editor-list" id="editorList"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.023 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.024 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -758,7 +801,7 @@ function renderTree(){const panel=document.getElementById('treePanel');panel.inn
 const HOLD_MS=300;const FLIP_MS=520;
 let holdState='idle';let holdTimer=null;
 function startHold(){if(holdState==='flipping'||holdState==='confirmed')return;if(status[current]==='done')return;holdState='holding';document.getElementById('confirmHint').textContent='מחזיק…';const fill=document.getElementById('runwayFill');fill.classList.remove('releasing');fill.classList.add('holding');const plane=document.getElementById('runwayPlane');plane.classList.add('holding');plane.classList.remove('confirmed');const btn=document.getElementById('runwayBtn');btn.classList.remove('idle');holdTimer=setTimeout(()=>{holdState='confirmed';const now=new Date();document.getElementById('stampTime').textContent=String(now.getUTCHours()).padStart(2,'0')+':'+String(now.getUTCMinutes()).padStart(2,'0')+' UTC';document.getElementById('cardStamp').classList.add('visible');if(navigator.vibrate){navigator.vibrate(40);}if(settings&&settings.sounds){playConfirmSound();}document.getElementById('confirmHint').textContent='אושר — שחרר להמשך';document.getElementById('confirmHint').classList.add('confirmed');fill.classList.add('confirmed');fill.classList.remove('holding');const p=document.getElementById('runwayPlane');p.classList.add('confirmed');p.classList.remove('holding');},(settings&&settings.holdMs?settings.holdMs:HOLD_MS));}
-function releaseHold(){clearTimeout(holdTimer);if(holdState==='confirmed'){holdState='flipping';const card=document.getElementById('cardTop');document.getElementById('cardStamp').classList.remove('visible');card.classList.add('flipping');setTimeout(()=>{status[current]='done';const prevPhase=CL[current].phase;advanceToNext();holdState='idle';resetRunwayBtn(true);const newPhase=CL[current]?CL[current].phase:null;const prevPhaseObj=PHASE_IDX[prevPhase];if(prevPhaseObj){const pDone=prevPhaseObj.groups.reduce((s,g)=>s+g.items.filter(j=>status[j]==='done').length,0);const pTot=prevPhaseObj.end-prevPhaseObj.start+1;if(pDone===pTot&&newPhase&&newPhase!==prevPhase){card.classList.remove('flipping');showPhaseOverlay(prevPhase,newPhase);return;}}render();card.classList.remove('flipping');},450);}else{cancelHold();}}
+function releaseHold(){clearTimeout(holdTimer);if(holdState==='confirmed'){holdState='flipping';const card=document.getElementById('cardTop');document.getElementById('cardStamp').classList.remove('visible');card.classList.add('flipping');setTimeout(()=>{status[current]='done';const prevPhase=CL[current].phase;advanceToNext();holdState='idle';resetRunwayBtn(true);const newPhase=CL[current]?CL[current].phase:null;const prevPhaseObj=PHASE_IDX[prevPhase];if(prevPhaseObj){const pDone=prevPhaseObj.groups.reduce((s,g)=>s+g.items.filter(j=>status[j]==='done').length,0);const pTot=prevPhaseObj.end-prevPhaseObj.start+1;if(pDone===pTot&&newPhase!==prevPhase){card.classList.remove('flipping');if(!newPhase){showAllDoneOverlay(prevPhase);}else{showPhaseOverlay(prevPhase,newPhase);}return;}}render();card.classList.remove('flipping');},450);}else{cancelHold();}}
 function cancelHold(){if(holdState==='flipping'||holdState==='confirmed')return;clearTimeout(holdTimer);holdState='idle';resetRunwayBtn();document.getElementById('confirmHint').textContent='לחץ והחזק את המסלול לאישור';document.getElementById('confirmHint').classList.remove('confirmed');document.getElementById('cardStamp').classList.remove('visible');}
 function resetRunwayBtn(instant){
   const fill=document.getElementById('runwayFill');
