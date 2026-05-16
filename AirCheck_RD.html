@@ -212,9 +212,8 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 
 
 /* ── ALL DONE OVERLAY ── */
-#allDoneOverlay{display:none;position:absolute;inset:0;z-index:210;align-items:center;justify-content:center;background:rgba(26,19,8,.85);backdrop-filter:blur(3px);padding:16px 0;}
-#allDoneOverlay.open{display:flex;}
-.alldone-box{background:var(--paper-hi);border:2px solid var(--cleared);border-radius:8px;padding:20px 20px 0;text-align:center;max-width:320px;width:92%;background-image:repeating-linear-gradient(0deg,transparent 0,transparent 27px,var(--paper-line) 27px,var(--paper-line) 28px);box-shadow:0 0 0 1px rgba(31,111,63,.15),0 20px 40px rgba(0,0,0,.35);height:80%;display:flex;flex-direction:column;overflow:hidden;}
+
+.alldone-box{background:var(--paper-hi);border:2px solid var(--cleared);border-radius:8px;padding:20px 20px 0;text-align:center;max-width:320px;width:92%;background-image:repeating-linear-gradient(0deg,transparent 0,transparent 27px,var(--paper-line) 27px,var(--paper-line) 28px);box-shadow:0 0 0 1px rgba(31,111,63,.15),0 20px 40px rgba(0,0,0,.35);max-height:460px;display:flex;flex-direction:column;overflow:hidden;}
 .alldone-stamp-wrap{display:flex;justify-content:center;margin-bottom:14px;flex-shrink:0;}
 .alldone-stamp{border:3px solid var(--cleared);padding:8px 20px 10px;text-align:center;color:var(--cleared);font-family:var(--font-mono);transform:rotate(-5deg);display:inline-block;}
 .alldone-stamp-name{font-size:15px;font-weight:700;letter-spacing:.06em;margin-bottom:4px;}
@@ -233,6 +232,28 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 .alldone-item .item-txt.skipped{color:var(--amber);opacity:.75;}
 .alldone-btns{flex-shrink:0;padding:0 0 16px;display:flex;flex-direction:column;gap:8px;}
 .btn-danger-ghost{background:transparent;color:var(--stamp-red);border:1px solid rgba(185,74,58,.4);font-size:14px;}
+
+
+/* ── SUMMARY SCREEN ── */
+#screenSummary{flex-direction:column;overflow:hidden;}
+.summary-strip{flex-shrink:0;background:var(--asphalt);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;direction:ltr;border-bottom:2px solid var(--gold);}
+.summary-strip-col{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.summary-strip-label{font-size:8px;color:rgba(244,236,220,.6);letter-spacing:.18em;text-transform:uppercase;font-family:var(--font-mono);}
+.summary-strip-val{font-size:15px;font-weight:700;font-family:var(--font-mono);color:var(--paper);}
+.summary-strip-route{font-size:13px;font-weight:700;font-family:var(--font-mono);color:var(--paper);letter-spacing:.05em;}
+.summary-body{flex:1;overflow-y:auto;padding:10px 14px 8px;-webkit-overflow-scrolling:touch;}
+.summary-stamp-wrap{display:flex;justify-content:center;margin-bottom:14px;}
+.summary-stamp{border:3px solid var(--cleared);padding:8px 20px 10px;text-align:center;color:var(--cleared);font-family:var(--font-mono);transform:rotate(-5deg);display:inline-block;}
+.summary-stamp-name{font-size:15px;font-weight:700;letter-spacing:.06em;margin-bottom:4px;}
+.summary-stamp-bottom{font-size:20px;font-weight:700;letter-spacing:.12em;direction:ltr;}
+.summary-header{flex-shrink:0;padding:14px 14px 0;text-align:center;background:var(--paper-hi);border-bottom:none;}
+.summary-meta{font-size:12px;color:var(--ink-muted);margin-bottom:12px;line-height:1.9;font-family:var(--font-mono);text-align:center;}
+.summary-meta span{color:var(--ink-body);font-weight:700;}
+.summary-divider{border:none;border-top:1px dashed var(--gold-lite);margin:0 0 12px;}
+.summary-phase-hdr{font-size:10px;font-family:var(--font-mono);letter-spacing:.12em;color:var(--ink-faint);text-transform:uppercase;padding:8px 0 3px;border-bottom:1px solid rgba(200,160,74,.25);margin-bottom:4px;}
+.summary-group-hdr{font-size:11px;color:var(--ink-muted);font-weight:600;padding:4px 0 2px;letter-spacing:.03em;border-bottom:1px dotted rgba(200,160,74,.2);margin-bottom:2px;}
+.summary-item{display:flex;align-items:center;gap:8px;padding:3px 0 3px 4px;font-size:12px;}
+.summary-btns{flex-shrink:0;padding:10px 14px 14px;display:flex;flex-direction:column;gap:8px;border-top:1px dashed var(--gold-lite);background:var(--paper-hi);}
 
 /* ── EDITOR SCREEN ── */
 #screenEditor{overflow:hidden;flex-direction:column;}
@@ -439,7 +460,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="splash-footer-wrap">
       <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
         <span class="footer-refresh" onclick="location.reload()">רענון</span>
-        <span>AirCheck+ · v2.04.041 · built by eligrt</span>
+        <span>AirCheck+ · v2.04.048 · built by eligrt</span>
         <span style="width:40px;"></span>
       </div>
     </div>
@@ -552,7 +573,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="tree-panel" id="treePanel"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.041 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.048 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -572,21 +593,47 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
   </div>
 
 
-  <div id="allDoneOverlay">
-    <div class="alldone-box">
-      <div class="alldone-stamp-wrap">
-        <div class="alldone-stamp">
-          <div class="alldone-stamp-name" id="allDonePhase"></div>
-          <div class="alldone-stamp-bottom">CHECKED &nbsp;✓</div>
+
+  <!-- ══ SUMMARY SCREEN ══ -->
+  <div class="screen" id="screenSummary">
+    <div class="summary-strip" style="direction:ltr;">
+      <div class="summary-strip-col">
+        <span class="summary-strip-label">UTC</span>
+        <span class="summary-strip-val" id="summaryUtc">--:--</span>
+      </div>
+      <div class="summary-strip-col">
+        <span class="summary-strip-label">FLT</span>
+        <span class="summary-strip-route" id="summaryRoute">— → —</span>
+      </div>
+      <div class="summary-strip-col">
+        <span class="summary-strip-label">REG</span>
+        <span class="summary-strip-val" id="summaryReg">—</span>
+      </div>
+    </div>
+
+    <div class="summary-header">
+      <div class="summary-stamp-wrap">
+        <div class="summary-stamp">
+          <div class="summary-stamp-name" id="summaryStampPhase"></div>
+          <div class="summary-stamp-bottom">CHECKED &nbsp;✓</div>
         </div>
       </div>
-      <div class="alldone-meta" id="allDoneMeta"></div>
-      <div class="alldone-summary" id="allDoneSummary"></div>
-      <div class="alldone-btns">
-        <button class="btn btn-ink" onclick="dismissAllDone()">המשך עכשיו ›</button>
-        <button class="btn btn-ghost" onclick="dismissAllDone();showScreen('screenSplash')">סגור — אמשיך מאוחר יותר</button>
-        <button class="btn btn-ghost btn-danger-ghost" onclick="dismissAllDone();openNewFlightModal()">✦ טיסה חדשה</button>
-      </div>
+      <div class="summary-meta" id="summaryMeta"></div>
+    </div>
+    <hr class="summary-divider" style="margin:0;">
+    <div class="summary-body">
+      <div id="summaryList"></div>
+    </div>
+
+    <div class="summary-btns">
+      <button class="btn btn-ghost" onclick="showScreen('screenChecklist');render()">‹ חזור לרשימה</button>
+      <button class="btn btn-ink" onclick="openNewFlightModal()">✦ טיסה חדשה</button>
+    </div>
+
+    <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
+      <span style="width:40px;"></span>
+      <span>AirCheck+ · v2.04.048 · built by eligrt</span>
+      <span style="width:40px;"></span>
     </div>
   </div>
 
@@ -670,7 +717,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.041 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.048 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -687,7 +734,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="editor-list" id="editorList"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.041 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.048 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -803,20 +850,9 @@ function render(){
   const stampEl=document.getElementById('stampInit');
   if(stampEl){const t=settings&&settings.tail?settings.tail:(localStorage.getItem(REG_KEY)||'');stampEl.textContent='PIC · 4X-'+(t||'HHH');}
   const item=CL[current];if(!item)return;const phase=PHASE_IDX[item.phase];const group=phase?phase.groups.find(g=>g.name===item.group):null;document.getElementById('crumbPhase').textContent=item.phase;document.getElementById('crumbGroup').textContent=item.group;const numEl=document.getElementById('cardItemNum');numEl.innerHTML='ITEM <b>'+(current+1).toString().padStart(2,'0')+'</b><span> / '+CL.length+'</span>';const badge=document.getElementById('cardBadge');if(group){const pos=group.items.indexOf(current)+1;badge.textContent=pos+'/'+group.items.length+' בקבוצה';badge.style.display='';}else{badge.style.display='none';}document.getElementById('cardMain').textContent=item.main;const subEl=document.getElementById('cardSub');subEl.textContent=item.sub||'';subEl.style.display=item.sub?'':'none';document.getElementById('cardStamp').classList.remove('visible');const next=CL[current+1];const under=document.getElementById('cardUnder');if(next){under.style.display='';document.getElementById('cardUnderNum').innerHTML='ITEM <b>'+(current+2).toString().padStart(2,'0')+'</b>';document.getElementById('cardUnderMain').textContent=next.main;}else{under.style.display='none';}renderRunway();if(treeOpen)renderTree();document.getElementById('confirmHint').classList.remove('confirmed','skipped-nudge');
-  // Check if there are skipped items and all others are done → show nudge
-  const skippedIdxs=Object.keys(status).filter(k=>status[k]==='skipped').map(Number);
-  const remainingNonSkipped=CL.map((_,i)=>i).filter(i=>!status[i]||status[i]==='upcoming');
-  if(skippedIdxs.length>0&&remainingNonSkipped.length===0){
-    const hintEl=document.getElementById('confirmHint');
-    const count=skippedIdxs.length;
-    hintEl.textContent=(count===1?'פריט דלוג אחד':''+count+' פריטים דלוגים')+' — קפוץ אליו ›';
-    hintEl.classList.add('skipped-nudge');
-    hintEl.onclick=()=>{current=skippedIdxs[0];holdState='idle';resetRunwayBtn();hintEl.onclick=null;render();};
-  }else{
-    const hintEl=document.getElementById('confirmHint');
-    hintEl.textContent='לחץ והחזק את המסלול לאישור';
-    hintEl.onclick=null;
-  }
+  const hintEl=document.getElementById('confirmHint');
+  hintEl.textContent='לחץ והחזק את המסלול לאישור';
+  hintEl.onclick=null;
   updateNavBtns();
   saveState();}
 function renderRunway(){
@@ -882,7 +918,7 @@ function renderTree(){const panel=document.getElementById('treePanel');panel.inn
 const HOLD_MS=300;const FLIP_MS=520;
 let holdState='idle';let holdTimer=null;
 function startHold(){if(holdState==='flipping'||holdState==='confirmed')return;if(status[current]==='done')return;holdState='holding';document.getElementById('confirmHint').textContent='מחזיק…';const fill=document.getElementById('runwayFill');fill.classList.remove('releasing');fill.classList.add('holding');const plane=document.getElementById('runwayPlane');plane.classList.add('holding');plane.classList.remove('confirmed');const btn=document.getElementById('runwayBtn');btn.classList.remove('idle');holdTimer=setTimeout(()=>{holdState='confirmed';const now=new Date();document.getElementById('stampTime').textContent=String(now.getUTCHours()).padStart(2,'0')+':'+String(now.getUTCMinutes()).padStart(2,'0')+' UTC';document.getElementById('cardStamp').classList.add('visible');if(navigator.vibrate){navigator.vibrate(40);}if(settings&&settings.sounds){playConfirmSound();}document.getElementById('confirmHint').textContent='אושר — שחרר להמשך';document.getElementById('confirmHint').classList.add('confirmed');fill.classList.add('confirmed');fill.classList.remove('holding');const p=document.getElementById('runwayPlane');p.classList.add('confirmed');p.classList.remove('holding');},(settings&&settings.holdMs?settings.holdMs:HOLD_MS));}
-function releaseHold(){clearTimeout(holdTimer);if(holdState==='confirmed'){holdState='flipping';const card=document.getElementById('cardTop');document.getElementById('cardStamp').classList.remove('visible');card.classList.add('flipping');setTimeout(()=>{status[current]='done';const prevPhase=CL[current].phase;advanceToNext();holdState='idle';resetRunwayBtn(true);const newPhase=CL[current]?CL[current].phase:null;const prevPhaseObj=PHASE_IDX[prevPhase];if(prevPhaseObj){const phAllItems=prevPhaseObj.groups.reduce((a,g)=>a.concat(g.items),[]);const pComplete=phAllItems.every(j=>status[j]==='done'||status[j]==='skipped');const pAllGreen=phAllItems.every(j=>status[j]==='done');const noUpcoming=CL.every((_,j)=>status[j]==='done'||status[j]==='skipped');if(noUpcoming){card.classList.remove('flipping');showAllDoneOverlay(prevPhase);return;}if(pAllGreen&&newPhase&&newPhase!==prevPhase){card.classList.remove('flipping');showPhaseOverlay(prevPhase,newPhase);return;}}render();card.classList.remove('flipping');},450);}else{cancelHold();}}
+function releaseHold(){clearTimeout(holdTimer);if(holdState==='confirmed'){holdState='flipping';const card=document.getElementById('cardTop');document.getElementById('cardStamp').classList.remove('visible');card.classList.add('flipping');setTimeout(()=>{status[current]='done';const prevPhase=CL[current].phase;advanceToNext();holdState='idle';resetRunwayBtn(true);const newPhase=CL[current]?CL[current].phase:null;const prevPhaseObj=PHASE_IDX[prevPhase];if(prevPhaseObj){const phAllItems=prevPhaseObj.groups.reduce((a,g)=>a.concat(g.items),[]);const pComplete=phAllItems.every(j=>status[j]==='done'||status[j]==='skipped');const pAllGreen=phAllItems.every(j=>status[j]==='done');const noUpcoming=CL.every((_,j)=>status[j]==='done'||(status[j]==='skipped'&&j===current)||status[j]==='done');const noRemaining=!CL.some((_,j)=>j!==current&&(status[j]==='skipped'||!status[j]||status[j]==='upcoming'));if(noUpcoming&&noRemaining){card.classList.remove('flipping');showAllDoneOverlay(prevPhase);return;}if(pAllGreen&&newPhase&&newPhase!==prevPhase){card.classList.remove('flipping');showPhaseOverlay(prevPhase,newPhase);return;}}render();card.classList.remove('flipping');},450);}else{cancelHold();}}
 function cancelHold(){if(holdState==='flipping'||holdState==='confirmed')return;clearTimeout(holdTimer);holdState='idle';resetRunwayBtn();document.getElementById('confirmHint').textContent='לחץ והחזק את המסלול לאישור';document.getElementById('confirmHint').classList.remove('confirmed');document.getElementById('cardStamp').classList.remove('visible');}
 function resetRunwayBtn(instant){
   const fill=document.getElementById('runwayFill');
@@ -909,12 +945,12 @@ function goBack(){if(current>0){current--;holdState='idle';resetRunwayBtn();rend
 function skipItem(){status[current]='skipped';let n=current+1;while(n<CL.length&&status[n]==='done')n++;if(n<CL.length)current=n;holdState='idle';resetRunwayBtn();render();}
 function uncheckCurrent(){status[current]='skipped';holdState='idle';resetRunwayBtn();render();}
 function goNext(){if(current<CL.length-1){current++;holdState='idle';resetRunwayBtn();render();}}
-function jumpToUnchecked(){const idx=CL.findIndex((_,i)=>i<current&&(!status[i]||status[i]==='upcoming'||status[i]==='skipped'));if(idx!==-1){for(let i=idx;i<current;i++){if(!status[i]||status[i]==='upcoming')status[i]='skipped';}current=idx;holdState='idle';resetRunwayBtn();render();}}
+function jumpToUnchecked(){const idx=CL.findIndex((_,i)=>status[i]==='skipped');if(idx!==-1){current=idx;holdState='idle';resetRunwayBtn();render();}}
 function updateNavBtns(){
   const isFirst=current===0;
   const isLast=current===CL.length-1;
   const isDone=status[current]==='done';
-  const hasUnchecked=CL.some((_,i)=>i<current&&(!status[i]||status[i]==='upcoming'||status[i]==='skipped'));
+  const hasUnchecked=CL.some((_,i)=>status[i]==='skipped'&&i!==current);
   document.getElementById('navBack').disabled=isFirst;
   document.getElementById('navNext').disabled=isLast;
   document.getElementById('navUncheck').disabled=!isDone;
@@ -923,41 +959,44 @@ function updateNavBtns(){
 function showPhaseOverlay(donePhaseName,nextPhaseName){document.getElementById('phaseOverlayTitle').textContent=donePhaseName;document.getElementById('phaseOverlayNext').textContent=nextPhaseName?'השלב הבא: '+nextPhaseName:'כל השלבים הושלמו!';document.getElementById('phaseOverlay').classList.add('open');}
 function dismissPhaseOverlay(){document.getElementById('phaseOverlay').classList.remove('open');render();}
 function showAllDoneOverlay(lastPhase){
-  document.getElementById('allDonePhase').textContent=lastPhase||'הצ׳קליסט';
   const done=Object.values(status).filter(s=>s==='done').length;
   const skipped=Object.values(status).filter(s=>s==='skipped').length;
   const now=new Date();
-  const utc=String(now.getUTCHours()).padStart(2,'0')+':'+String(now.getUTCMinutes()).padStart(2,'0')+' UTC';
-  const tail=settings.tail?'4X-'+settings.tail:'—';
-  let route='';
-  try{const r=JSON.parse(localStorage.getItem('aircheck_rd_route')||'{}');if(r.from||r.to)route=(r.from||'?')+' → '+(r.to||'?');}catch(e){}
+  const utc=String(now.getUTCHours()).padStart(2,'0')+':'+String(now.getUTCMinutes()).padStart(2,'0');
+  let from='',to='',tail=settings.tail?'4X-'+settings.tail:'—';
+  try{const r=JSON.parse(localStorage.getItem('aircheck_rd_route')||'{}');from=r.from||'';to=r.to||'';}catch(e){}
+  // strip
+  document.getElementById('summaryUtc').textContent=utc;
+  document.getElementById('summaryRoute').textContent=(from||'—')+' → '+(to||'—');
+  document.getElementById('summaryReg').textContent=tail;
+  // stamp
+  document.getElementById('summaryStampPhase').textContent=lastPhase||'הצ׳קליסט';
+  // meta
   let meta='<span>'+done+'</span> פריטים אושרו';
-  if(skipped>0)meta+=' · <span>'+skipped+'</span> דולגו';
-  meta+='<br>'+utc;
-  if(tail!=='—')meta+=' · <span>'+tail+'</span>';
-  if(route)meta+='<br>'+route;
-  document.getElementById('allDoneMeta').innerHTML=meta;
-  const container=document.getElementById('allDoneSummary');
+  if(skipped>0)meta+=' &nbsp;·&nbsp; <span>'+skipped+'</span> דולגו';
+  document.getElementById('summaryMeta').innerHTML=meta;
+  // list
+  const container=document.getElementById('summaryList');
   container.innerHTML='';
   PHASES.forEach(p=>{
     const phHdr=document.createElement('div');
-    phHdr.className='alldone-phase-hdr';
+    phHdr.className='summary-phase-hdr';
     phHdr.textContent=p.name;
     container.appendChild(phHdr);
     p.groups.forEach(g=>{
       const grHdr=document.createElement('div');
-      grHdr.className='alldone-group-hdr';
+      grHdr.className='summary-group-hdr';
       grHdr.textContent=g.name;
       container.appendChild(grHdr);
       g.items.forEach(ii=>{
         const s=status[ii]||'upcoming';
         const row=document.createElement('div');
-        row.className='alldone-item';
+        row.className='summary-item';
         const mark=document.createElement('span');
         mark.className='tree-mark '+(s==='done'?'done':s==='skipped'?'skipped':'upcoming');
         mark.textContent=s==='done'?'✓':s==='skipped'?'~':'○';
         const txt=document.createElement('span');
-        txt.className='item-txt '+(s==='done'?'done':s==='skipped'?'skipped':'upcoming');
+        txt.className='tree-item-text '+(s==='done'?'done':s==='skipped'?'skipped':'upcoming');
         txt.textContent=CL[ii].main;
         row.appendChild(mark);
         row.appendChild(txt);
@@ -965,9 +1004,9 @@ function showAllDoneOverlay(lastPhase){
       });
     });
   });
-  document.getElementById('allDoneOverlay').classList.add('open');
+  showScreen('screenSummary');
 }
-function dismissAllDone(){document.getElementById('allDoneOverlay').classList.remove('open');render();}
+function dismissAllDone(){showScreen('screenChecklist');render();}
 
 
 function openModal(){
