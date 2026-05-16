@@ -140,11 +140,19 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 .runway-plane.holding{right:calc(100% - 52px);transition:right .3s linear;}
 .runway-plane.confirmed{right:calc(100% + 80px);transform:translateY(-55px) rotate(10deg) scale(1.08);opacity:0;transition:right 1s cubic-bezier(.25,.55,.4,1),transform 1s cubic-bezier(.25,.55,.4,1),opacity .7s ease-in .45s;}
 
+
+/* ── SKIPPED INDICATORS ── */
+.runway-skipped-pip{position:absolute;top:0;bottom:0;width:3px;background:var(--amber);opacity:.85;z-index:2;border-radius:1px;}
+.confirm-hint-text.skipped-nudge{color:var(--amber);cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
+
 /* ── NAV ── */
-.nav-row{flex-shrink:0;display:flex;gap:8px;padding:8px 14px 12px;border-top:1px dashed var(--gold-lite);}
-.nav-btn{flex:1;padding:11px 6px;border-radius:4px;border:1px solid var(--gold-lite);background:transparent;color:var(--ink);font-size:14px;font-family:var(--font-ui);font-weight:600;cursor:pointer;transition:background .12s;}
-.nav-btn:active{background:rgba(200,160,74,.12);}
+.nav-row{flex-shrink:0;display:flex;gap:6px;padding:8px 14px 12px;border-top:1px dashed var(--gold-lite);}
+.nav-btn{flex:2;padding:9px 4px;border-radius:4px;border:1px solid var(--gold-lite);background:transparent;color:var(--ink);font-size:13px;font-family:var(--font-ui);font-weight:600;cursor:pointer;transition:background .12s;line-height:1.25;text-align:center;}
+.nav-btn.narrow{flex:1.2;font-size:11px;}
+.nav-btn:active:not(:disabled){background:rgba(200,160,74,.12);}
+.nav-btn:disabled{opacity:.28;cursor:default;}
 .nav-btn.warn{color:var(--stamp-red);border-color:rgba(185,74,58,.4);}
+.nav-btn.amber{color:var(--amber);border-color:rgba(245,158,11,.4);}
 
 /* ── TREE ── */
 .tree-panel{flex:1;overflow-y:auto;background:var(--paper-hi);border-top:1px solid var(--gold-lite);padding:6px 14px 16px;-webkit-overflow-scrolling:touch;}
@@ -204,9 +212,9 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 
 
 /* ── ALL DONE OVERLAY ── */
-#allDoneOverlay{display:none;position:absolute;inset:0;z-index:210;align-items:center;justify-content:center;background:rgba(26,19,8,.85);backdrop-filter:blur(3px);}
+#allDoneOverlay{display:none;position:absolute;inset:0;z-index:210;align-items:center;justify-content:center;background:rgba(26,19,8,.85);backdrop-filter:blur(3px);padding:16px 0;}
 #allDoneOverlay.open{display:flex;}
-.alldone-box{background:var(--paper-hi);border:2px solid var(--cleared);border-radius:8px;padding:20px 20px 0;text-align:center;max-width:320px;width:92%;background-image:repeating-linear-gradient(0deg,transparent 0,transparent 27px,var(--paper-line) 27px,var(--paper-line) 28px);box-shadow:0 0 0 1px rgba(31,111,63,.15),0 20px 40px rgba(0,0,0,.35);max-height:88vh;display:flex;flex-direction:column;}
+.alldone-box{background:var(--paper-hi);border:2px solid var(--cleared);border-radius:8px;padding:20px 20px 0;text-align:center;max-width:320px;width:92%;background-image:repeating-linear-gradient(0deg,transparent 0,transparent 27px,var(--paper-line) 27px,var(--paper-line) 28px);box-shadow:0 0 0 1px rgba(31,111,63,.15),0 20px 40px rgba(0,0,0,.35);height:80%;display:flex;flex-direction:column;overflow:hidden;}
 .alldone-stamp-wrap{display:flex;justify-content:center;margin-bottom:14px;flex-shrink:0;}
 .alldone-stamp{border:3px solid var(--cleared);padding:8px 20px 10px;text-align:center;color:var(--cleared);font-family:var(--font-mono);transform:rotate(-5deg);display:inline-block;}
 .alldone-stamp-name{font-size:15px;font-weight:700;letter-spacing:.06em;margin-bottom:4px;}
@@ -431,7 +439,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="splash-footer-wrap">
       <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
         <span class="footer-refresh" onclick="location.reload()">רענון</span>
-        <span>AirCheck+ · v2.04.025 · built by eligrt</span>
+        <span>AirCheck+ · v2.04.041 · built by eligrt</span>
         <span style="width:40px;"></span>
       </div>
     </div>
@@ -535,15 +543,16 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
 
     <div class="nav-row">
-      <button class="nav-btn" onclick="goBack()">‹ קודם</button>
-      <button class="nav-btn warn" id="uncheckBtn" onclick="uncheckCurrent()" style="display:none">בטל ✓</button>
-      <button class="nav-btn" onclick="skipItem()">הבא ›</button>
+      <button class="nav-btn" id="navBack" onclick="goBack()">‹ קודם</button>
+      <button class="nav-btn narrow amber" id="navSkipJump" onclick="jumpToUnchecked()">חזור ל<br>לא מסומן</button>
+      <button class="nav-btn narrow warn" id="navUncheck" onclick="uncheckCurrent()">בטל<br>סימון</button>
+      <button class="nav-btn" id="navNext" onclick="goNext()">הבא ›</button>
     </div>
 
     <div class="tree-panel" id="treePanel"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.025 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.041 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -661,7 +670,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.025 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.041 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -678,7 +687,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="editor-list" id="editorList"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.025 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.041 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -793,15 +802,87 @@ function render(){
   // Sync stamp tail from settings on every render
   const stampEl=document.getElementById('stampInit');
   if(stampEl){const t=settings&&settings.tail?settings.tail:(localStorage.getItem(REG_KEY)||'');stampEl.textContent='PIC · 4X-'+(t||'HHH');}
-  const item=CL[current];if(!item)return;const phase=PHASE_IDX[item.phase];const group=phase?phase.groups.find(g=>g.name===item.group):null;document.getElementById('crumbPhase').textContent=item.phase;document.getElementById('crumbGroup').textContent=item.group;const numEl=document.getElementById('cardItemNum');numEl.innerHTML='ITEM <b>'+(current+1).toString().padStart(2,'0')+'</b><span> / '+CL.length+'</span>';const badge=document.getElementById('cardBadge');if(group){const pos=group.items.indexOf(current)+1;badge.textContent=pos+'/'+group.items.length+' בקבוצה';badge.style.display='';}else{badge.style.display='none';}document.getElementById('cardMain').textContent=item.main;const subEl=document.getElementById('cardSub');subEl.textContent=item.sub||'';subEl.style.display=item.sub?'':'none';document.getElementById('cardStamp').classList.remove('visible');const next=CL[current+1];const under=document.getElementById('cardUnder');if(next){under.style.display='';document.getElementById('cardUnderNum').innerHTML='ITEM <b>'+(current+2).toString().padStart(2,'0')+'</b>';document.getElementById('cardUnderMain').textContent=next.main;}else{under.style.display='none';}renderRunway();if(treeOpen)renderTree();const ub=document.getElementById('uncheckBtn');ub.style.display=(status[current]==='done')?'':'none';document.getElementById('confirmHint').textContent='לחץ והחזק את המסלול לאישור';document.getElementById('confirmHint').classList.remove('confirmed');saveState();}
-function renderRunway(){const totalDone=Object.values(status).filter(s=>s==='done').length;const totalPct=Math.round((totalDone/CL.length)*100);document.getElementById('runwayCountLabel').textContent=totalDone.toString().padStart(2,'0')+' / '+CL.length;document.getElementById('runwayPctLabel').textContent=totalPct+'%';const container=document.getElementById('runwayPhases');container.innerHTML='';PHASES.forEach(p=>{const pDone=p.groups.reduce((s,g)=>s+g.items.filter(j=>status[j]==='done').length,0);const pTot=p.end-p.start+1;const pct=Math.round((pDone/pTot)*100);const isCur=current>=p.start&&current<=p.end;const isDone=pDone===pTot;const seg=document.createElement('div');seg.className='runway-seg';const nm=document.createElement('div');nm.className='runway-seg-name'+(isDone?' done':isCur?' cur':'');nm.textContent=p.name;seg.appendChild(nm);const track=document.createElement('div');track.className='runway-track'+(isCur?' cur':'');const fill=document.createElement('div');fill.className='runway-fill';fill.style.width=pct+'%';fill.style.background=isDone?'#1f6f3f':'#1c3d6e';track.appendChild(fill);const dashes=document.createElement('div');dashes.className='runway-dashes';for(let i=0;i<8;i++){const d=document.createElement('div');d.className='runway-dash';dashes.appendChild(d);}track.appendChild(dashes);seg.appendChild(track);const cnt=document.createElement('div');cnt.className='runway-seg-count';cnt.textContent=pDone+'/'+pTot;seg.appendChild(cnt);container.appendChild(seg);});}
+  const item=CL[current];if(!item)return;const phase=PHASE_IDX[item.phase];const group=phase?phase.groups.find(g=>g.name===item.group):null;document.getElementById('crumbPhase').textContent=item.phase;document.getElementById('crumbGroup').textContent=item.group;const numEl=document.getElementById('cardItemNum');numEl.innerHTML='ITEM <b>'+(current+1).toString().padStart(2,'0')+'</b><span> / '+CL.length+'</span>';const badge=document.getElementById('cardBadge');if(group){const pos=group.items.indexOf(current)+1;badge.textContent=pos+'/'+group.items.length+' בקבוצה';badge.style.display='';}else{badge.style.display='none';}document.getElementById('cardMain').textContent=item.main;const subEl=document.getElementById('cardSub');subEl.textContent=item.sub||'';subEl.style.display=item.sub?'':'none';document.getElementById('cardStamp').classList.remove('visible');const next=CL[current+1];const under=document.getElementById('cardUnder');if(next){under.style.display='';document.getElementById('cardUnderNum').innerHTML='ITEM <b>'+(current+2).toString().padStart(2,'0')+'</b>';document.getElementById('cardUnderMain').textContent=next.main;}else{under.style.display='none';}renderRunway();if(treeOpen)renderTree();document.getElementById('confirmHint').classList.remove('confirmed','skipped-nudge');
+  // Check if there are skipped items and all others are done → show nudge
+  const skippedIdxs=Object.keys(status).filter(k=>status[k]==='skipped').map(Number);
+  const remainingNonSkipped=CL.map((_,i)=>i).filter(i=>!status[i]||status[i]==='upcoming');
+  if(skippedIdxs.length>0&&remainingNonSkipped.length===0){
+    const hintEl=document.getElementById('confirmHint');
+    const count=skippedIdxs.length;
+    hintEl.textContent=(count===1?'פריט דלוג אחד':''+count+' פריטים דלוגים')+' — קפוץ אליו ›';
+    hintEl.classList.add('skipped-nudge');
+    hintEl.onclick=()=>{current=skippedIdxs[0];holdState='idle';resetRunwayBtn();hintEl.onclick=null;render();};
+  }else{
+    const hintEl=document.getElementById('confirmHint');
+    hintEl.textContent='לחץ והחזק את המסלול לאישור';
+    hintEl.onclick=null;
+  }
+  updateNavBtns();
+  saveState();}
+function renderRunway(){
+  const totalDone=Object.values(status).filter(s=>s==='done').length;
+  const totalPct=Math.round((totalDone/CL.length)*100);
+  document.getElementById('runwayCountLabel').textContent=totalDone.toString().padStart(2,'0')+' / '+CL.length;
+  document.getElementById('runwayPctLabel').textContent=totalPct+'%';
+  const container=document.getElementById('runwayPhases');
+  container.innerHTML='';
+  PHASES.forEach(p=>{
+    const allItems=p.groups.reduce((a,g)=>a.concat(g.items),[]);
+    const pTot=allItems.length;
+    const pDone=allItems.filter(j=>status[j]==='done').length;
+    const pSkipped=allItems.filter(j=>status[j]==='skipped').length;
+    const isCur=current>=p.start&&current<=p.end;
+    const isComplete=pDone===pTot;
+    const seg=document.createElement('div');
+    seg.className='runway-seg';
+    // phase name
+    const nm=document.createElement('div');
+    nm.className='runway-seg-name'+(isComplete?' done':isCur?' cur':'');
+    nm.textContent=p.name;
+    seg.appendChild(nm);
+    // track — asphalt base
+    const track=document.createElement('div');
+    track.className='runway-track'+(isCur?' cur':'');
+    // dashes overlay (white stripes)
+    const dashes=document.createElement('div');
+    dashes.className='runway-dashes';
+    for(let i=0;i<8;i++){const d=document.createElement('div');d.className='runway-dash';dashes.appendChild(d);}
+    track.appendChild(dashes);
+    // per-item colored segments as absolute overlays
+    allItems.forEach((ii,idx)=>{
+      const s=status[ii]||'upcoming';
+      const isCurItem=ii===current;
+      let color=null;
+      if(s==='done') color='rgba(31,111,63,.82)';
+      else if(s==='skipped') color='rgba(245,158,11,.82)';
+      else if(!isCurItem&&s!=='done'&&ii<current) color='rgba(245,158,11,.82)';
+      // current item (non-skipped) and future items — no fill, asphalt shows through
+      if(color){
+        const pip=document.createElement('div');
+        const pct=100/pTot;
+        pip.style.cssText='position:absolute;top:0;bottom:0;border-radius:1px;pointer-events:none;transition:background .2s;';
+        pip.style.right=(idx*pct)+'%';
+        pip.style.width=pct+'%';
+        pip.style.background=color;
+        track.appendChild(pip);
+      }
+    });
+    seg.appendChild(track);
+    // count
+    const cnt=document.createElement('div');
+    cnt.className='runway-seg-count';
+    cnt.textContent=pDone+'/'+pTot;
+    seg.appendChild(cnt);
+    container.appendChild(seg);
+  });
+}
 const expandedPhases={};
 function togglePhase(phaseName){expandedPhases[phaseName]=!expandedPhases[phaseName];renderTree();}
-function renderTree(){const panel=document.getElementById('treePanel');panel.innerHTML='';PHASES.forEach((p)=>{const pDone=p.groups.reduce((s,g)=>s+g.items.filter(j=>status[j]==='done').length,0);const pTot=p.end-p.start+1;const isCurPhase=current>=p.start&&current<=p.end;const isDone=pDone===pTot;let isOpen;if(expandedPhases[p.name]===undefined){isOpen=isCurPhase;}else{isOpen=expandedPhases[p.name];}const phDiv=document.createElement('div');phDiv.className='tree-phase';const hdr=document.createElement('div');hdr.className='tree-phase-hdr';hdr.style.cursor='pointer';hdr.onclick=()=>togglePhase(p.name);const nm=document.createElement('span');nm.className='tree-ph-name '+(isDone?'done':isCurPhase?'cur':'upcoming');nm.textContent=p.name;const right=document.createElement('span');right.style.cssText='display:flex;align-items:center;gap:8px;direction:ltr;';const stat=document.createElement('span');stat.className='tree-ph-stat';stat.textContent=pDone+'/'+pTot;const chevron=document.createElement('span');chevron.style.cssText='font-size:10px;color:var(--ink-muted);font-family:var(--font-mono);display:inline-block;';chevron.textContent=isOpen?'▼':'►';right.appendChild(stat);right.appendChild(chevron);hdr.appendChild(nm);hdr.appendChild(right);phDiv.appendChild(hdr);if(isOpen){p.groups.forEach((g)=>{const gDiv=document.createElement('div');gDiv.className='tree-group';const gnm=document.createElement('div');gnm.className='tree-gr-name';gnm.textContent=g.name;gDiv.appendChild(gnm);g.items.forEach(ii=>{const s=status[ii]||'upcoming';const isCurItem=ii===current;const row=document.createElement('div');row.className='tree-item';row.onclick=(e)=>{e.stopPropagation();current=ii;holdState='idle';resetRunwayBtn();render();};const mark=document.createElement('span');mark.className='tree-mark '+(s==='done'?'done':isCurItem?'cur':s==='skipped'?'skipped':'upcoming');mark.textContent=s==='done'?'✓':isCurItem?'●':s==='skipped'?'~':'○';const txt=document.createElement('span');txt.className='tree-item-text '+(s==='done'?'done':isCurItem?'cur':s==='skipped'?'skipped':'upcoming');txt.textContent=CL[ii].main;row.appendChild(mark);row.appendChild(txt);gDiv.appendChild(row);});phDiv.appendChild(gDiv);});}panel.appendChild(phDiv);});}
+function renderTree(){const panel=document.getElementById('treePanel');panel.innerHTML='';PHASES.forEach((p)=>{const pAllItems=p.groups.reduce((a,g)=>a.concat(g.items),[]);const pDone=pAllItems.filter(j=>status[j]==='done').length;const pTot=pAllItems.length;const isCurPhase=current>=p.start&&current<=p.end;const isDone=pAllItems.every(j=>status[j]==='done'||status[j]==='skipped');let isOpen;if(expandedPhases[p.name]===undefined){isOpen=isCurPhase;}else{isOpen=expandedPhases[p.name];}const phDiv=document.createElement('div');phDiv.className='tree-phase';const hdr=document.createElement('div');hdr.className='tree-phase-hdr';hdr.style.cursor='pointer';hdr.onclick=()=>togglePhase(p.name);const nm=document.createElement('span');nm.className='tree-ph-name '+(isDone?'done':isCurPhase?'cur':'upcoming');nm.textContent=p.name;const right=document.createElement('span');right.style.cssText='display:flex;align-items:center;gap:8px;direction:ltr;';const stat=document.createElement('span');stat.className='tree-ph-stat';stat.textContent=pDone+'/'+pTot;const chevron=document.createElement('span');chevron.style.cssText='font-size:10px;color:var(--ink-muted);font-family:var(--font-mono);display:inline-block;';chevron.textContent=isOpen?'▼':'►';right.appendChild(stat);right.appendChild(chevron);hdr.appendChild(nm);hdr.appendChild(right);phDiv.appendChild(hdr);if(isOpen){p.groups.forEach((g)=>{const gDiv=document.createElement('div');gDiv.className='tree-group';const gnm=document.createElement('div');gnm.className='tree-gr-name';gnm.textContent=g.name;gDiv.appendChild(gnm);g.items.forEach(ii=>{const s=status[ii]||'upcoming';const isCurItem=ii===current;const row=document.createElement('div');row.className='tree-item';row.onclick=(e)=>{e.stopPropagation();current=ii;holdState='idle';resetRunwayBtn();render();};const mark=document.createElement('span');mark.className='tree-mark '+(s==='done'?'done':isCurItem?'cur':s==='skipped'?'skipped':'upcoming');mark.textContent=s==='done'?'✓':isCurItem?'●':s==='skipped'?'~':'○';const txt=document.createElement('span');txt.className='tree-item-text '+(s==='done'?'done':isCurItem?'cur':s==='skipped'?'skipped':'upcoming');txt.textContent=CL[ii].main;row.appendChild(mark);row.appendChild(txt);gDiv.appendChild(row);});phDiv.appendChild(gDiv);});}panel.appendChild(phDiv);});}
 const HOLD_MS=300;const FLIP_MS=520;
 let holdState='idle';let holdTimer=null;
 function startHold(){if(holdState==='flipping'||holdState==='confirmed')return;if(status[current]==='done')return;holdState='holding';document.getElementById('confirmHint').textContent='מחזיק…';const fill=document.getElementById('runwayFill');fill.classList.remove('releasing');fill.classList.add('holding');const plane=document.getElementById('runwayPlane');plane.classList.add('holding');plane.classList.remove('confirmed');const btn=document.getElementById('runwayBtn');btn.classList.remove('idle');holdTimer=setTimeout(()=>{holdState='confirmed';const now=new Date();document.getElementById('stampTime').textContent=String(now.getUTCHours()).padStart(2,'0')+':'+String(now.getUTCMinutes()).padStart(2,'0')+' UTC';document.getElementById('cardStamp').classList.add('visible');if(navigator.vibrate){navigator.vibrate(40);}if(settings&&settings.sounds){playConfirmSound();}document.getElementById('confirmHint').textContent='אושר — שחרר להמשך';document.getElementById('confirmHint').classList.add('confirmed');fill.classList.add('confirmed');fill.classList.remove('holding');const p=document.getElementById('runwayPlane');p.classList.add('confirmed');p.classList.remove('holding');},(settings&&settings.holdMs?settings.holdMs:HOLD_MS));}
-function releaseHold(){clearTimeout(holdTimer);if(holdState==='confirmed'){holdState='flipping';const card=document.getElementById('cardTop');document.getElementById('cardStamp').classList.remove('visible');card.classList.add('flipping');setTimeout(()=>{status[current]='done';const prevPhase=CL[current].phase;advanceToNext();holdState='idle';resetRunwayBtn(true);const newPhase=CL[current]?CL[current].phase:null;const prevPhaseObj=PHASE_IDX[prevPhase];if(prevPhaseObj){const pDone=prevPhaseObj.groups.reduce((s,g)=>s+g.items.filter(j=>status[j]==='done').length,0);const pTot=prevPhaseObj.end-prevPhaseObj.start+1;if(pDone===pTot&&newPhase!==prevPhase){card.classList.remove('flipping');if(!newPhase){showAllDoneOverlay(prevPhase);}else{showPhaseOverlay(prevPhase,newPhase);}return;}}render();card.classList.remove('flipping');},450);}else{cancelHold();}}
+function releaseHold(){clearTimeout(holdTimer);if(holdState==='confirmed'){holdState='flipping';const card=document.getElementById('cardTop');document.getElementById('cardStamp').classList.remove('visible');card.classList.add('flipping');setTimeout(()=>{status[current]='done';const prevPhase=CL[current].phase;advanceToNext();holdState='idle';resetRunwayBtn(true);const newPhase=CL[current]?CL[current].phase:null;const prevPhaseObj=PHASE_IDX[prevPhase];if(prevPhaseObj){const phAllItems=prevPhaseObj.groups.reduce((a,g)=>a.concat(g.items),[]);const pComplete=phAllItems.every(j=>status[j]==='done'||status[j]==='skipped');const pAllGreen=phAllItems.every(j=>status[j]==='done');const noUpcoming=CL.every((_,j)=>status[j]==='done'||status[j]==='skipped');if(noUpcoming){card.classList.remove('flipping');showAllDoneOverlay(prevPhase);return;}if(pAllGreen&&newPhase&&newPhase!==prevPhase){card.classList.remove('flipping');showPhaseOverlay(prevPhase,newPhase);return;}}render();card.classList.remove('flipping');},450);}else{cancelHold();}}
 function cancelHold(){if(holdState==='flipping'||holdState==='confirmed')return;clearTimeout(holdTimer);holdState='idle';resetRunwayBtn();document.getElementById('confirmHint').textContent='לחץ והחזק את המסלול לאישור';document.getElementById('confirmHint').classList.remove('confirmed');document.getElementById('cardStamp').classList.remove('visible');}
 function resetRunwayBtn(instant){
   const fill=document.getElementById('runwayFill');
@@ -826,9 +907,68 @@ function resetRunwayBtn(instant){
 function advanceToNext(){let n=current+1;while(n<CL.length&&status[n]==='done')n++;if(n<CL.length)current=n;else{current=CL.length-1;}}
 function goBack(){if(current>0){current--;holdState='idle';resetRunwayBtn();render();}}
 function skipItem(){status[current]='skipped';let n=current+1;while(n<CL.length&&status[n]==='done')n++;if(n<CL.length)current=n;holdState='idle';resetRunwayBtn();render();}
-function uncheckCurrent(){delete status[current];holdState='idle';resetRunwayBtn();render();}
+function uncheckCurrent(){status[current]='skipped';holdState='idle';resetRunwayBtn();render();}
+function goNext(){if(current<CL.length-1){current++;holdState='idle';resetRunwayBtn();render();}}
+function jumpToUnchecked(){const idx=CL.findIndex((_,i)=>i<current&&(!status[i]||status[i]==='upcoming'||status[i]==='skipped'));if(idx!==-1){for(let i=idx;i<current;i++){if(!status[i]||status[i]==='upcoming')status[i]='skipped';}current=idx;holdState='idle';resetRunwayBtn();render();}}
+function updateNavBtns(){
+  const isFirst=current===0;
+  const isLast=current===CL.length-1;
+  const isDone=status[current]==='done';
+  const hasUnchecked=CL.some((_,i)=>i<current&&(!status[i]||status[i]==='upcoming'||status[i]==='skipped'));
+  document.getElementById('navBack').disabled=isFirst;
+  document.getElementById('navNext').disabled=isLast;
+  document.getElementById('navUncheck').disabled=!isDone;
+  document.getElementById('navSkipJump').disabled=!hasUnchecked;
+}
 function showPhaseOverlay(donePhaseName,nextPhaseName){document.getElementById('phaseOverlayTitle').textContent=donePhaseName;document.getElementById('phaseOverlayNext').textContent=nextPhaseName?'השלב הבא: '+nextPhaseName:'כל השלבים הושלמו!';document.getElementById('phaseOverlay').classList.add('open');}
 function dismissPhaseOverlay(){document.getElementById('phaseOverlay').classList.remove('open');render();}
+function showAllDoneOverlay(lastPhase){
+  document.getElementById('allDonePhase').textContent=lastPhase||'הצ׳קליסט';
+  const done=Object.values(status).filter(s=>s==='done').length;
+  const skipped=Object.values(status).filter(s=>s==='skipped').length;
+  const now=new Date();
+  const utc=String(now.getUTCHours()).padStart(2,'0')+':'+String(now.getUTCMinutes()).padStart(2,'0')+' UTC';
+  const tail=settings.tail?'4X-'+settings.tail:'—';
+  let route='';
+  try{const r=JSON.parse(localStorage.getItem('aircheck_rd_route')||'{}');if(r.from||r.to)route=(r.from||'?')+' → '+(r.to||'?');}catch(e){}
+  let meta='<span>'+done+'</span> פריטים אושרו';
+  if(skipped>0)meta+=' · <span>'+skipped+'</span> דולגו';
+  meta+='<br>'+utc;
+  if(tail!=='—')meta+=' · <span>'+tail+'</span>';
+  if(route)meta+='<br>'+route;
+  document.getElementById('allDoneMeta').innerHTML=meta;
+  const container=document.getElementById('allDoneSummary');
+  container.innerHTML='';
+  PHASES.forEach(p=>{
+    const phHdr=document.createElement('div');
+    phHdr.className='alldone-phase-hdr';
+    phHdr.textContent=p.name;
+    container.appendChild(phHdr);
+    p.groups.forEach(g=>{
+      const grHdr=document.createElement('div');
+      grHdr.className='alldone-group-hdr';
+      grHdr.textContent=g.name;
+      container.appendChild(grHdr);
+      g.items.forEach(ii=>{
+        const s=status[ii]||'upcoming';
+        const row=document.createElement('div');
+        row.className='alldone-item';
+        const mark=document.createElement('span');
+        mark.className='tree-mark '+(s==='done'?'done':s==='skipped'?'skipped':'upcoming');
+        mark.textContent=s==='done'?'✓':s==='skipped'?'~':'○';
+        const txt=document.createElement('span');
+        txt.className='item-txt '+(s==='done'?'done':s==='skipped'?'skipped':'upcoming');
+        txt.textContent=CL[ii].main;
+        row.appendChild(mark);
+        row.appendChild(txt);
+        container.appendChild(row);
+      });
+    });
+  });
+  document.getElementById('allDoneOverlay').classList.add('open');
+}
+function dismissAllDone(){document.getElementById('allDoneOverlay').classList.remove('open');render();}
+
 
 function openModal(){
   document.getElementById('modal').classList.add('open');
