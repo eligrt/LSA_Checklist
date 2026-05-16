@@ -460,7 +460,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="splash-footer-wrap">
       <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
         <span class="footer-refresh" onclick="location.reload()">רענון</span>
-        <span>AirCheck+ · v2.04.048 · built by eligrt</span>
+        <span>AirCheck+ · v2.04.049 · built by eligrt</span>
         <span style="width:40px;"></span>
       </div>
     </div>
@@ -573,7 +573,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="tree-panel" id="treePanel"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.048 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.049 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -632,7 +632,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span style="width:40px;"></span>
-      <span>AirCheck+ · v2.04.048 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.049 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -717,7 +717,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.048 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.049 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -734,7 +734,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="editor-list" id="editorList"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.048 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.049 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -918,7 +918,7 @@ function renderTree(){const panel=document.getElementById('treePanel');panel.inn
 const HOLD_MS=300;const FLIP_MS=520;
 let holdState='idle';let holdTimer=null;
 function startHold(){if(holdState==='flipping'||holdState==='confirmed')return;if(status[current]==='done')return;holdState='holding';document.getElementById('confirmHint').textContent='מחזיק…';const fill=document.getElementById('runwayFill');fill.classList.remove('releasing');fill.classList.add('holding');const plane=document.getElementById('runwayPlane');plane.classList.add('holding');plane.classList.remove('confirmed');const btn=document.getElementById('runwayBtn');btn.classList.remove('idle');holdTimer=setTimeout(()=>{holdState='confirmed';const now=new Date();document.getElementById('stampTime').textContent=String(now.getUTCHours()).padStart(2,'0')+':'+String(now.getUTCMinutes()).padStart(2,'0')+' UTC';document.getElementById('cardStamp').classList.add('visible');if(navigator.vibrate){navigator.vibrate(40);}if(settings&&settings.sounds){playConfirmSound();}document.getElementById('confirmHint').textContent='אושר — שחרר להמשך';document.getElementById('confirmHint').classList.add('confirmed');fill.classList.add('confirmed');fill.classList.remove('holding');const p=document.getElementById('runwayPlane');p.classList.add('confirmed');p.classList.remove('holding');},(settings&&settings.holdMs?settings.holdMs:HOLD_MS));}
-function releaseHold(){clearTimeout(holdTimer);if(holdState==='confirmed'){holdState='flipping';const card=document.getElementById('cardTop');document.getElementById('cardStamp').classList.remove('visible');card.classList.add('flipping');setTimeout(()=>{status[current]='done';const prevPhase=CL[current].phase;advanceToNext();holdState='idle';resetRunwayBtn(true);const newPhase=CL[current]?CL[current].phase:null;const prevPhaseObj=PHASE_IDX[prevPhase];if(prevPhaseObj){const phAllItems=prevPhaseObj.groups.reduce((a,g)=>a.concat(g.items),[]);const pComplete=phAllItems.every(j=>status[j]==='done'||status[j]==='skipped');const pAllGreen=phAllItems.every(j=>status[j]==='done');const noUpcoming=CL.every((_,j)=>status[j]==='done'||(status[j]==='skipped'&&j===current)||status[j]==='done');const noRemaining=!CL.some((_,j)=>j!==current&&(status[j]==='skipped'||!status[j]||status[j]==='upcoming'));if(noUpcoming&&noRemaining){card.classList.remove('flipping');showAllDoneOverlay(prevPhase);return;}if(pAllGreen&&newPhase&&newPhase!==prevPhase){card.classList.remove('flipping');showPhaseOverlay(prevPhase,newPhase);return;}}render();card.classList.remove('flipping');},450);}else{cancelHold();}}
+function releaseHold(){clearTimeout(holdTimer);if(holdState==='confirmed'){holdState='flipping';const card=document.getElementById('cardTop');document.getElementById('cardStamp').classList.remove('visible');card.classList.add('flipping');setTimeout(()=>{status[current]='done';const prevPhase=CL[current].phase;advanceToNext();holdState='idle';resetRunwayBtn(true);const newPhase=CL[current]?CL[current].phase:null;const prevPhaseObj=PHASE_IDX[prevPhase];if(prevPhaseObj){const phAllItems=prevPhaseObj.groups.reduce((a,g)=>a.concat(g.items),[]);const pComplete=phAllItems.every(j=>status[j]==='done'||status[j]==='skipped');const pAllGreen=phAllItems.every(j=>status[j]==='done');const allDone=CL.every((_,j)=>status[j]==='done'||status[j]==='skipped');const anySkipped=CL.some((_,j)=>status[j]==='skipped');const anyUpcoming=CL.some((_,j)=>!status[j]||status[j]==='upcoming');if(allDone&&!anySkipped&&!anyUpcoming){card.classList.remove('flipping');showAllDoneOverlay(prevPhase);return;}if(pAllGreen&&newPhase&&newPhase!==prevPhase){card.classList.remove('flipping');showPhaseOverlay(prevPhase,newPhase);return;}}render();card.classList.remove('flipping');},450);}else{cancelHold();}}
 function cancelHold(){if(holdState==='flipping'||holdState==='confirmed')return;clearTimeout(holdTimer);holdState='idle';resetRunwayBtn();document.getElementById('confirmHint').textContent='לחץ והחזק את המסלול לאישור';document.getElementById('confirmHint').classList.remove('confirmed');document.getElementById('cardStamp').classList.remove('visible');}
 function resetRunwayBtn(instant){
   const fill=document.getElementById('runwayFill');
