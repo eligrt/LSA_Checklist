@@ -255,6 +255,17 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 .summary-item{display:flex;align-items:center;gap:8px;padding:3px 0 3px 4px;font-size:12px;}
 .summary-btns{flex-shrink:0;padding:10px 14px 14px;display:flex;flex-direction:column;gap:8px;border-top:1px dashed var(--gold-lite);background:var(--paper-hi);}
 
+
+/* ── BULK PHASE POPUP ── */
+#bulkPopup{display:none;position:absolute;z-index:300;background:var(--paper-hi);border:1.5px solid var(--gold);border-radius:6px;padding:10px 12px;box-shadow:0 8px 24px rgba(0,0,0,.35);min-width:160px;text-align:center;}
+#bulkPopup.open{display:block;}
+.bulk-phase-name{font-size:11px;font-family:var(--font-mono);letter-spacing:.08em;color:var(--ink-muted);margin-bottom:8px;}
+.bulk-btns{display:flex;flex-direction:column;gap:6px;}
+.bulk-btn{padding:7px 12px;border-radius:4px;font-size:13px;font-family:var(--font-ui);font-weight:600;cursor:pointer;border:1px solid var(--gold-lite);}
+.bulk-btn.confirm{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.bulk-btn.cancel{background:transparent;color:var(--ink-muted);}
+.bulk-btn.warn{background:transparent;color:var(--stamp-red);border-color:rgba(185,74,58,.4);}
+
 /* ── EDITOR SCREEN ── */
 #screenEditor{overflow:hidden;flex-direction:column;}
 .editor-topbar{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--stamp-red);box-shadow:0 2px 0 #8a3527;color:var(--paper);}
@@ -460,7 +471,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="splash-footer-wrap">
       <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
         <span class="footer-refresh" onclick="location.reload()">רענון</span>
-        <span>AirCheck+ · v2.04.050 · built by eligrt</span>
+        <span>AirCheck+ · v2.04.051 · built by eligrt</span>
         <span style="width:40px;"></span>
       </div>
     </div>
@@ -573,7 +584,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="tree-panel" id="treePanel"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.050 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.051 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -632,8 +643,16 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span style="width:40px;"></span>
-      <span>AirCheck+ · v2.04.050 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.051 · built by eligrt</span>
       <span style="width:40px;"></span>
+    </div>
+  </div>
+
+  <div id="bulkPopup">
+    <div class="bulk-phase-name" id="bulkPhaseName"></div>
+    <div class="bulk-btns">
+      <button class="bulk-btn confirm" id="bulkConfirmBtn" onclick="bulkConfirm()"></button>
+      <button class="bulk-btn cancel" onclick="closeBulkPopup()">ביטול</button>
     </div>
   </div>
 
@@ -717,7 +736,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.050 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.051 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -734,7 +753,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="editor-list" id="editorList"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.050 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.051 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -903,6 +922,16 @@ function renderRunway(){
         track.appendChild(pip);
       }
     });
+    // long-press on track
+    let lpTimer=null;
+    const startLp=(e)=>{lpTimer=setTimeout(()=>{lpTimer=null;openBulkPopup(p,allItems,isComplete,seg);},500);};
+    const cancelLp=()=>{if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}};
+    track.addEventListener('mousedown',startLp);
+    track.addEventListener('touchstart',startLp,{passive:true});
+    track.addEventListener('mouseup',cancelLp);
+    track.addEventListener('mouseleave',cancelLp);
+    track.addEventListener('touchend',cancelLp);
+    track.addEventListener('touchcancel',cancelLp);
     seg.appendChild(track);
     // count
     const cnt=document.createElement('div');
@@ -955,6 +984,46 @@ function updateNavBtns(){
   document.getElementById('navNext').disabled=isLast;
   document.getElementById('navUncheck').disabled=!isDone;
   document.getElementById('navSkipJump').disabled=!hasUnchecked;
+}
+let _bulkPhaseItems=[];let _bulkIsComplete=false;
+function openBulkPopup(p,allItems,isComplete,segEl){
+  _bulkPhaseItems=allItems;
+  _bulkIsComplete=isComplete;
+  document.getElementById('bulkPhaseName').textContent=p.name;
+  const btn=document.getElementById('bulkConfirmBtn');
+  if(isComplete){btn.textContent='בטל סימון הכל ~';btn.className='bulk-btn warn';}
+  else{btn.textContent='סמן הכל ✓';btn.className='bulk-btn confirm';}
+  // position near the segment
+  const popup=document.getElementById('bulkPopup');
+  popup.classList.add('open');
+  const appRect=document.getElementById('app').getBoundingClientRect();
+  const segRect=segEl.getBoundingClientRect();
+  let top=segRect.bottom-appRect.top+6;
+  let left=segRect.left-appRect.left;
+  // keep within app bounds
+  popup.style.top=top+'px';
+  popup.style.left=Math.max(4,Math.min(left,appRect.width-180))+'px';
+}
+function closeBulkPopup(){document.getElementById('bulkPopup').classList.remove('open');}
+function bulkConfirm(){
+  closeBulkPopup();
+  if(_bulkIsComplete){
+    // uncheck all — mark as skipped
+    _bulkPhaseItems.forEach(ii=>{status[ii]='skipped';});
+    current=_bulkPhaseItems[0];
+  }else{
+    // check all
+    _bulkPhaseItems.forEach(ii=>{status[ii]='done';});
+    // advance current past this phase
+    const lastInPhase=_bulkPhaseItems[_bulkPhaseItems.length-1];
+    let n=lastInPhase+1;
+    while(n<CL.length&&status[n]==='done')n++;
+    current=n<CL.length?n:lastInPhase;
+    // check if all done → summary
+    const allDone=CL.every((_,j)=>status[j]==='done');
+    if(allDone){const lastPhase=CL[CL.length-1].phase;holdState='idle';showAllDoneOverlay(lastPhase);return;}
+  }
+  holdState='idle';resetRunwayBtn();render();
 }
 function showPhaseOverlay(donePhaseName,nextPhaseName){document.getElementById('phaseOverlayTitle').textContent=donePhaseName;document.getElementById('phaseOverlayNext').textContent=nextPhaseName?'השלב הבא: '+nextPhaseName:'כל השלבים הושלמו!';document.getElementById('phaseOverlay').classList.add('open');}
 function dismissPhaseOverlay(){document.getElementById('phaseOverlay').classList.remove('open');render();}
@@ -1663,6 +1732,10 @@ function doSettingsReset(){
 }
 function editRoute(){}
 
+document.getElementById('app').addEventListener('click',e=>{
+  const popup=document.getElementById('bulkPopup');
+  if(popup.classList.contains('open')&&!popup.contains(e.target))closeBulkPopup();
+});
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
