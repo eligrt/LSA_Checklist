@@ -40,7 +40,9 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 .splash-logo-wrap img{width:220px;height:220px;object-fit:contain;display:block;}
 .splash-app-title{font-family:var(--font-mono);font-size:28px;font-weight:700;color:var(--paper);direction:ltr;letter-spacing:-.5px;}
 .splash-app-sub{font-size:9px;color:rgba(244,236,220,.85);letter-spacing:.18em;font-family:var(--font-mono);text-transform:uppercase;}
-.splash-app-slogan{font-size:10px;color:rgba(244,236,220,.7);letter-spacing:.05em;font-family:var(--font-mono);font-style:italic;margin-top:2px;}
+.splash-app-slogan{font-size:10px;color:rgba(244,236,220,.7);letter-spacing:.05em;font-family:var(--font-mono);font-style:italic;margin-top:2px;min-height:1.4em;direction:ltr;unicode-bidi:bidi-override;}
+.tw-cursor{display:inline-block;width:1px;height:.9em;background:rgba(244,236,220,.7);margin-left:1px;vertical-align:middle;animation:twBlink .7s step-end infinite;}
+@keyframes twBlink{0%,100%{opacity:1;}50%{opacity:0;}}
 .splash-body{flex:1;padding:56px 18px 20px;display:flex;flex-direction:column;gap:10px;background:transparent;}
 .splash-resume-card{background:var(--paper-hi);border:1px solid var(--gold);border-radius:4px;padding:10px 12px;direction:rtl;}
 .splash-resume-lbl{font-size:8px;font-family:var(--font-mono);letter-spacing:.1em;color:var(--ink-faint);margin-bottom:3px;text-transform:uppercase;direction:ltr;}
@@ -451,8 +453,8 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
           alt="AirCheck+" onerror="this.style.display='none'">
       </div>
       <div class="splash-app-title">AirCheck+</div>
-      <div class="splash-app-sub">personal flight checklist</div>
-      <div class="splash-app-slogan">"the checklist on top of the checklist"</div>
+      <div class="splash-app-sub" id="splashSub" style="opacity:0;transition:opacity 1.2s ease;">personal flight checklist</div>
+      <div class="splash-app-slogan" id="splashSlogan" style="opacity:0;"></div>
     </div>
     <div class="splash-body">
       <div class="splash-resume-card" id="splashResumeCard" style="display:none;">
@@ -471,7 +473,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="splash-footer-wrap">
       <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
         <span class="footer-refresh" onclick="location.reload()">רענון</span>
-        <span>AirCheck+ · v2.04.056 · built by eligrt</span>
+        <span>AirCheck+ · v2.04.061 · built by eligrt</span>
         <span style="width:40px;"></span>
       </div>
     </div>
@@ -584,7 +586,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="tree-panel" id="treePanel"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.056 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.061 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -643,7 +645,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span style="width:40px;"></span>
-      <span>AirCheck+ · v2.04.056 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.061 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -736,7 +738,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.056 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.061 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -753,7 +755,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="editor-list" id="editorList"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.056 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.061 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -856,7 +858,12 @@ const KEY='aircheck_rd_v1';const REG_KEY='aircheck_rd_reg';const ROUTE_KEY='airc
 let current=0;let status={};let treeOpen=true;
 function saveState(){try{localStorage.setItem(KEY,JSON.stringify({current,status}));}catch(e){}}
 function loadState(){try{const raw=localStorage.getItem(KEY);if(raw){const d=JSON.parse(raw);current=d.current||0;status=d.status||{};}}catch(e){}}
-function clearState(){current=0;status={};saveState();}
+function clearState(){
+  current=0;status={};saveState();
+  localStorage.removeItem('aircheck_rd_route');
+  document.getElementById('stripFrom').value='';
+  document.getElementById('stripTo').value='';
+}
 function saveReg(val){try{localStorage.setItem(REG_KEY,val);}catch(e){}document.getElementById('stampInit').textContent='PIC · 4X-'+(val||'HHH');}
 function loadReg(){try{const v=localStorage.getItem(REG_KEY)||'';document.getElementById('stampInit').textContent='PIC · 4X-'+(v||'HHH');}catch(e){}}
 function saveRoute(){try{const f=document.getElementById('stripFrom').value;const t=document.getElementById('stripTo').value;localStorage.setItem(ROUTE_KEY,JSON.stringify({from:f,to:t}));}catch(e){}}
@@ -1739,12 +1746,35 @@ function showScreen(id){
 }
 document.addEventListener('DOMContentLoaded',()=>{loadSettings();loadList();loadState();loadReg();loadRoute();drawRings();initSplash();});
 
+function startSplashTypewriter(){
+  const sloganEl=document.getElementById('splashSlogan');
+  const subEl=document.getElementById('splashSub');
+  if(!sloganEl||!subEl)return;
+  const text='"the checklist on top of the checklist"';
+  const speed=38;
+  setTimeout(()=>{
+    sloganEl.style.transition='opacity 0.3s ease';
+    sloganEl.style.opacity='1';
+    let i=0;
+    sloganEl.innerHTML='<span class="tw-cursor"></span>';
+    const interval=setInterval(()=>{
+      i++;
+      sloganEl.innerHTML=text.slice(0,i)+'<span class="tw-cursor"></span>';
+      if(i>=text.length){
+        clearInterval(interval);
+        sloganEl.innerHTML=text;
+      }
+    },speed);
+  },600);
+}
 function initSplash(){
   document.getElementById('app').addEventListener('click',e=>{
     if(window._bulkJustOpened){window._bulkJustOpened=false;return;}
     const popup=document.getElementById('bulkPopup');
     if(popup&&popup.classList.contains('open')&&!popup.contains(e.target))closeBulkPopup();
   });
+  startSplashTypewriter();
+  const subEl2=document.getElementById('splashSub');if(subEl2){setTimeout(()=>{subEl2.style.opacity='1';},100);}
   const done=Object.values(status).filter(s=>s==='done').length;
   const hasProgress=done>0;
   const resumeCard=document.getElementById('splashResumeCard');
