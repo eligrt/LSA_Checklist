@@ -471,7 +471,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="splash-footer-wrap">
       <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
         <span class="footer-refresh" onclick="location.reload()">רענון</span>
-        <span>AirCheck+ · v2.04.052 · built by eligrt</span>
+        <span>AirCheck+ · v2.04.055 · built by eligrt</span>
         <span style="width:40px;"></span>
       </div>
     </div>
@@ -584,7 +584,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="tree-panel" id="treePanel"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.052 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.055 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -643,7 +643,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span style="width:40px;"></span>
-      <span>AirCheck+ · v2.04.052 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.055 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -736,7 +736,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.052 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.055 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -753,7 +753,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="editor-list" id="editorList"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.052 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.055 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -1113,6 +1113,7 @@ function saveSettings(){
 }
 // ── EDITOR ──
 const LIST_KEY='checklist_list_v1';
+function loadList(){try{const raw=localStorage.getItem(LIST_KEY);if(raw){const saved=JSON.parse(raw);if(Array.isArray(saved)&&saved.length){CL.length=0;saved.forEach(it=>CL.push(it));buildIndex();}}}catch(e){}}
 let edData=[];
 let edPopupCallback=null;
 let dragSrc=null;
@@ -1732,19 +1733,18 @@ function doSettingsReset(){
 }
 function editRoute(){}
 
-document.getElementById('app').addEventListener('click',e=>{
-  if(window._bulkJustOpened){window._bulkJustOpened=false;return;}
-  const popup=document.getElementById('bulkPopup');
-  if(popup.classList.contains('open')&&!popup.contains(e.target))closeBulkPopup();
-});
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-loadSettings();loadState();loadReg();loadRoute();drawRings();
-initSplash();
+document.addEventListener('DOMContentLoaded',()=>{loadSettings();loadList();loadState();loadReg();loadRoute();drawRings();initSplash();});
 
 function initSplash(){
+  document.getElementById('app').addEventListener('click',e=>{
+    if(window._bulkJustOpened){window._bulkJustOpened=false;return;}
+    const popup=document.getElementById('bulkPopup');
+    if(popup&&popup.classList.contains('open')&&!popup.contains(e.target))closeBulkPopup();
+  });
   const done=Object.values(status).filter(s=>s==='done').length;
   const hasProgress=done>0;
   const resumeCard=document.getElementById('splashResumeCard');
