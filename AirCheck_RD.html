@@ -471,7 +471,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="splash-footer-wrap">
       <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
         <span class="footer-refresh" onclick="location.reload()">רענון</span>
-        <span>AirCheck+ · v2.04.051 · built by eligrt</span>
+        <span>AirCheck+ · v2.04.052 · built by eligrt</span>
         <span style="width:40px;"></span>
       </div>
     </div>
@@ -584,7 +584,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="tree-panel" id="treePanel"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.051 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.052 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -643,7 +643,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
 
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span style="width:40px;"></span>
-      <span>AirCheck+ · v2.04.051 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.052 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -736,7 +736,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     </div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.051 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.052 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -753,7 +753,7 @@ html,body{height:100%;background:#1a1a1c;font-family:var(--font-ui);color:var(--
     <div class="editor-list" id="editorList"></div>
     <div class="footer-strip" style="display:flex;align-items:center;justify-content:space-between;padding:5px 14px 8px;">
       <span class="footer-refresh" onclick="location.reload()">רענון</span>
-      <span>AirCheck+ · v2.04.051 · built by eligrt</span>
+      <span>AirCheck+ · v2.04.052 · built by eligrt</span>
       <span style="width:40px;"></span>
     </div>
   </div>
@@ -924,7 +924,7 @@ function renderRunway(){
     });
     // long-press on track
     let lpTimer=null;
-    const startLp=(e)=>{lpTimer=setTimeout(()=>{lpTimer=null;openBulkPopup(p,allItems,isComplete,seg);},500);};
+    const startLp=(e)=>{lpTimer=setTimeout(()=>{lpTimer=null;window._bulkJustOpened=true;openBulkPopup(p,allItems,isComplete,seg);},500);};
     const cancelLp=()=>{if(lpTimer){clearTimeout(lpTimer);lpTimer=null;}};
     track.addEventListener('mousedown',startLp);
     track.addEventListener('touchstart',startLp,{passive:true});
@@ -1733,6 +1733,7 @@ function doSettingsReset(){
 function editRoute(){}
 
 document.getElementById('app').addEventListener('click',e=>{
+  if(window._bulkJustOpened){window._bulkJustOpened=false;return;}
   const popup=document.getElementById('bulkPopup');
   if(popup.classList.contains('open')&&!popup.contains(e.target))closeBulkPopup();
 });
